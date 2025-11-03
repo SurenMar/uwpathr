@@ -4,7 +4,7 @@ from django.contrib.auth.models import (
   AbstractBaseUser,
   PermissionsMixin
 )
-from utils import current_year
+from .utils import current_year
 
 
 # Tells django how to create my custom users and superusers
@@ -29,9 +29,10 @@ class UserAccountManager(BaseUserManager):
     user.save(using=self._db)
     return user
 
-  def create_superuser(self, email, password=None, **kwargs):
+  def create_superuser(self, email, first_name, password=None, **kwargs):
     user = self.create_user(
       email,
+      first_name,
       password=password,
       **kwargs
     )
