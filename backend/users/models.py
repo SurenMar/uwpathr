@@ -22,7 +22,7 @@ class UserAccountManager(BaseUserManager):
 
     user = self.model(
       email=email,
-      first_name=first_name
+      first_name=first_name,
       **kwargs
     )
 
@@ -46,10 +46,13 @@ class UserAccountManager(BaseUserManager):
 
 # The actual user model
 class UserAccount(AbstractBaseUser, PermissionsMixin):
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
   id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   is_active = models.BooleanField(default=True)
   is_staff = models.BooleanField(default=False)
   is_superuser = models.BooleanField(default=False)
+
   first_name = models.CharField(max_length=255, blank=True)
   email = models.EmailField(unique=True, max_length=255)
   start_year = models.PositiveSmallIntegerField(
@@ -62,7 +65,6 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     related_name='+'
   )
 
-  # Tells django to use our custom manger for creating users
   objects = UserAccountManager()
 
   USERNAME_FIELD = 'email'
