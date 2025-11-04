@@ -39,8 +39,8 @@ class Course(models.Model):
   uwflow_useful_ratings = models.PositiveSmallIntegerField(blank=True, null=True)
 
   class Meta:
-    # TODO Rework for frontend csr
-    # Also sorts by code first then number (no need for single column indexes)
+    # TODO Rework indexes for frontend csr
+    # Also sorts by code first then number (no need for seperate composite index)
     unique_together = ('code', 'number')
     indexes = [GinIndex(fields=['category'])]
 
@@ -50,6 +50,7 @@ class Course(models.Model):
     super().save(*args, **kwargs)
 
 
+#TODO USE MPTT OR TREABEARD FOR RECURSIVE TREE
 class CourseRequisiteNode(models.Model):
   REQUISITE_TYPES = [
     ('pre', 'Prerequisite'),
@@ -64,7 +65,7 @@ class CourseRequisiteNode(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
   requisite_type = models.CharField(max_length=16, choices=REQUISITE_TYPES)
-  root_course = models.ForeignKey(
+  target_course = models.ForeignKey(
     'Course',
     on_delete=models.CASCADE,
     related_name='req_nodes'
@@ -81,23 +82,19 @@ class CourseRequisiteNode(models.Model):
     'Course',
     blank=True,
     null=True,
-    on_delete=models.PROTECT,
+    on_delete=models.PROTECT, # Course requisites and paths should be fully updated before any removed courses are deleted
     related_name='+'
   )
   num_children_required = models.PositiveSmallIntegerField( # Only if node_type == group
     blank=True, 
     default=0
   )
-  depth = models.PositiveSmallIntegerField(blank=True, default=0)
+  depth = models.PositiveSmallIntegerField()
 
   class Meta:
     indexes = [
-      # TODO
-      # Rework indexes after knowing how csr will work and whats needed by the frontend
-      # Ie we might need to send ALL prerequisites to frontend and do logic there for csr, not here
-      # This means we'll only need second index
-      models.Index(fields=['root_course', 'requisite_type', 'parent']),
-      models.Index(fields=['root_course', 'requisite_type']),
-      models.Index(fields=['root_course', 'requisite_type', 'depth']),
+      # TODO Rework indexes for frontend csr
+      models.Index(fields=['target_course', 'requisite_type', 'parent']),
+      models.Index(fields=['target_course', 'requisite_type', 'depth']), # Might not need this
     ]
 
