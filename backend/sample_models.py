@@ -84,7 +84,6 @@ class UserCourse(models.Model):
 
     class Meta:
         unique_together = ('user','course')
-        indexes = [models.Index(fields=['user']), models.Index(fields=['course'])]
 
 class UserChecklistAssignment(models.Model):
     checklist = models.ForeignKey(UserChecklist, on_delete=models.CASCADE)

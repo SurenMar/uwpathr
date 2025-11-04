@@ -7,3 +7,9 @@ class UserChecklist(models.Model):
 # Node
 class UserChecklistRequirement(models.Model):
   pass
+
+class UserAdditionalRequirement(models.Model):
+  pass
+
+class UserDepthConstrain(models.Model):
+  pass

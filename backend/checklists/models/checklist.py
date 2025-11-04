@@ -9,3 +9,7 @@ class ChecklistRequirement(models.Model):
 # Is this needed?
 class RequirementAllowedCourses(models.Model):
   pass
+
+# Similar to course requisite logic
+class AdditionalConstraint(models.Model):
+  pass

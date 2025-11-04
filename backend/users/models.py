@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 from django.contrib.auth.models import (
   BaseUserManager, 
   AbstractBaseUser,
@@ -45,6 +46,7 @@ class UserAccountManager(BaseUserManager):
 
 # The actual user model
 class UserAccount(AbstractBaseUser, PermissionsMixin):
+  id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
   is_active = models.BooleanField(default=True)
   is_staff = models.BooleanField(default=False)
   is_superuser = models.BooleanField(default=False)
@@ -55,9 +57,9 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     blank=True
   )
   active_specialization = models.ForeignKey(
-    'Specialization', #TODO
+    'checklists.Specialization',
     on_delete=models.PROTECT,
-    related_name='users'
+    related_name='+'
   )
 
   # Tells django to use our custom manger for creating users
