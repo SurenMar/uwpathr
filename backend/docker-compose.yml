@@ -1,0 +1,16 @@
+services:
+  db:  # This defines a service (a container) named "db"
+    image: postgres:16  # Use official postgres version 16 image from Docker Hub
+    container_name: uwpathr_postgres  # Optional name to identify container
+    restart: always  # Restart if it crashes
+    environment:  # Environment variables passed to the container
+      POSTGRES_DB: uwpathr_dev          # Name of the database to create
+      POSTGRES_USER: flippyy            # Username
+      POSTGRES_PASSWORD: 4444           # Password
+    ports:
+      - "5432:5432"  # Map container port 5432 to local port 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persist data between restarts
+
+volumes:
+  postgres_data:  # Define a named volume to store PostgreSQL data
