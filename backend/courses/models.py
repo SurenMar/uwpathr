@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.contrib.postgres.indexes import GinIndex
+from mptt.models import MPTTModel, TreeForeignKey
 
 
 class Course(models.Model):
@@ -50,8 +51,7 @@ class Course(models.Model):
     super().save(*args, **kwargs)
 
 
-#TODO USE MPTT OR TREABEARD FOR RECURSIVE TREE
-class CourseRequisiteNode(models.Model):
+class CourseRequisiteNode(MPTTModel):
   REQUISITE_TYPES = [
     ('pre', 'Prerequisite'),
     ('co', 'Corequisite'),
@@ -71,7 +71,7 @@ class CourseRequisiteNode(models.Model):
     related_name='req_nodes'
   )
   node_type = models.CharField(max_length=8, choices=NODE_TYPES)
-  parent = models.ForeignKey(
+  parent = TreeForeignKey(
     'self',
     blank=True,
     null=True,
@@ -82,19 +82,18 @@ class CourseRequisiteNode(models.Model):
     'Course',
     blank=True,
     null=True,
-    on_delete=models.PROTECT, # Course requisites and paths should be fully updated before any removed courses are deleted
+    on_delete=models.PROTECT, # Course requisites and paths will be fully updated before any removed courses are deleted
     related_name='+'
   )
   num_children_required = models.PositiveSmallIntegerField( # Only if node_type == group
     blank=True, 
     default=0
   )
-  depth = models.PositiveSmallIntegerField()
-
+  
   class Meta:
     indexes = [
       # TODO Rework indexes for frontend csr
       models.Index(fields=['target_course', 'requisite_type', 'parent']),
-      models.Index(fields=['target_course', 'requisite_type', 'depth']), # Might not need this
+      models.Index(fields=['target_course', 'requisite_type', 'level']), # Might not need this
     ]
 

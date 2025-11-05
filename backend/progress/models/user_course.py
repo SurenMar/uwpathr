@@ -41,7 +41,7 @@ class UserCoursePathNode(models.Model):
   )
   requisite_node = models.ForeignKey(
     'courses.CourseRequisiteNode',
-    on_delete=models.PROTECT, # Course requisites and paths should be fully updated before any removed courses are deleted
+    on_delete=models.PROTECT, # Course requisites and paths will be fully updated before any removed courses are deleted
     related_name='+'
   )
   child = models.OneToOneField(
@@ -51,7 +51,7 @@ class UserCoursePathNode(models.Model):
     on_delete=models.SET_NULL,
     related_name='parent'
   )
-  depth = models.PositiveSmallIntegerField()
+  level = models.PositiveSmallIntegerField() # Might not need this, can access directly from requisite_node
 
   class Meta:
     # TODO Rework indexes for frontend csr

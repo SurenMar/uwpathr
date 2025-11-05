@@ -27,8 +27,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.postgres',
+    'mptt',                         # For tree like models
     'rest_framework',
-    'djoser',
+    'djoser',                       # For authentication
     'users',
 ]
 
