@@ -30,6 +30,9 @@ INSTALLED_APPS = [
     'mptt',                         # For tree like models
     'rest_framework',
     'djoser',                       # For authentication
+    'checklists',
+    'courses',
+    'progress',
     'users',
 ]
 

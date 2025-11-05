@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import F
 from django.contrib.postgres.fields import ArrayField
 from django.contrib.postgres.indexes import GinIndex
 from mptt.models import MPTTModel, TreeForeignKey
@@ -22,7 +23,7 @@ class Course(models.Model):
   number = models.CharField(max_length=8)
   units = models.PositiveSmallIntegerField()
   offered_next_term = models.BooleanField(null=True) # Should we have null=True?
-  category = ArrayField(
+  category = ArrayField( # TODO This might not be a good use case for ArrayField
     models.CharField(max_length=32, choices=COURSE_CATEGORIES),
     default=list,
     blank=True
@@ -89,6 +90,9 @@ class CourseRequisiteNode(MPTTModel):
     blank=True, 
     default=0
   )
+
+  class MPTTMeta:
+    order_insertion_by = [F('leaf_course').asc(nulls_last=True)]
   
   class Meta:
     indexes = [
