@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import F
+from django.db.models import Q
 from django.contrib.postgres.fields import ArrayField
 from django.contrib.postgres.indexes import GinIndex
 from mptt.models import MPTTModel, TreeForeignKey
@@ -41,7 +41,7 @@ class Course(models.Model):
   uwflow_useful_ratings = models.PositiveSmallIntegerField(blank=True, null=True)
 
   class Meta:
-    # TODO Rework indexes for frontend csr
+    # TODO Rework indexes and ordering for frontend csr
     # Also sorts by code first then number (no need for seperate composite index)
     unique_together = ('code', 'number')
     indexes = [GinIndex(fields=['category'])]
@@ -79,27 +79,36 @@ class CourseRequisiteNode(MPTTModel):
     on_delete=models.CASCADE,
     related_name='children'
   )
-  leaf_course = models.ForeignKey( # Only if node_type == course
+  leaf_course = models.ForeignKey(
     'Course',
     blank=True,
     null=True,
     on_delete=models.PROTECT, # Course requisites and paths will be fully updated before any removed courses are deleted
     related_name='+'
   )
-  num_children_required = models.PositiveSmallIntegerField( # Only if node_type == group
-    blank=True, 
-    default=0
-  )
+  num_children_required = models.PositiveSmallIntegerField(blank=True, null=True)
   
   class Meta:
-    # TODO Add ordering
-    ordering = ['']
     indexes = [
-      # TODO Rework indexes for frontend csr
+      # TODO Rework indexes and ordering for frontend csr
       models.Index(fields=['target_course', 'requisite_type', 'parent']),
       models.Index(fields=['target_course', 'requisite_type', 'level']), # Might not need this
     ]
+    contraints = [
+      models.CheckConstraint(
+        check=(
+          (Q(node_type='course') & 
+           Q(leaf_course__isnull=False) & 
+           Q(num_children_required__isnull=True)) 
+           |
+          (Q(node_type='group') & 
+           Q(leaf_course__isnull=True) & 
+           Q(num_children_required__isnull=False))
+        )
+      )
+    ]
   
   class MPTTMeta:
-    order_insertion_by = [F('leaf_course').asc(nulls_last=True)]
+    order_insertion_by = ['leaf_course']
+
 

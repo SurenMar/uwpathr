@@ -13,3 +13,6 @@ class RequirementAllowedCourses(models.Model):
 # Similar to course requisite logic
 class AdditionalConstraint(models.Model):
   pass
+
+class Specialization(models.Model):
+  name = models.CharField(max_length=255)

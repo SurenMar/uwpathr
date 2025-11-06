@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 
+
 class UserCourse(models.Model):
   COURSE_LIST_TYPES = [
     ('taken', 'Taken'),
@@ -23,8 +24,9 @@ class UserCourse(models.Model):
   course_list = models.CharField(max_length=16, choices=COURSE_LIST_TYPES)
 
   class Meta:
-    # TODO Rework indexes for frontend csr
+    # TODO Rework indexes and ordering for frontend csr
     unique_together = ('user', 'course')
+
 
 class UserCoursePathNode(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
@@ -54,9 +56,7 @@ class UserCoursePathNode(models.Model):
   level = models.PositiveSmallIntegerField() # Might not need this, can access directly from requisite_node
 
   class Meta:
-    # TODO Add ordering
-    ordering = ['']
-    # TODO Rework indexes for frontend csr
+    # TODO Rework indexes and ordering for frontend csr
     unique_together = ('user', 'target_course')
     indexes = [
       models.Index(fields=['user', 'target_course', 'parent']),
