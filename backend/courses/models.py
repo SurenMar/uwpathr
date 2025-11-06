@@ -90,14 +90,16 @@ class CourseRequisiteNode(MPTTModel):
     blank=True, 
     default=0
   )
-
-  class MPTTMeta:
-    order_insertion_by = [F('leaf_course').asc(nulls_last=True)]
   
   class Meta:
+    # TODO Add ordering
+    ordering = ['']
     indexes = [
       # TODO Rework indexes for frontend csr
       models.Index(fields=['target_course', 'requisite_type', 'parent']),
       models.Index(fields=['target_course', 'requisite_type', 'level']), # Might not need this
     ]
+  
+  class MPTTMeta:
+    order_insertion_by = [F('leaf_course').asc(nulls_last=True)]
 

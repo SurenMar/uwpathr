@@ -1,8 +1,27 @@
 from django.db import models
+from mptt.models import MPTTModel, TreeForeignKey
 
 # Root
 class UserChecklist(models.Model):
-  pass # SHOULD WE STORE ACTIVE SPECIALIZATION HERE INSTEAD AS A BOOL?
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
+  user = models.OneToOneField(
+    'users.UserAccount',
+    on_delete=models.CASCADE,
+    related_name='active_checklist'
+  )
+  taken_course_credits = models.PositiveSmallIntegerField(
+    blank=True, default=0
+  )
+  planned_course_credits = models.PositiveSmallIntegerField(
+    blank=True, default=0
+  )
+  specialization = models.ForeignKey(
+    'checklists.Specialization',
+    on_delete=models.PROTECT,
+    related_name='+'
+  )
+  # TODO Add indexing and ordering
 
 # Node
 class UserChecklistRequirement(models.Model):

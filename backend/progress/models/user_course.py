@@ -54,6 +54,8 @@ class UserCoursePathNode(models.Model):
   level = models.PositiveSmallIntegerField() # Might not need this, can access directly from requisite_node
 
   class Meta:
+    # TODO Add ordering
+    ordering = ['']
     # TODO Rework indexes for frontend csr
     unique_together = ('user', 'target_course')
     indexes = [

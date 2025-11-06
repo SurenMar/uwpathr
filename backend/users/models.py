@@ -59,11 +59,6 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     default=current_year, 
     blank=True
   )
-  active_specialization = models.ForeignKey(
-    'checklists.Specialization',
-    on_delete=models.PROTECT,
-    related_name='+'
-  )
 
   objects = UserAccountManager()
 
