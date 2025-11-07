@@ -23,7 +23,7 @@ class Course(models.Model):
   number = models.CharField(max_length=8)
   units = models.PositiveSmallIntegerField()
   offered_next_term = models.BooleanField(null=True) # Should we have null=True?
-  category = ArrayField( # TODO This might not be a good use case for ArrayField
+  category = ArrayField(
     models.CharField(max_length=32, choices=COURSE_CATEGORIES),
     default=list,
     blank=True
@@ -94,7 +94,7 @@ class CourseRequisiteNode(MPTTModel):
       models.Index(fields=['target_course', 'requisite_type', 'parent']),
       models.Index(fields=['target_course', 'requisite_type', 'level']), # Might not need this
     ]
-    contraints = [
+    constraints = [
       models.CheckConstraint(
         check=(
           (Q(node_type='course') & 
@@ -105,7 +105,7 @@ class CourseRequisiteNode(MPTTModel):
            Q(leaf_course__isnull=True) & 
            Q(num_children_required__isnull=False))
         )
-      )
+      ),
     ]
   
   class MPTTMeta:

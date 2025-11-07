@@ -1,7 +1,9 @@
 from django.db import models
 
+
 class Checklist(models.Model):
   pass
+
 
 class ChecklistRequirement(models.Model):
   pass
@@ -9,10 +11,3 @@ class ChecklistRequirement(models.Model):
 # Is this needed?
 class RequirementAllowedCourses(models.Model):
   pass
-
-# Similar to course requisite logic
-class AdditionalConstraint(models.Model):
-  pass
-
-class Specialization(models.Model):
-  name = models.CharField(max_length=255)

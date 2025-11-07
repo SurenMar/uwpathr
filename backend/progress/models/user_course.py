@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 from django.conf import settings
 
 
@@ -27,6 +27,18 @@ class UserCourse(models.Model):
     # TODO Rework indexes and ordering for frontend csr
     unique_together = ('user', 'course')
 
+  # Change total_units or num_courses in corrosponding UserDepthList fields
+  @transaction.atomic # Strong guarantee
+  def delete(self, *args, **kwargs):
+    depth_lists = list(self.depth_lists.all())
+    for depth_list in depth_lists:
+      if depth_list.is_chain:
+        depth_list.num_courses -= 1
+      else:
+        depth_list.total_units -= self.course.units
+      depth_list.save()
+    super().delete(*args, **kwargs)
+
 
 class UserCoursePathNode(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
@@ -34,7 +46,7 @@ class UserCoursePathNode(models.Model):
   user = models.ForeignKey(
     settings.AUTH_USER_MODEL,
     on_delete=models.CASCADE,
-    related_name='course_paths'
+    related_name='course_paths' # TODO We might not need this reverse relationship
   )
   target_course = models.ForeignKey(
     'UserCourse',
