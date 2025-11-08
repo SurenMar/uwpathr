@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from mptt.models import MPTTModel, TreeForeignKey
 
 
@@ -14,8 +15,9 @@ class Checklist(models.Model):
   )
 
 
-class ChecklistRequirementNode(MPTTModel):
+class ChecklistNode(MPTTModel):
   NODE_TYPES = [
+    ('head', 'Head'),
     ('group', 'Group'),
     ('checkbox', 'Checkbox'),
   ]
@@ -38,12 +40,25 @@ class ChecklistRequirementNode(MPTTModel):
     related_name='children'
   )
 
+  class Meta:
+    constraints = [
+      models.CheckConstraint(
+        check=(
+          ((Q(requirement_type='head') | Q(requirement_type='checkbox')) &
+           Q(units_required__isnull=True))
+           |
+          (Q(requirement_type='group') &
+           Q(units_required__isnull=False))
+        )
+      )
+    ]
+
 
 class CheckboxAllowedCourses(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
   target_checkbox = models.ForeignKey(
-    'ChecklistRequirementNode',
+    'ChecklistNode',
     on_delete=models.CASCADE,
     related_name='allowed_courses'
   )
@@ -51,4 +66,3 @@ class CheckboxAllowedCourses(models.Model):
     'courses.Course',
     related_name='+',
   )
-  

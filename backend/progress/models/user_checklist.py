@@ -10,7 +10,7 @@ class UserChecklist(models.Model):
   user = models.OneToOneField(
     'users.UserAccount',
     on_delete=models.CASCADE,
-    related_name='active_checklist'
+    related_name='checklists'
   )
   units_required = models.PositiveSmallIntegerField()
   taken_course_units = models.PositiveSmallIntegerField(blank=True, default=0)
@@ -23,8 +23,70 @@ class UserChecklist(models.Model):
   # TODO Add indexing and ordering for frontend csr
 
 
-class UserChecklistNode(models.Model):
-  pass
+class UserChecklistNode(MPTTModel):
+  NODE_TYPES = [
+    ('head', 'Head'),
+    ('group', 'Group'),
+    ('checkbox', 'Checkbox'),
+  ]
+
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
+  requirement_type = models.CharField(max_length=8, choices=NODE_TYPES)
+  title = models.CharField(max_length=64, db_index=True)
+  units_required = models.PositiveSmallIntegerField(blank=True, null=True)
+  units_gathered = models.PositiveSmallIntegerField(blank=True, null=True)
+  box_complete = models.BooleanField()
+  user = models.OneToOneField(
+    'users.UserAccount',
+    on_delete=models.CASCADE,
+    related_name='checklist_nodes'
+  )
+  target_checklist = models.ForeignKey(
+    'UserChecklist',
+    on_delete=models.CASCADE,
+    related_name='nodes'
+  )
+  # Use this to access allowed courses
+  original_checkbox = models.ForeignKey(
+    'checklists.ChecklistNode',
+    blank=True,
+    null=True,
+    on_delete=models.PROTECT,
+    related_name='+'
+  )
+  parent = TreeForeignKey(
+    'self',
+    blank=True,
+    null=True,
+    on_delete=models.CASCADE,
+    related_name='children'
+  )
+
+  class Meta:
+    # TODO Add indexing and ordering for frontend csr
+    constraints = [
+      models.CheckConstraint(
+        check=(
+          (~Q(requirement_type='group') &
+           Q(units_required__isnull=True) &
+           Q(units_gathered__isnull=True))
+           |
+          (Q(requirement_type='group') &
+           Q(units_required__isnull=False) &
+           Q(units_gathered__isnull=False))
+        )
+      ),
+      models.CheckConstraint(
+        check=(
+          (~Q(requirement_type='checkbox') &
+           Q(original_checkbox__isnull=True))
+           |
+          (Q(requirement_type='checkbox') &
+           Q(original_checkbox__isnull=True))
+        )
+      )
+    ]
 
 
 # TODO Place as many that fit into the additional constraints as possible. we will only query 4 anyway
