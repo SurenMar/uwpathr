@@ -26,17 +26,23 @@ class UserCourse(models.Model):
 
   class Meta:
     # TODO Rework indexes and ordering for frontend csr
-    unique_together = ('user', 'course')
+    indexes = [
+      models.Index(fields=['user', 'course_list'])
+    ]
+    constraints = [
+      models.UniqueConstraint(
+        fields=['user', 'course'], 
+        name='unique_course_per_user'
+      )
+    ]
 
   # Change total_units or num_courses in corrosponding UserDepthList fields
   @transaction.atomic # Strong guarantee
   def delete(self, *args, **kwargs):
     depth_lists = list(self.depth_lists.all())
     for depth_list in depth_lists:
-      if depth_list.is_chain:
-        depth_list.num_courses -= 1
-      else:
-        depth_list.total_units -= self.course.units
+      depth_list.num_courses -= 1
+      depth_list.total_units -= self.course.units
       depth_list.save()
     super().delete(*args, **kwargs)
 
@@ -62,7 +68,12 @@ class UserCoursePathNode(MP_Node):
 
   class Meta:
     # TODO Rework indexes and ordering for frontend csr
-    unique_together = ('user', 'target_course')
+    constraints = [
+      models.UniqueConstraint(
+        fields=['user', 'target_course'], 
+        name='unique_target_course_per_user'
+      )
+    ]
     indexes = [
       models.Index(fields=['user', 'target_course', 'parent']),
       models.Index(fields=['user', 'target_course', 'depth']), # Might not need this
