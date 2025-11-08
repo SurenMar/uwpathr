@@ -26,10 +26,18 @@ class UserChecklistNode(models.Model):
   pass
 
 
+# TODO Place as many that fit into the additional constraints as possible. we will only query 4 anyway
 class UserAdditionalConstraints(models.Model):
   pass
 
 
+# TODO THIS APPROACH MIGHT BE WRONG BECAUSE WE HAVE TO SEARCH EVERY SINGLE PREREQ EVERYTIME WE ADD A COURSE
+#      INSTEAD, WHY DONT WE HAVE A LIST OF ALL POSSIBLE DEPTH LISTS, AND JUST SEARCH FROM THERE
+#      WE COULD HAVE SAME APPROACH, EXCEPT NOW WE SEARCH FROM ALREADY DEFINED DEPTH LIST INSTEAD OF PREREQS
+#      THE PRE DEFINED DEPTH LIST GETS CONSTRUCTED WHEN WE ADD ALL COURSES
+#      DEPTH CHAIN COULD BE LIKE A TREE TO AVOID REDUNDANT ENTRIES
+#      NEW IDEA: TO NOT GO THROUGH THE HASTLE OF FINDING PREREQ CHAINS, LETS JUST LET THE USER FILL THEM IN
+#      AND WE'LL ONLY SUPPLY THE BASIC ONES
 class UserDepthList(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)

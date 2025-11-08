@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
     'mptt',                         # For tree like models
+    'treebeard',                    # For tree like models
     'rest_framework',
     'djoser',                       # For authentication
     'checklists',

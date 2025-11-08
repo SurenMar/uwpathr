@@ -1,4 +1,5 @@
 from django.db import models, transaction
+from treebeard.mp_tree import MP_Node
 from django.conf import settings
 
 
@@ -40,7 +41,7 @@ class UserCourse(models.Model):
     super().delete(*args, **kwargs)
 
 
-class UserCoursePathNode(models.Model):
+class UserCoursePathNode(MP_Node):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
   user = models.ForeignKey(
@@ -58,14 +59,6 @@ class UserCoursePathNode(models.Model):
     on_delete=models.PROTECT, # Course requisites and paths will be fully updated before any removed courses are deleted
     related_name='+'
   )
-  child = models.OneToOneField(
-    'self',
-    blank=True,
-    null=True,
-    on_delete=models.SET_NULL,
-    related_name='parent'
-  )
-  level = models.PositiveSmallIntegerField() # Might not need this, can access directly from requisite_node
 
   class Meta:
     # TODO Rework indexes and ordering for frontend csr
