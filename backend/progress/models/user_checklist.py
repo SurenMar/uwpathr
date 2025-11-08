@@ -33,10 +33,10 @@ class UserChecklistNode(MPTTModel):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
   requirement_type = models.CharField(max_length=8, choices=NODE_TYPES)
-  title = models.CharField(max_length=64, db_index=True)
+  title = models.CharField(max_length=64)
   units_required = models.PositiveSmallIntegerField(blank=True, null=True)
   units_gathered = models.PositiveSmallIntegerField(blank=True, null=True)
-  box_complete = models.BooleanField()
+  completed = models.BooleanField()
   user = models.OneToOneField(
     'users.UserAccount',
     on_delete=models.CASCADE,
@@ -89,18 +89,71 @@ class UserChecklistNode(MPTTModel):
     ]
 
 
-# TODO Place as many that fit into the additional constraints as possible. we will only query 4 anyway
-class UserAdditionalConstraints(models.Model):
-  pass
+class UserAdditionalConstraint(MPTTModel):
+  NODE_TYPES = [
+    ('group', 'Group'),
+    ('checkbox', 'Checkbox'),
+  ]
+
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
+  title = models.CharField(max_length=64, blank=True, null=True)
+  requirement_type = models.CharField(max_length=8, choices=NODE_TYPES)
+  num_courses_required = models.PositiveSmallIntegerField(blank=True, null=True)
+  num_courses_gathered = models.PositiveSmallIntegerField(blank=True, null=True)
+  completed = models.BooleanField()
+  user = models.OneToOneField(
+    'users.UserAccount',
+    on_delete=models.CASCADE,
+    related_name='checklist_nodes'
+  )
+  target_checklist = models.ForeignKey(
+    'UserChecklist',
+    on_delete=models.CASCADE,
+    related_name='additional_constraints'
+  )
+  # Use this to access allowed courses
+  original_checkbox = models.ForeignKey(
+    'checklists.AdditionalConstraint',
+    blank=True,
+    null=True,
+    on_delete=models.PROTECT,
+    related_name='+'
+  )
+  parent = TreeForeignKey(
+    'self',
+    blank=True,
+    null=True,
+    on_delete=models.CASCADE,
+    related_name='children'
+  )
+
+  class Meta:
+    # TODO Add indexing and ordering for frontend csr
+    constraints = [
+      models.CheckConstraint(
+        check=(
+          (~Q(requirement_type='group') &
+           Q(courses_required__isnull=True) &
+           Q(courses_gathered__isnull=True))
+           |
+          (Q(requirement_type='group') &
+           Q(courses_required__isnull=False) &
+           Q(courses_gathered__isnull=False))
+        )
+      ),
+      models.CheckConstraint(
+        check=(
+          (~Q(requirement_type='checkbox') &
+           Q(original_checkbox__isnull=True))
+           |
+          (Q(requirement_type='checkbox') &
+           Q(original_checkbox__isnull=True))
+        )
+      )
+    ]
 
 
-# TODO THIS APPROACH MIGHT BE WRONG BECAUSE WE HAVE TO SEARCH EVERY SINGLE PREREQ EVERYTIME WE ADD A COURSE
-#      INSTEAD, WHY DONT WE HAVE A LIST OF ALL POSSIBLE DEPTH LISTS, AND JUST SEARCH FROM THERE
-#      WE COULD HAVE SAME APPROACH, EXCEPT NOW WE SEARCH FROM ALREADY DEFINED DEPTH LIST INSTEAD OF PREREQS
-#      THE PRE DEFINED DEPTH LIST GETS CONSTRUCTED WHEN WE ADD ALL COURSES
-#      DEPTH CHAIN COULD BE LIKE A TREE TO AVOID REDUNDANT ENTRIES
-#      NEW IDEA: TO NOT GO THROUGH THE HASTLE OF FINDING PREREQ CHAINS, LETS JUST LET THE USER FILL THEM IN
-#      AND WE'LL ONLY SUPPLY THE BASIC ONES
 class UserDepthList(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
@@ -113,7 +166,7 @@ class UserDepthList(models.Model):
     'progress.UserCourse', 
     related_name='depth_lists'
   )
-  is_chain = models.BooleanField()
+  is_chain = models.BooleanField(blank=True, null=True)
   total_units = models.PositiveSmallIntegerField(blank=True, null=True)
   num_courses = models.PositiveSmallIntegerField(blank=True, null=True)
 

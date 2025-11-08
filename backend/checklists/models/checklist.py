@@ -44,7 +44,7 @@ class ChecklistNode(MPTTModel):
     constraints = [
       models.CheckConstraint(
         check=(
-          ((Q(requirement_type='head') | Q(requirement_type='checkbox')) &
+          (~Q(requirement_type='group') &
            Q(units_required__isnull=True))
            |
           (Q(requirement_type='group') &
