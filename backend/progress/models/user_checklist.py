@@ -12,8 +12,9 @@ class UserChecklist(models.Model):
     on_delete=models.CASCADE,
     related_name='active_checklist'
   )
-  taken_course_credits = models.PositiveSmallIntegerField(blank=True, default=0)
-  planned_course_credits = models.PositiveSmallIntegerField(blank=True, default=0)
+  units_required = models.PositiveSmallIntegerField()
+  taken_course_units = models.PositiveSmallIntegerField(blank=True, default=0)
+  planned_course_units = models.PositiveSmallIntegerField(blank=True, default=0)
   specialization = models.ForeignKey(
     'checklists.Specialization',
     on_delete=models.PROTECT,
