@@ -3,7 +3,6 @@ from django.db.models import Q
 from mptt.models import MPTTModel, TreeForeignKey
 
 
-
 class UserChecklist(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)

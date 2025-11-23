@@ -1,8 +1,12 @@
 from django.db import models
 from django.db.models import Q
-from django.dispatch import receiver
-from django.db.models.signals import m2m_changed
 from mptt.models import MPTTModel, TreeForeignKey
+from django.dispatch import receiver
+from django.db.models.signals import (
+  m2m_changed, 
+  post_save,
+  pre_delete
+)
 
 
 class UserAdditionalConstraint(MPTTModel):
@@ -49,7 +53,7 @@ class UserAdditionalConstraint(MPTTModel):
     constraints = [
       models.CheckConstraint(
         check=(
-          (~Q(requirement_type='group') &
+          (Q(requirement_type='checkbox') &
            Q(num_courses_required__isnull=True) &
            Q(num_courses_gathered__isnull=True))
            |
@@ -71,19 +75,24 @@ class UserAdditionalConstraint(MPTTModel):
       )
     ]
 
+# Auto-save logic
+@receiver(post_save, sender=UserAdditionalConstraint)
+def update_parent_on_checkbox_add(sender, instance, created, **kwargs):
+    if created and instance.requirement_type == 'checkbox' and \
+       instance.parent and instance.parent.requirement_type == 'group':
+      instance.parent.num_courses_gathered += 1
+      instance.parent.save(update_fields=['num_courses_gathered'])
 
-@receiver(m2m_changed, sender=kjk.courses.through)
-def update_depth_list_on_add(sender, instance, action, pk_set, **kwargs):
-  if action == 'post_add':
-    added_courses = instance.courses.filter(pk__in=pk_set)
-    for course in added_courses:
-      if instance.is_chain:
-        instance.num_courses += 1
-      else:
-        instance.total_units += course.course.units
-    instance.save()
+# Auto-delete logic
+@receiver(pre_delete, sender=UserAdditionalConstraint)
+def update_parent_on_checkbox_delete(sender, instance, created, **kwargs):
+  if instance.requirement_type == 'checkbox' and \
+     instance.parent and instance.parent.requirement_type == 'group':
+    instance.parent.num_courses_gathered -= 1
+    instance.parent.save(update_fields=['num_courses_gathered'])
 
 
+# Maybe we have an auto fill button that creates a depth list on command
 class UserDepthList(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
@@ -104,7 +113,7 @@ class UserDepthList(models.Model):
    # TODO Rework indexes and ordering for frontend csr
    pass
 
-
+# Auto-add logic
 @receiver(m2m_changed, sender=UserDepthList.courses.through)
 def update_depth_list_on_add(sender, instance, action, pk_set, **kwargs):
   if action == 'post_add':
@@ -114,4 +123,16 @@ def update_depth_list_on_add(sender, instance, action, pk_set, **kwargs):
         instance.num_courses += 1
       else:
         instance.total_units += course.course.units
-    instance.save()
+    instance.save(update_fields=["num_courses", "total_units"])
+
+# Auto-remove logic
+@receiver(m2m_changed, sender=UserDepthList.courses.through)
+def update_depth_list_on_remove(sender, instance, action, pk_set, **kwargs):
+  if action == 'pre_remove':
+    removed_courses = instance.courses.filter(pk__in=pk_set)
+    for course in removed_courses:
+      if instance.is_chain:
+        instance.num_courses -= 1
+      else:
+        instance.total_units -= course.course.units
+    instance.save(update_fields=["num_courses", "total_units"])
