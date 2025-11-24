@@ -1,5 +1,7 @@
 from django.db import models
 from django.db.models import Q
+from django.dispatch import receiver
+from django.db.models.signals import post_save, pre_delete
 from mptt.models import MPTTModel, TreeForeignKey
 
 
@@ -62,6 +64,13 @@ class UserChecklistNode(MPTTModel):
     on_delete=models.PROTECT,
     related_name='+'
   )
+  selected_course = models.OneToOneField( # A course can only be selected once
+    'courses.Course',
+    blank=True,
+    null=True,
+    on_delete=models.SET_NULL,
+    related_name='+'
+  )
   parent = TreeForeignKey(
     'self',
     blank=True,
@@ -88,11 +97,25 @@ class UserChecklistNode(MPTTModel):
       models.CheckConstraint(
         check=(
           (~Q(requirement_type='checkbox') &
-           Q(original_checkbox__isnull=True))
+           Q(original_checkbox__isnull=True) &
+           Q(selected_course__isnull=True))
            |
           (Q(requirement_type='checkbox') &
-           Q(original_checkbox__isnull=False))
+           Q(original_checkbox__isnull=False) &
+           Q(selected_course__isnull=False))
         ),
-        name='only_checkboxes_have_checkbox_field'
+        name='only_checkboxes_have_course_and_checkbox_field'
       )
     ]
+
+# Auto-update logic
+@receiver(post_save, sender=UserChecklistNode)
+def update_parent_on_completed_toggle(sender, instance, created, **kwargs):
+  if not created and instance.requirement_type == 'checkbox' and \
+     instance.parent and instance.parent.requirement_type == 'group':
+    old = sender.objects.get(pk=instance.pk)
+    if old.completed != instance.completed and instance.selected_course:
+      delta = instance.selected_course.units \
+        if instance.completed else -instance.selected_course.units
+      instance.parent.units_gathered += delta
+      instance.parent.save(update_fields=['units_gathered'])

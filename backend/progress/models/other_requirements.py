@@ -1,12 +1,8 @@
 from django.db import models
 from django.db.models import Q
-from mptt.models import MPTTModel, TreeForeignKey
 from django.dispatch import receiver
-from django.db.models.signals import (
-  m2m_changed, 
-  post_save,
-  pre_delete
-)
+from django.db.models.signals import m2m_changed, post_save, pre_delete
+from mptt.models import MPTTModel, TreeForeignKey
 
 
 class UserAdditionalConstraint(MPTTModel):
@@ -78,10 +74,10 @@ class UserAdditionalConstraint(MPTTModel):
 # Auto-save logic
 @receiver(post_save, sender=UserAdditionalConstraint)
 def update_parent_on_checkbox_add(sender, instance, created, **kwargs):
-    if created and instance.requirement_type == 'checkbox' and \
-       instance.parent and instance.parent.requirement_type == 'group':
-      instance.parent.num_courses_gathered += 1
-      instance.parent.save(update_fields=['num_courses_gathered'])
+  if created and instance.requirement_type == 'checkbox' and \
+      instance.parent and instance.parent.requirement_type == 'group':
+    instance.parent.num_courses_gathered += 1
+    instance.parent.save(update_fields=['num_courses_gathered'])
 
 # Auto-delete logic
 @receiver(pre_delete, sender=UserAdditionalConstraint)

@@ -3,6 +3,8 @@ from django.db.models import Q
 from mptt.models import MPTTModel, TreeForeignKey
 
 class Specialization(models.Model):
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
   name = models.CharField(max_length=255)
 
 
