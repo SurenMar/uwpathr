@@ -92,7 +92,7 @@ class CourseRequisiteNode(MPTTModel):
     indexes = [
       # TODO Rework indexes and ordering for frontend csr
       models.Index(fields=['target_course', 'requisite_type', 'parent']),
-      models.Index(fields=['target_course', 'requisite_type', 'level']), # Might not need this
+      #models.Index(fields=['target_course', 'requisite_type', 'level']), # Might not need this
     ]
     constraints = [
       models.CheckConstraint(
@@ -104,7 +104,8 @@ class CourseRequisiteNode(MPTTModel):
           (Q(node_type='group') & 
            Q(leaf_course__isnull=True) & 
            Q(num_children_required__isnull=False))
-        )
+        ),
+        name='courses_are_leafs_and_groups_are_nodes'
       ),
     ]
   
