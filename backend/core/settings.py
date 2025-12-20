@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'mptt',                         # For tree like models
     'treebeard',                    # For tree like models
     'rest_framework',
+    'django_filters',               # For API filtering
     'djoser',                       # For authentication
     'checklists',
     'courses',
@@ -125,6 +126,14 @@ REST_FRAMEWORK = {
   'DEFAULT_AUTHENTICATION_CLASSES': [
     'rest_framework_simplejwt.authentication.JWTAuthentication',
   ],
+  'DEFAULT_THROTTLE_CLASSES': [
+      'rest_framework.throttling.AnonRateThrottle',
+      'rest_framework.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+      'anon': '100/min',
+      'user': '1000/min',
+    },
   'DEFAULT_PERMISSION_CLASSES': [
     'rest_framework.permissions.IsAuthenticated',
   ]

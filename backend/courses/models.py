@@ -28,13 +28,8 @@ class Course(models.Model):
     default=list,
     blank=True
   )
-
   title = models.TextField()
   description = models.TextField()
-  prerequisite_text = models.TextField()
-  corequisite_text = models.TextField()
-  antirequisite_text = models.TextField()
-
   num_uwflow_ratings = models.PositiveSmallIntegerField()
   uwflow_liked_rating = models.PositiveSmallIntegerField(blank=True, null=True)
   uwflow_easy_ratings = models.PositiveSmallIntegerField(blank=True, null=True)
