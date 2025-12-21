@@ -42,7 +42,7 @@ class CourseRequisiteNodeListSerializer(serializers.ModelSerializer):
 		fields = [
 			'id', 'created_at', 'updated_at',
 			'requisite_type', 'target_course', 'node_type',
-			'leaf_course', 'num_children_required', 'children', 'children_input',
+			'leaf_course', 'num_children_required', 'children',
 		]
 		read_only_fields = ['id', 'created_at', 'updated_at', 'target_course']
 

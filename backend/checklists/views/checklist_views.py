@@ -12,31 +12,17 @@ from ..models.checklist import (
 from ..serializers.checklist_serializers import (
   ChecklistListSerializer,
   ChecklistCreateSerializer,
+
+  ChecklistNodeListSerializer,
+  ChecklistNodeCreateSerializer,
+
+
 )
 
 
 class Admin(BasePermission):
     def has_permission(self, request, view):
       return request.user and request.user.is_staff
-
-
-class CourseFilter(FilterSet):
-  # Comma-separated categories; matches any overlap in ArrayField
-  category = filters.CharFilter(method='filter_category')
-  offered_next_term = filters.BooleanFilter(field_name='offered_next_term')
-  min_number = filters.NumberFilter(field_name='number', lookup_expr='gte')
-  max_number = filters.NumberFilter(field_name='number', lookup_expr='lt')
-
-  class Meta:
-    model = Course
-    fields = ['code', 'number', 'offered_next_term']
-
-  def filter_category(self, queryset, name, value):
-    values = [v.strip() for v in value.split(',') if v.strip()]
-    if not values:
-      return queryset
-    # ArrayField overlap: returns rows where category overlaps with provided list
-    return queryset.filter(category__overlap=values)
 
 
 class ChecklistViewSet(ModelViewSet):
@@ -55,5 +41,48 @@ class ChecklistViewSet(ModelViewSet):
   
 
 class ChecklistNodeViewSet(ModelViewSet):
-   
+  """
+  ViewSet for MPTT model
+  """
+  # Prefetch queryset
+  queryset = ChecklistNode.objects.select_related(
+    # Foreign keys
+    'target_checklist',
+  ).prefetch_related(
+    Prefetch(
+      # Reverse foreign keys
+      'children', 
+      queryset=ChecklistNode.objects.all()
+    )
+  )
+  permission_classes = [Admin]
+
+  def get_serializer_class(self):
+    if self.action in ('list', 'retrieve'):
+      return ChecklistNodeListSerializer
+    elif self.action in ('create', 'update', 'partial_update'):
+      return ChecklistNodeCreateSerializer
+    return ChecklistNodeListSerializer
+  
+
+class CheckboxAllowedCoursesViewSet(ModelViewSet):
+  # Prefetch queryset
+  queryset = CheckboxAllowedCourses.objects.select_related(
+    # Foreign keys
+    'target_checkbox',
+  ).prefetch_related(
+    Prefetch(
+      # M2M fields
+      'courses', 
+      queryset=CheckboxAllowedCourses.objects.all()
+    )
+  )
+  permission_classes = [Admin]
+
+  def get_serializer_class(self):
+    if self.action in ('list', 'retrieve'):
+      return ChecklistNodeListSerializer
+    elif self.action in ('create', 'update', 'partial_update'):
+      return ChecklistNodeCreateSerializer
+    return ChecklistNodeListSerializer
   
