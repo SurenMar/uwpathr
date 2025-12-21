@@ -53,7 +53,7 @@ class ChecklistNodeCreateSerializer(serializers.ModelSerializer):
 		model = ChecklistNode
 		fields = [
 			'requirement_type', 'title', 'units_required', 'target_checklist', 
-			'children', 'children_input',
+			'children_input',
 		]
 
 	@transaction.atomic
@@ -72,3 +72,18 @@ class ChecklistNodeCreateSerializer(serializers.ModelSerializer):
 		return node
 
 
+class CheckboxAllowedCoursesListSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = CheckboxAllowedCourses
+    fields = [
+      'id', 'created_at', 'updated_at', 'target_checkbox', 'courses',
+    ]
+    read_only_fields = ['id', 'created_at', 'updated_at']
+		
+
+class CheckboxAllowedCoursesCreateSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = CheckboxAllowedCourses
+    fields = [
+      'target_checkbox', 'courses',
+    ]

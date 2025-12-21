@@ -1,9 +1,8 @@
 from rest_framework.viewsets import ModelViewSet
 from django.db.models import Prefetch
-from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.permissions import BasePermission, SAFE_METHODS
-from django_filters.rest_framework import DjangoFilterBackend, FilterSet, filters
+from rest_framework.permissions import BasePermission
 
+from courses.models import Course
 from ..models.checklist import (
   Checklist, 
   ChecklistNode,
@@ -16,7 +15,8 @@ from ..serializers.checklist_serializers import (
   ChecklistNodeListSerializer,
   ChecklistNodeCreateSerializer,
 
-
+  CheckboxAllowedCoursesListSerializer,
+  CheckboxAllowedCoursesCreateSerializer
 )
 
 
@@ -74,15 +74,15 @@ class CheckboxAllowedCoursesViewSet(ModelViewSet):
     Prefetch(
       # M2M fields
       'courses', 
-      queryset=CheckboxAllowedCourses.objects.all()
+      queryset=Course.objects.all()
     )
   )
   permission_classes = [Admin]
 
   def get_serializer_class(self):
     if self.action in ('list', 'retrieve'):
-      return ChecklistNodeListSerializer
+      return CheckboxAllowedCoursesListSerializer
     elif self.action in ('create', 'update', 'partial_update'):
-      return ChecklistNodeCreateSerializer
-    return ChecklistNodeListSerializer
+      return CheckboxAllowedCoursesCreateSerializer
+    return CheckboxAllowedCoursesListSerializer
   

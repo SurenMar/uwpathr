@@ -64,7 +64,7 @@ class CourseRequisiteNodeCreateSerializer(serializers.ModelSerializer):
 		model = CourseRequisiteNode
 		fields = [
 			'requisite_type', 'target_course', 'node_type', 'leaf_course', 
-			'num_children_required', 'children', 'children_input',
+			'num_children_required', 'children_input',
 		]
 
 	@transaction.atomic
