@@ -22,6 +22,11 @@ class UserChecklist(models.Model):
     on_delete=models.PROTECT,
     related_name='+'
   )
+  original_checklist = models.ForeignKey(
+    'checklists.Checklist',
+    on_delete=models.CASCADE,
+    related_name='+'
+  )
   # TODO Add indexing and ordering for frontend csr
   class Meta:
     constraints = [

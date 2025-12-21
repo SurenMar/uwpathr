@@ -1,7 +1,6 @@
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ReadOnlyModelViewSet
 from django.db.models import Prefetch
 from rest_framework.filters import SearchFilter, OrderingFilter
-from rest_framework.permissions import BasePermission, SAFE_METHODS
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet, filters
 
 from .models import Course, CourseRequisiteNode
@@ -15,11 +14,12 @@ from .serializers import (
 ) 
 
 
-class ReadOnlyOrAdmin(BasePermission):
-    def has_permission(self, request, view):
-        if request.method in SAFE_METHODS:
-            return True
-        return request.user and request.user.is_staff
+# TODO Delete
+# class ReadOnlyOrAdmin(BasePermission):
+#     def has_permission(self, request, view):
+#         if request.method in SAFE_METHODS:
+#             return True
+#         return request.user and request.user.is_staff
 
 
 class CourseFilter(FilterSet):
@@ -41,9 +41,8 @@ class CourseFilter(FilterSet):
     return queryset.filter(category__overlap=values)
 
 
-class CourseViewSet(ModelViewSet):
+class CourseViewSet(ReadOnlyModelViewSet):
   queryset = Course.objects.all().order_by('code', 'number')
-  permission_classes = [ReadOnlyOrAdmin]
 
   # Flexible filtering, searching, and ordering
   filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
@@ -60,12 +59,10 @@ class CourseViewSet(ModelViewSet):
       return CourseListSerializer
     elif self.action == 'retrieve':
       return CourseDetailSerializer
-    elif self.action in ('create', 'update', 'partial_update'):
-      return CourseCreateSerializer
     return CourseDetailSerializer
 
 
-class CourseRequisiteNodeViewSet(ModelViewSet):
+class CourseRequisiteNodeViewSet(ReadOnlyModelViewSet):
   """
   ViewSet for MPTT model
   """
@@ -81,7 +78,6 @@ class CourseRequisiteNodeViewSet(ModelViewSet):
       queryset=CourseRequisiteNode.objects.all()
     )
   )
-  permission_classes = [ReadOnlyOrAdmin]
 
   filter_backends = [DjangoFilterBackend]
   filterset_fields = {
@@ -94,6 +90,4 @@ class CourseRequisiteNodeViewSet(ModelViewSet):
   def get_serializer_class(self):
     if self.action == 'list':
       return CourseRequisiteNodeListSerializer
-    elif self.action in ('create', 'update', 'partial_update'):
-      return CourseRequisiteNodeCreateSerializer
     return CourseRequisiteNodeListSerializer
