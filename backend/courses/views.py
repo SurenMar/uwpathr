@@ -1,10 +1,18 @@
 from rest_framework.viewsets import ModelViewSet
+from django.db.models import Prefetch
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet, filters
 
 from .models import Course, CourseRequisiteNode
-from .serializers import CourseSerializer, CourseRequisiteNodeSerializer
+from .serializers import (
+  CourseListSerializer,
+  CourseDetailSerializer,
+  CourseCreateSerializer,
+
+  CourseRequisiteNodeListSerializer,
+  CourseRequisiteNodeCreateSerializer,
+) 
 
 
 class ReadOnlyOrAdmin(BasePermission):
@@ -35,7 +43,6 @@ class CourseFilter(FilterSet):
 
 class CourseViewSet(ModelViewSet):
   queryset = Course.objects.all().order_by('code', 'number')
-  serializer_class = CourseSerializer
   permission_classes = [ReadOnlyOrAdmin]
 
   # Flexible filtering, searching, and ordering
@@ -48,13 +55,32 @@ class CourseViewSet(ModelViewSet):
   ]
   ordering = ['code', 'number']
 
+  def get_serializer_class(self):
+    if self.action == 'list':
+      return CourseListSerializer
+    elif self.action == 'retrieve':
+      return CourseDetailSerializer
+    elif self.action in ('create', 'update', 'partial_update'):
+      return CourseCreateSerializer
+    return CourseDetailSerializer
+
 
 class CourseRequisiteNodeViewSet(ModelViewSet):
   """
   ViewSet for MPTT model
   """
-  queryset = CourseRequisiteNode.objects.all()
-  serializer_class = CourseRequisiteNodeSerializer
+  # Prefetch queryset
+  queryset = CourseRequisiteNode.objects.select_related (
+    # Foreign keys
+    'target_course',
+    'leaf_course',
+  ).prefetch_related(
+    Prefetch(
+      # Reverse foreign keys
+      'children', 
+      queryset=CourseRequisiteNode.objects.all()
+    )
+  )
   permission_classes = [ReadOnlyOrAdmin]
 
   filter_backends = [DjangoFilterBackend]
@@ -64,3 +90,10 @@ class CourseRequisiteNodeViewSet(ModelViewSet):
     'target_course__number': ['exact'], 
     'requisite_type': ['exact'],
   }
+
+  def get_serializer_class(self):
+    if self.action == 'list':
+      return CourseListSerializer
+    elif self.action in ('create', 'update', 'partial_update'):
+      return CourseCreateSerializer
+    return CourseListSerializer
