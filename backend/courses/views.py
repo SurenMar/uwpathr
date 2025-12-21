@@ -70,7 +70,7 @@ class CourseRequisiteNodeViewSet(ModelViewSet):
   ViewSet for MPTT model
   """
   # Prefetch queryset
-  queryset = CourseRequisiteNode.objects.select_related (
+  queryset = CourseRequisiteNode.objects.select_related(
     # Foreign keys
     'target_course',
     'leaf_course',
@@ -93,7 +93,7 @@ class CourseRequisiteNodeViewSet(ModelViewSet):
 
   def get_serializer_class(self):
     if self.action == 'list':
-      return CourseListSerializer
+      return CourseRequisiteNodeListSerializer
     elif self.action in ('create', 'update', 'partial_update'):
-      return CourseCreateSerializer
-    return CourseListSerializer
+      return CourseRequisiteNodeCreateSerializer
+    return CourseRequisiteNodeListSerializer

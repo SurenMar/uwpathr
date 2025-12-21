@@ -16,10 +16,10 @@ class CourseDetailSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Course
 		fields = [
-			'id', 'created_at', 'updated_at',
-			'code', 'number', 'units', 'offered_next_term', 'category',
-			'title', 'description', 'num_uwflow_ratings', 'uwflow_liked_rating', 
-			'uwflow_easy_ratings', 'uwflow_useful_ratings',
+			'id', 'created_at', 'updated_at', 'code', 'number', 'units', 
+			'offered_next_term', 'category', 'title', 'description', 
+			'num_uwflow_ratings', 'uwflow_liked_rating', 'uwflow_easy_ratings', 
+			'uwflow_useful_ratings',
 		]
 		read_only_fields = ['id', 'created_at', 'updated_at']
 		
@@ -66,7 +66,6 @@ class CourseRequisiteNodeCreateSerializer(serializers.ModelSerializer):
 			'requisite_type', 'target_course', 'node_type', 'leaf_course', 
 			'num_children_required', 'children', 'children_input',
 		]
-		read_only_fields = ['target_course']
 
 	@transaction.atomic
 	def create(self, validated_data):
