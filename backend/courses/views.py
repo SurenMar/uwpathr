@@ -3,8 +3,8 @@ from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet, filters
 
-from .models import Course
-from .serializers import CourseSerializer
+from .models import Course, CourseRequisiteNode
+from .serializers import CourseSerializer, CourseRequisiteNodeSerializer
 
 
 class ReadOnlyOrAdmin(BasePermission):
@@ -47,3 +47,20 @@ class CourseViewSet(ModelViewSet):
     'uwflow_easy_ratings', 'uwflow_useful_ratings'
   ]
   ordering = ['code', 'number']
+
+
+class CourseRequisiteNodeViewSet(ModelViewSet):
+  """
+  ViewSet for MPTT model
+  """
+  queryset = CourseRequisiteNode.objects.all()
+  serializer_class = CourseRequisiteNodeSerializer
+  permission_classes = [ReadOnlyOrAdmin]
+
+  filter_backends = [DjangoFilterBackend]
+  filterset_fields = {
+    'target_course': ['exact'], 
+    'target_course__code': ['exact'], 
+    'target_course__number': ['exact'], 
+    'requisite_type': ['exact'],
+  }
