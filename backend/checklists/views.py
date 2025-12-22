@@ -1,8 +1,6 @@
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
-from django.db.models import Prefetch
 
-from courses.models import Course
 from .models.checklist import CheckboxAllowedCourses
 from .models.requirements import AdditionalConstraintAllowedCourses
 from serializers import (
