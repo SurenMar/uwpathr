@@ -55,8 +55,10 @@ class UserAdditionalConstraintsUpdateSerializer(serializers.ModelSerializer):
         elif not completed and instance.completed:
           parent.num_courses_gathered -= 1
         # Clamp values
-        parent.num_courses_gathered = max(0, min(parent.num_required_courses, parent.num_courses_gathered))
-        parent.save(update_fields=['num_courses_gathered'])
+        parent.num_courses_gathered = max(0, min(parent.num_courses_required, parent.num_courses_gathered))
+        if parent.num_courses_gathered == parent.num_courses_required:
+          parent.completed = True
+        parent.save(update_fields=['num_courses_gathered', 'completed'])
 
         # Update child
         instance.completed = completed
