@@ -80,7 +80,7 @@ class UserCourseMinimalSerializer(serializers.ModelSerializer):
     fields = ['id', 'course_list', 'course']
 
 
-class UserDepthListListSerializer(serializers.ModelSerializer):
+class UserDepthListDetailSerializer(serializers.ModelSerializer):
   courses = UserCourseMinimalSerializer(many=True, read_only=True)
 
   class Meta:
@@ -89,3 +89,26 @@ class UserDepthListListSerializer(serializers.ModelSerializer):
       'id', 'created_at', 'updated_at', 'courses', 'is_chain', 'total_units',
       'num_courses'
     ]
+
+
+class UserDepthListCreateSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = UserDepthList
+    fields = [
+      'id', 'created_at', 'updated_at', 'courses', 'is_chain'
+    ]
+    read_only_fields = ['id', 'created_at', 'updated_at', 'courses']
+
+
+class UserDepthListUpdateSerializer(serializers.ModelSerializer):
+  courses = serializers.PrimaryKeyRelatedField(
+    many=True, queryset=UserCourse.objects.all()
+  )
+
+  class Meta:
+    model = UserDepthList
+    fields = [
+      'id', 'created_at', 'updated_at', 'courses', 'is_chain'
+    ]
+    read_only_fields = ['id', 'created_at', 'updated_at']
+  

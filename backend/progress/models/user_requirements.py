@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.dispatch import receiver
 from django.db.models.signals import m2m_changed, post_save, pre_delete
 from mptt.models import MPTTModel, TreeForeignKey
@@ -72,7 +72,6 @@ class UserAdditionalConstraint(MPTTModel):
     ]
 
 
-# Maybe we have an auto fill button that creates a depth list on command
 class UserDepthList(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
@@ -88,36 +87,27 @@ class UserDepthList(models.Model):
   )
   courses = models.ManyToManyField(
     'progress.UserCourse', 
-    related_name='depth_lists'
+    related_name='depth_lists',
+    blank=True
   )
   is_chain = models.BooleanField(blank=True, null=True)
-  total_units = models.PositiveSmallIntegerField()
-  num_courses = models.PositiveSmallIntegerField()
+  total_units = models.PositiveSmallIntegerField(default=0)
+  num_courses = models.PositiveSmallIntegerField(default=0)
 
   class Meta:
    # TODO Rework indexes and ordering for frontend csr
    pass
 
-# Auto-add logic
-@receiver(m2m_changed, sender=UserDepthList.courses.through)
-def update_depth_list_on_add(sender, instance, action, pk_set, **kwargs):
-  if action == 'post_add':
-    added_courses = instance.courses.filter(pk__in=pk_set)
-    for course in added_courses:
-      if instance.is_chain:
-        instance.num_courses += 1
-      else:
-        instance.total_units += course.course.units
-    instance.save(update_fields=["num_courses", "total_units"])
-
-# Auto-remove logic
-@receiver(m2m_changed, sender=UserDepthList.courses.through)
-def update_depth_list_on_remove(sender, instance, action, pk_set, **kwargs):
-  if action == 'pre_remove':
-    removed_courses = instance.courses.filter(pk__in=pk_set)
-    for course in removed_courses:
-      if instance.is_chain:
-        instance.num_courses -= 1
-      else:
-        instance.total_units -= course.course.units
-    instance.save(update_fields=["num_courses", "total_units"])
+@receiver(post_save, sender=UserDepthList)
+def update_depth_list_counts_on_save(sender, instance, created, **kwargs):
+  for course in instance.courses:
+    if instance.is_chain:
+      instance.num_courses = instance.courses.count()
+    else:
+      instance.total_units = instance.courses.aggregate(
+        total=Sum('units'))['total'] or 0
+  # Avoid recursion
+  sender.objects.filter(pk=instance.pk).update(
+    num_courses=instance.num_courses,
+    total_units=instance.total_units
+  )

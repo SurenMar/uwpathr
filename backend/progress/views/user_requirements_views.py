@@ -11,7 +11,9 @@ from ..serializers.user_requirements_serializers import (
   UserAdditionalConstraintsListSerializer,
   UserAdditionalConstraintsUpdateSerializer,
 
-  UserDepthListListSerializer,
+  UserDepthListDetailSerializer,
+  UserDepthListCreateSerializer,
+  UserDepthListUpdateSerializer,
 )
 
 
@@ -45,12 +47,12 @@ class UserAdditionalConstraintViewSet(ModelViewSet):
     return UserAdditionalConstraintsListSerializer
   
 
-class UserDepthListViewSet(ReadOnlyModelViewSet):
-  # Flexible filtering, searching, and ordering
+class UserDepthListViewSet(ModelViewSet):
   filter_backends = [DjangoFilterBackend]
   filterset_fields = {
     'target_checklist': ['exact'],
   }
+  http_method_names = ['get', 'create', 'patch']
 
   def get_queryset(self):
     return (
@@ -68,4 +70,10 @@ class UserDepthListViewSet(ReadOnlyModelViewSet):
     )
   
   def get_serializer_class(self):
-    return UserDepthListListSerializer
+    if self.action == 'retrieve':
+      return UserDepthListDetailSerializer
+    elif self.action == 'create':
+      return UserDepthListCreateSerializer
+    elif self.action == 'partial_update':
+      return UserDepthListUpdateSerializer
+    return UserDepthListDetailSerializer
