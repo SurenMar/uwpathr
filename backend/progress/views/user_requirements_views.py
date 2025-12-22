@@ -2,8 +2,8 @@ from rest_framework.viewsets import ModelViewSet
 from django.db.models import Prefetch
 from django_filters.rest_framework import DjangoFilterBackend
 
-from ..models.user_course import UserCourse
-from ..models.user_requirements import (
+from progress.models.user_course import UserCourse
+from progress.models.user_requirements import (
   UserAdditionalConstraint, 
   UserDepthList,
 )

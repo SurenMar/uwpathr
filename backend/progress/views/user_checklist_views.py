@@ -3,8 +3,8 @@ from rest_framework.mixins import UpdateModelMixin
 from django.db.models import Prefetch
 from django_filters.rest_framework import DjangoFilterBackend
 
-from ..models.user_checklist import UserChecklist, UserChecklistNode
-from ..serializers.user_checklist_serializers import (
+from progress.models.user_checklist import UserChecklist, UserChecklistNode
+from progress.serializers.user_checklist_serializers import (
   UserChecklistDetailSerializer,
   UserChecklistNodeUpdateSerializer,
 )

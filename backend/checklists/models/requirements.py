@@ -53,7 +53,8 @@ class AdditionalConstraint(MPTTModel):
            |
           (Q(requirement_type='group') &
            Q(courses_required__isnull=False))
-        )
+        ),
+        name='only_group_has_courses_required'
       )
     ]
 

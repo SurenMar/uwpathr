@@ -3,8 +3,8 @@ from django.db.models import Prefetch
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet, filters
 
-from .models import Course, CourseRequisiteNode
-from .serializers import (
+from courses.models import Course, CourseRequisiteNode
+from courses.serializers import (
   CourseListSerializer,
   CourseDetailSerializer,
 

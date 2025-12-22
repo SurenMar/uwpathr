@@ -64,6 +64,6 @@ class UserCoursePathNode(MP_Node):
       )
     ]
     indexes = [
-      models.Index(fields=['user', 'target_course', 'parent']),
+      models.Index(fields=['user', 'target_course', 'path']),
       models.Index(fields=['user', 'target_course', 'depth']),
     ]

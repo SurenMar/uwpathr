@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models.checklist import CheckboxAllowedCourses
+from checklists.models.checklist import CheckboxAllowedCourses
 from courses.models import Course
 
 

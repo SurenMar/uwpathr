@@ -1,5 +1,5 @@
 from rest_framework.routers import DefaultRouter
-from .views.user_checklist_views import (
+from progress.views.user_checklist_views import (
   UserChecklistViewSet, 
   UserChecklistNodeViewSet
 )

@@ -1,9 +1,9 @@
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 
-from .models.checklist import CheckboxAllowedCourses
-from .models.requirements import AdditionalConstraintAllowedCourses
-from serializers import (
+from checklists.models.checklist import CheckboxAllowedCourses
+from checklists.models.requirements import AdditionalConstraintAllowedCourses
+from checklists.serializers import (
   CheckboxAllowedCoursesListSerializer,
   AdditionalConstraintAllowedCoursesListSerializer
 )

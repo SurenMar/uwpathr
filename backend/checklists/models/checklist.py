@@ -49,7 +49,8 @@ class ChecklistNode(MPTTModel):
            |
           (Q(requirement_type='group') &
            Q(units_required__isnull=False))
-        )
+        ),
+        name='only_group_has_units_required'
       )
     ]
 

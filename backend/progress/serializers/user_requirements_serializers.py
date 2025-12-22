@@ -1,11 +1,11 @@
 from rest_framework import serializers
 from django.db import transaction
 
-from ..models.user_requirements import (
+from progress.models.user_requirements import (
   UserAdditionalConstraint, 
   UserDepthList,
 )
-from ..models.user_course import UserCourse
+from progress.models.user_course import UserCourse
 from courses.models import Course
 
 

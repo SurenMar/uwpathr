@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
 from courses.models import Course, CourseRequisiteNode
-from ..models.user_course import UserCourse, UserCoursePathNode
+from progress.models.user_course import UserCourse, UserCoursePathNode
 from courses.serializers import CourseListSerializer, CourseDetailSerializer
-from .user_requirements_serializers import CourseMinimalSerializer
+from progress.serializers.user_requirements_serializers import CourseMinimalSerializer
 
 
 class UserCourseListSerializer(serializers.ModelSerializer):

@@ -3,8 +3,8 @@ from django.db.models import Prefetch
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet, filters
 
-from ..models.user_course import UserCourse, UserCoursePathNode
-from ..serializers.user_course_serializers import (
+from progress.models.user_course import UserCourse, UserCoursePathNode
+from progress.serializers.user_course_serializers import (
   UserCourseListSerializer,
   UserCourseDetailSerializer,
   UserCourseCreateSerializer,
@@ -86,7 +86,7 @@ class UserPathNodeViewSet(ModelViewSet):
 
   def get_queryset(self):
     return (
-      UserCourse.objects
+      UserCoursePathNode.objects
       .filter(user=self.request.user)
       .select_related(
         'target_course',

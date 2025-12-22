@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models.user_checklist import UserChecklist, UserChecklistNode
+from progress.models.user_checklist import UserChecklist, UserChecklistNode
 
 
 class UserChecklistNodeListSerializer(serializers.ModelSerializer):
