@@ -1,4 +1,5 @@
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import GenericViewSet, ReadOnlyModelViewSet
+from rest_framework.mixins import UpdateModelMixin
 from django.db.models import Prefetch
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -9,7 +10,6 @@ from ..serializers.user_checklist_serializers import (
 
 
 class UserChecklistViewSet(ReadOnlyModelViewSet):
-  # Flexible filtering, searching, and ordering
   filter_backends = [DjangoFilterBackend]
   filterset_fields = {
     'year': ['exact'], 
@@ -44,3 +44,8 @@ class UserChecklistViewSet(ReadOnlyModelViewSet):
   
   def get_serializer_class(self):
     return UserChecklistDetailSerializer
+
+
+# TODO Create view for editing
+class UserChecklistNodeViewSet(GenericViewSet, UpdateModelMixin):
+  pass # How does frontend find the correct node to edit of an mptt
