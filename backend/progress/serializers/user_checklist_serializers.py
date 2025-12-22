@@ -2,7 +2,7 @@ from rest_framework import serializers
 from ..models.user_checklist import UserChecklist, UserChecklistNode
 
 
-class UserChecklistNodeSerializer(serializers.ModelSerializer):
+class UserChecklistNodeListSerializer(serializers.ModelSerializer):
   children = serializers.SerializerMethodField()
 
   class Meta:
@@ -12,13 +12,14 @@ class UserChecklistNodeSerializer(serializers.ModelSerializer):
       'units_required', 'units_gathered', 'completed', 'selected_course',
       'children',
     ]
+    read_only_fields = fields
 
   def get_children(self, obj):
 		# Assumes queryset is prefetched in view
     children = obj.get_children()
     if not children:
       return []
-    return UserChecklistNodeSerializer(
+    return UserChecklistNodeListSerializer(
       children, 
       many=True,
       context=self.context
@@ -26,7 +27,7 @@ class UserChecklistNodeSerializer(serializers.ModelSerializer):
 
 
 class UserChecklistDetailSerializer(serializers.ModelSerializer):
-  nodes = UserChecklistNodeSerializer(many=True, read_only=True)
+  nodes = serializers.SerializerMethodField()
 
   class Meta:
     model = UserChecklist
@@ -35,3 +36,17 @@ class UserChecklistDetailSerializer(serializers.ModelSerializer):
       'taken_course_units', 'planned_course_units', 'specialization',
       'nodes',
     ]
+    read_only_fields = [
+      'id', 'created_at', 'updated_at', 'units_required', 'taken_course_units', 
+      'planned_course_units', 'nodes',
+    ]
+
+  def get_nodes(self, obj):
+    # Filter roots from the prefetched node set
+    roots = [n for n in obj.nodes.all() if n.parent_id is None]
+    return UserChecklistNodeListSerializer(
+      roots, 
+      many=True,
+      context=self.context
+    ).data
+

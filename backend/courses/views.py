@@ -12,14 +12,6 @@ from .serializers import (
 ) 
 
 
-# TODO Delete
-# class ReadOnlyOrAdmin(BasePermission):
-#     def has_permission(self, request, view):
-#         if request.method in SAFE_METHODS:
-#             return True
-#         return request.user and request.user.is_staff
-
-
 class CourseFilter(FilterSet):
   # Comma-separated categories; matches any overlap in ArrayField
   category = filters.CharFilter(method='filter_category')
@@ -57,7 +49,6 @@ class CourseViewSet(ReadOnlyModelViewSet):
       return CourseListSerializer
     elif self.action == 'retrieve':
       return CourseDetailSerializer
-    return CourseDetailSerializer
 
 
 class CourseRequisiteNodeViewSet(ReadOnlyModelViewSet):
@@ -79,10 +70,7 @@ class CourseRequisiteNodeViewSet(ReadOnlyModelViewSet):
 
   filter_backends = [DjangoFilterBackend]
   filterset_fields = {
-    'target_course': ['exact'], 
-    'target_course__code': ['exact'], 
-    'target_course__number': ['exact'], 
-    'requisite_type': ['exact'],
+    'target_course': ['exact']
   }
 
   def get_serializer_class(self):

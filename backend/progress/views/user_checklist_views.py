@@ -16,26 +16,22 @@ class UserChecklistViewSet(ReadOnlyModelViewSet):
     'specialization': ['exact'], 
   }
 
+  # Recursively get the nodes (requirements) for the head (checklist)
   def get_queryset(self):
     return (
       UserChecklist.objects
       .filter(user=self.request.user)
       .select_related(
-        # Foreign keys
         'specialization',
         'original_checklist',
       ).prefetch_related(
         Prefetch(
-          # Node
           'nodes',
           queryset=UserChecklistNode.objects
-          .filter(parent__isnull=True)
           .select_related(
-            # Foreign keys
             'selected_course',
             'original_checkbox',
           ).prefetch_related(
-            # Reverse foreign keys
             'children'
           )
         )
