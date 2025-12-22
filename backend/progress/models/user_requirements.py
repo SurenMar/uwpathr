@@ -71,22 +71,6 @@ class UserAdditionalConstraint(MPTTModel):
       )
     ]
 
-# Auto-save logic
-@receiver(post_save, sender=UserAdditionalConstraint)
-def update_parent_on_checkbox_add(sender, instance, created, **kwargs):
-  if created and instance.requirement_type == 'checkbox' and \
-      instance.parent and instance.parent.requirement_type == 'group':
-    instance.parent.num_courses_gathered += 1
-    instance.parent.save(update_fields=['num_courses_gathered'])
-
-# Auto-delete logic
-@receiver(pre_delete, sender=UserAdditionalConstraint)
-def update_parent_on_checkbox_delete(sender, instance, created, **kwargs):
-  if instance.requirement_type == 'checkbox' and \
-     instance.parent and instance.parent.requirement_type == 'group':
-    instance.parent.num_courses_gathered -= 1
-    instance.parent.save(update_fields=['num_courses_gathered'])
-
 
 # Maybe we have an auto fill button that creates a depth list on command
 class UserDepthList(models.Model):

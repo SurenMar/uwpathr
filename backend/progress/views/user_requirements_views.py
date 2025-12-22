@@ -1,4 +1,4 @@
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.viewsets import ModelViewSet
 from django.db.models import Prefetch
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -9,16 +9,19 @@ from ..models.user_requirements import (
 )
 from ..serializers.user_requirements_serializers import (
   UserAdditionalConstraintsListSerializer,
+  UserAdditionalConstraintsUpdateSerializer,
+
   UserDepthListListSerializer,
 )
 
 
-class UserAdditionalConstraintViewSet(ReadOnlyModelViewSet):
+class UserAdditionalConstraintViewSet(ModelViewSet):
   # Flexible filtering, searching, and ordering
   filter_backends = [DjangoFilterBackend]
   filterset_fields = {
     'target_checklist': ['exact'],
   }
+  http_method_names = ['get', 'patch']
 
   def get_queryset(self):
     return (
@@ -35,6 +38,10 @@ class UserAdditionalConstraintViewSet(ReadOnlyModelViewSet):
     )
   
   def get_serializer_class(self):
+    if self.action in ('list', 'retrieve'):
+      return UserAdditionalConstraintsListSerializer
+    elif self.action == 'partial_update':
+      return UserAdditionalConstraintsUpdateSerializer
     return UserAdditionalConstraintsListSerializer
   
 
