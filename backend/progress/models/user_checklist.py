@@ -113,14 +113,30 @@ class UserChecklistNode(MPTTModel):
       )
     ]
 
-# Auto-update logic
 @receiver(post_save, sender=UserChecklistNode)
-def update_parent_on_completed_toggle(sender, instance, created, **kwargs):
+def update_parent_on_child_update(sender, instance, created, **kwargs):
   if not created and instance.requirement_type == 'checkbox' and \
-     instance.parent and instance.parent.requirement_type == 'group':
+     instance.parent.requirement_type == 'group':
     old = sender.objects.get(pk=instance.pk)
-    if old.completed != instance.completed and instance.selected_course:
-      delta = instance.selected_course.units \
-        if instance.completed else -instance.selected_course.units
-      instance.parent.units_gathered += delta
-      instance.parent.save(update_fields=['units_gathered'])
+    update_group_on_course_change(old, instance)
+    instance = instance.parent
+  
+  if not created and instance.requirement_type == 'group' and \
+     instance.parent.requirement_type == 'head':
+    update_head_on_group_change(instance)
+    
+def update_group_on_course_change(old_instance, new_instance):
+  old_units = old_instance.selected_course.units \
+    if old_instance.selected_course else 0
+  new_units = new_instance.selected_course.units \
+    if new_instance.selected_course else 0
+  
+  new_instance.parent.units_gathered -= old_units 
+  new_instance.parent.units_gathered += new_units 
+
+  new_instance.parent.save(update_fields=['units_gathered'])
+
+def update_head_on_group_change(new_instance):
+  if new_instance.units_gathered == new_instance.units_required:
+    new_instance.parent.completed = True
+    new_instance.parent.save(update_fields=['completed'])

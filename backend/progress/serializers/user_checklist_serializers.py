@@ -26,6 +26,22 @@ class UserChecklistNodeListSerializer(serializers.ModelSerializer):
     ).data
 
 
+class UserChecklistNodeUpdateSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = UserChecklistNode
+    fields = [
+      'id', 'created_at', 'updated_at', 'requirement_type', 'selected_course'
+    ]
+    read_only_fields = ['id', 'created_at', 'updated_at', 'requirement_type']
+
+  def update(self, instance, validated_data):
+    if 'selected_course' in validated_data and \
+       instance.requirement_type == 'checkbox':
+      instance.selected_course = validated_data['selected_course']
+    instance.save(update_fields=['selected_course'])
+    return instance
+
+
 class UserChecklistDetailSerializer(serializers.ModelSerializer):
   nodes = serializers.SerializerMethodField()
 
