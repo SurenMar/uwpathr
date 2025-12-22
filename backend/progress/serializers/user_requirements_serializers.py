@@ -37,7 +37,7 @@ class CourseMinimalSerializer(serializers.ModelSerializer):
 
 
 class UserCourseMinimalSerializer(serializers.ModelSerializer):
-  course = CourseMinimalSerializer(many=False, read_only=True)
+  course = CourseMinimalSerializer(read_only=True)
 
   class Meta:
     model = UserCourse

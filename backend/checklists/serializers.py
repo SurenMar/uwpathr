@@ -9,7 +9,6 @@ class CoursesMinimalSerializer(serializers.ModelSerializer):
 		fields = [
 			'id', 'created_at', 'updated_at', 'code', 'number'
 		]
-		read_only_fields = ['id', 'created_at', 'updated_at']
 
 
 class CheckboxAllowedCoursesListSerializer(serializers.ModelSerializer):
@@ -20,7 +19,6 @@ class CheckboxAllowedCoursesListSerializer(serializers.ModelSerializer):
 		fields = [
 		  'id', 'created_at', 'updated_at', 'target_checkbox', 'courses',
     ]
-		read_only_fields = ['id', 'created_at', 'updated_at', 'courses']
 
 
 class AdditionalConstraintAllowedCoursesListSerializer(serializers.ModelSerializer):
@@ -31,5 +29,4 @@ class AdditionalConstraintAllowedCoursesListSerializer(serializers.ModelSerializ
 		fields = [
 		  'id', 'created_at', 'updated_at', 'target_checkbox', 'courses',
     ]
-		read_only_fields = ['id', 'created_at', 'updated_at', 'courses']
 		

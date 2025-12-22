@@ -21,7 +21,7 @@ class CourseFilter(FilterSet):
 
   class Meta:
     model = Course
-    fields = ['code', 'number', 'offered_next_term']
+    fields = ['id', 'code', 'number', 'offered_next_term']
 
   def filter_category(self, queryset, name, value):
     values = [v.strip() for v in value.split(',') if v.strip()]

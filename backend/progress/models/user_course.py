@@ -36,16 +36,6 @@ class UserCourse(models.Model):
       )
     ]
 
-  # Change total_units or num_courses in corrosponding UserDepthList fields
-  @transaction.atomic # Strong guarantee
-  def delete(self, *args, **kwargs):
-    depth_lists = list(self.depth_lists.all())
-    for depth_list in depth_lists:
-      depth_list.num_courses -= 1
-      depth_list.total_units -= self.course.units
-      depth_list.save()
-    super().delete(*args, **kwargs)
-
 
 class UserCoursePathNode(MP_Node):
   created_at = models.DateTimeField(auto_now_add=True)
@@ -53,7 +43,7 @@ class UserCoursePathNode(MP_Node):
   user = models.ForeignKey(
     settings.AUTH_USER_MODEL,
     on_delete=models.CASCADE,
-    related_name='course_paths' # TODO We might not need this reverse relationship
+    related_name='course_paths'
   )
   target_course = models.ForeignKey(
     'UserCourse',
@@ -67,7 +57,6 @@ class UserCoursePathNode(MP_Node):
   )
 
   class Meta:
-    # TODO Rework indexes and ordering for frontend csr
     constraints = [
       models.UniqueConstraint(
         fields=['user', 'target_course'], 
@@ -76,5 +65,5 @@ class UserCoursePathNode(MP_Node):
     ]
     indexes = [
       models.Index(fields=['user', 'target_course', 'parent']),
-      models.Index(fields=['user', 'target_course', 'depth']), # Might not need this
+      models.Index(fields=['user', 'target_course', 'depth']),
     ]

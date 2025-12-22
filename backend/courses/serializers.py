@@ -6,8 +6,9 @@ class CourseListSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Course
 		fields = [
-			'code', 'number', 'units', 'category', 'title', 'num_uwflow_ratings', 
-			'uwflow_liked_rating', 'uwflow_easy_ratings', 'uwflow_useful_ratings',
+			'id', 'created_at', 'updated_at', 'code', 'number', 'title',
+			'num_uwflow_ratings', 'uwflow_liked_rating', 'uwflow_easy_ratings', 
+			'uwflow_useful_ratings',
 		]
 
 
@@ -20,11 +21,6 @@ class CourseDetailSerializer(serializers.ModelSerializer):
 			'num_uwflow_ratings', 'uwflow_liked_rating', 'uwflow_easy_ratings', 
 			'uwflow_useful_ratings',
 		]
-		read_only_fields = [
-			'id', 'created_at', 'updated_at', 'units', 'offered_next_term', 'title', 
-			'description', 'num_uwflow_ratings', 'uwflow_liked_rating', 
-			'uwflow_easy_ratings', 'uwflow_useful_ratings',
-		]
 		
 
 class CourseRequisiteNodeListSerializer(serializers.ModelSerializer):
@@ -36,10 +32,6 @@ class CourseRequisiteNodeListSerializer(serializers.ModelSerializer):
 		fields = [
 			'id', 'created_at', 'updated_at',
 			'requisite_type', 'target_course', 'node_type',
-			'leaf_course', 'num_children_required', 'children',
-		]
-		read_only_fields = [
-			'id', 'created_at', 'updated_at', 'requisite_type', 'node_type', 
 			'leaf_course', 'num_children_required', 'children',
 		]
 

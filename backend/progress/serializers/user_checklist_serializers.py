@@ -12,7 +12,6 @@ class UserChecklistNodeListSerializer(serializers.ModelSerializer):
       'units_required', 'units_gathered', 'completed', 'selected_course',
       'children',
     ]
-    read_only_fields = fields
 
   def get_children(self, obj):
 		# Assumes queryset is prefetched in view
@@ -51,10 +50,6 @@ class UserChecklistDetailSerializer(serializers.ModelSerializer):
       'id', 'created_at', 'updated_at', 'year', 'units_required',
       'taken_course_units', 'planned_course_units', 'specialization',
       'nodes',
-    ]
-    read_only_fields = [
-      'id', 'created_at', 'updated_at', 'units_required', 'taken_course_units', 
-      'planned_course_units', 'nodes',
     ]
 
   def get_nodes(self, obj):
