@@ -7,10 +7,8 @@ from .models import Course, CourseRequisiteNode
 from .serializers import (
   CourseListSerializer,
   CourseDetailSerializer,
-  CourseCreateSerializer,
 
   CourseRequisiteNodeListSerializer,
-  CourseRequisiteNodeCreateSerializer,
 ) 
 
 
@@ -88,6 +86,4 @@ class CourseRequisiteNodeViewSet(ReadOnlyModelViewSet):
   }
 
   def get_serializer_class(self):
-    if self.action == 'list':
-      return CourseRequisiteNodeListSerializer
     return CourseRequisiteNodeListSerializer

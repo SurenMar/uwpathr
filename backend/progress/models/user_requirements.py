@@ -97,6 +97,11 @@ class UserDepthList(models.Model):
     on_delete=models.CASCADE,
     related_name='depth_lists' # TODO We might not need this reverse relationship
   )
+  target_checklist = models.ForeignKey(
+    'UserChecklist',
+    on_delete=models.CASCADE,
+    related_name='depth_list'
+  )
   courses = models.ManyToManyField(
     'progress.UserCourse', 
     related_name='depth_lists'

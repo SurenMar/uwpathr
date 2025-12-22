@@ -18,7 +18,11 @@ class UserChecklistNodeSerializer(serializers.ModelSerializer):
     children = obj.get_children()
     if not children:
       return []
-    return UserChecklistNodeSerializer(children, many=True).data
+    return UserChecklistNodeSerializer(
+      children, 
+      many=True,
+      context=self.context
+    ).data
 
 
 class UserChecklistDetailSerializer(serializers.ModelSerializer):

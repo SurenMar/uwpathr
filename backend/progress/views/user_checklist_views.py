@@ -4,8 +4,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from ..models.user_checklist import UserChecklist, UserChecklistNode
 from ..serializers.user_checklist_serializers import (
-  UserChecklistNodeSerializer,
-  UserChecklistDetailSerializer,
+  UserChecklistDetailSerializer
 )
 
 

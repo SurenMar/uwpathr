@@ -49,7 +49,11 @@ class CourseRequisiteNodeListSerializer(serializers.ModelSerializer):
 	def get_children(self, obj):
 		# Assumes queryset is prefetched in view
 		children = obj.get_children()
-		return CourseRequisiteNodeListSerializer(children, many=True).data
+		return CourseRequisiteNodeListSerializer(
+      children, 
+      many=True,
+      context=self.context
+    ).data
 	
 
 # TODO Delete
