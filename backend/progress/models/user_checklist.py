@@ -1,4 +1,4 @@
-from django.db import models
+from django.db import models, transaction
 from django.db.models import Q
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_delete
@@ -126,17 +126,31 @@ def update_parent_on_child_update(sender, instance, created, **kwargs):
     update_head_on_group_change(instance)
     
 def update_group_on_course_change(old_instance, new_instance):
+  parent = getattr(new_instance, 'parent', None)
+  if parent is None:
+    return  # nothing to update
+
   old_units = old_instance.selected_course.units \
     if old_instance.selected_course else 0
   new_units = new_instance.selected_course.units \
     if new_instance.selected_course else 0
-  
-  new_instance.parent.units_gathered -= old_units 
-  new_instance.parent.units_gathered += new_units 
 
-  new_instance.parent.save(update_fields=['units_gathered'])
+  # Update units_gathered safely
+  with transaction.atomic():
+    # Use update() to avoid triggering signals on parent
+    type(parent).objects.filter(pk=parent.pk).update(
+      units_gathered=parent.units_gathered - old_units + new_units
+    )
 
 def update_head_on_group_change(new_instance):
+  parent = getattr(new_instance, 'parent', None)
+  if parent is None:
+    return  # nothing to update
+
   if new_instance.units_gathered == new_instance.units_required:
-    new_instance.parent.completed = True
-    new_instance.parent.save(update_fields=['completed'])
+    # Update parent safely
+    with transaction.atomic():
+      parent.completed = True
+      # Save only the completed field
+      type(parent).objects.filter(pk=parent.pk).update(completed=True)
+    
