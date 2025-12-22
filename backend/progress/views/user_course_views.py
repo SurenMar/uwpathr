@@ -10,7 +10,6 @@ from ..serializers.user_course_serializers import (
   UserCourseCreateSerializer,
 
   UserPathNodeListSerializer,
-  UserPathNodeUpdateSerializer,
   UserPathNodeCreateSerializer
 ) 
 
@@ -101,8 +100,6 @@ class UserPathNodeViewSet(ModelViewSet):
   def get_serializer_class(self):
     if self.action in ('list', 'retrieve'):
       return UserPathNodeListSerializer
-    elif self.action == 'partial_update':
-      return UserPathNodeUpdateSerializer
     elif self.action == 'create':
       return UserPathNodeCreateSerializer
     return UserPathNodeListSerializer
