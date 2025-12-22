@@ -5,7 +5,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from ..models.user_checklist import UserChecklist, UserChecklistNode
 from ..serializers.user_checklist_serializers import (
-  UserChecklistDetailSerializer
+  UserChecklistDetailSerializer,
+  UserChecklistNodeUpdateSerializer,
 )
 
 
@@ -42,6 +43,9 @@ class UserChecklistViewSet(ReadOnlyModelViewSet):
     return UserChecklistDetailSerializer
 
 
-# TODO Create view for editing
 class UserChecklistNodeViewSet(GenericViewSet, UpdateModelMixin):
-  pass # How does frontend find the correct node to edit of an mptt
+  serializer_class = UserChecklistNodeUpdateSerializer
+  http_method_names = ['patch']
+
+  def get_queryset(self):
+    return UserChecklistNode.objects.filter(user=self.request.user)
