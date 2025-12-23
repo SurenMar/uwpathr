@@ -126,6 +126,9 @@ REST_FRAMEWORK = {
   'DEFAULT_AUTHENTICATION_CLASSES': [
     'rest_framework_simplejwt.authentication.JWTAuthentication',
   ],
+  'DEFAULT_PERMISSION_CLASSES': [
+    'rest_framework.permissions.IsAuthenticated',
+  ],
   'DEFAULT_THROTTLE_CLASSES': [
       'rest_framework.throttling.AnonRateThrottle',
       'rest_framework.throttling.UserRateThrottle',
@@ -134,9 +137,6 @@ REST_FRAMEWORK = {
       'anon': '100/min',
       'user': '1000/min',
     },
-  'DEFAULT_PERMISSION_CLASSES': [
-    'rest_framework.permissions.IsAuthenticated',
-  ]
 }
 
 DJOSER = {

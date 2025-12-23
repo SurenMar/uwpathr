@@ -53,7 +53,7 @@ class UserAdditionalConstraint(MPTTModel):
            Q(num_courses_required__isnull=True) &
            Q(num_courses_gathered__isnull=True))
            |
-          (Q(num_requirement_type='group') &
+          (Q(requirement_type='group') &
            Q(num_courses_required__isnull=False) &
            Q(num_courses_gathered__isnull=False))
         ),
@@ -65,7 +65,7 @@ class UserAdditionalConstraint(MPTTModel):
            Q(original_checkbox__isnull=True))
            |
           (Q(requirement_type='checkbox') &
-           Q(original_checkbox__isnull=True))
+           Q(original_checkbox__isnull=False))
         ),
         name='only_checkboxes_have_checkbox_field'
       )

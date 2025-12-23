@@ -49,10 +49,10 @@ class AdditionalConstraint(MPTTModel):
       models.CheckConstraint(
         check=(
           (~Q(requirement_type='group') &
-           Q(courses_required__isnull=True))
+           Q(num_courses_required__isnull=True))
            |
           (Q(requirement_type='group') &
-           Q(courses_required__isnull=False))
+           Q(num_courses_required__isnull=False))
         ),
         name='only_group_has_courses_required'
       )
