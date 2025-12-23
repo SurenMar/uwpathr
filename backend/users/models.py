@@ -56,8 +56,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
   first_name = models.CharField(max_length=255, blank=True)
   email = models.EmailField(unique=True, max_length=255)
   start_year = models.PositiveSmallIntegerField(
-    default=current_year, 
-    blank=True
+    default=current_year
   )
 
   objects = UserAccountManager()
