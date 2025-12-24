@@ -8,12 +8,12 @@ from rest_framework_simplejwt.views import (
   TokenRefreshView,
   TokenVerifyView
 )
-
+'''
 class CustomProviderAuthView(ProviderAuthView):
   def post(self, request, *args, **kwargs):
     response = super().post(request, *args, **kwargs)
 
-    if response.status_code == 201:
+    if response.status_code == 200:
       access_token = response.data.get('access')
       refresh_token = response.data.get('refresh')
 
@@ -24,7 +24,7 @@ class CustomProviderAuthView(ProviderAuthView):
         path=settings.AUTH_COOKIE_PATH,
         secure=settings.AUTH_COOKIE_SECURE,
         httponly=settings.AUTH_COOKIE_HTTP_ONLY,
-        samesite=settings.AUTH_COOKIE_SAME_SITE
+        samesite=settings.AUTH_COOKIE_SAMESITE
       )
       response.set_cookie(
         'refresh', 
@@ -33,14 +33,14 @@ class CustomProviderAuthView(ProviderAuthView):
         path=settings.AUTH_COOKIE_PATH,
         secure=settings.AUTH_COOKIE_SECURE,
         httponly=settings.AUTH_COOKIE_HTTP_ONLY,
-        samesite=settings.AUTH_COOKIE_SAME_SITE
+        samesite=settings.AUTH_COOKIE_SAMESITE
       )
 
     # TODO Remove from response body
     # response.data.pop("access", None)
     # response.data.pop("refresh", None)
 
-    return response
+    return response '''
 
 # Override following methods to handle cookies
 
@@ -60,7 +60,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         path=settings.AUTH_COOKIE_PATH,
         secure=settings.AUTH_COOKIE_SECURE,
         httponly=settings.AUTH_COOKIE_HTTP_ONLY,
-        samesite=settings.AUTH_COOKIE_SAME_SITE
+        samesite=settings.AUTH_COOKIE_SAMESITE
       )
       response.set_cookie(
         'refresh', 
@@ -69,7 +69,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         path=settings.AUTH_COOKIE_PATH,
         secure=settings.AUTH_COOKIE_SECURE,
         httponly=settings.AUTH_COOKIE_HTTP_ONLY,
-        samesite=settings.AUTH_COOKIE_SAME_SITE
+        samesite=settings.AUTH_COOKIE_SAMESITE
       )
 
     # TODO Remove from response body
@@ -99,7 +99,7 @@ class CustomTokenRefreshView(TokenRefreshView):
         path=settings.AUTH_COOKIE_PATH,
         secure=settings.AUTH_COOKIE_SECURE,
         httponly=settings.AUTH_COOKIE_HTTP_ONLY,
-        samesite=settings.AUTH_COOKIE_SAME_SITE
+        samesite=settings.AUTH_COOKIE_SAMESITE
       )
 
     # TODO Remove from response body
