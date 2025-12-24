@@ -8,12 +8,12 @@ from rest_framework_simplejwt.views import (
   TokenRefreshView,
   TokenVerifyView
 )
-'''
+
 class CustomProviderAuthView(ProviderAuthView):
   def post(self, request, *args, **kwargs):
     response = super().post(request, *args, **kwargs)
 
-    if response.status_code == 200:
+    if response.status_code == 201:
       access_token = response.data.get('access')
       refresh_token = response.data.get('refresh')
 
@@ -40,7 +40,7 @@ class CustomProviderAuthView(ProviderAuthView):
     # response.data.pop("access", None)
     # response.data.pop("refresh", None)
 
-    return response '''
+    return response
 
 # Override following methods to handle cookies
 
