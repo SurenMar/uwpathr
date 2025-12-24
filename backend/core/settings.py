@@ -86,15 +86,18 @@ DATABASES = {
 
 # Email settings
 
-EMAIL_BACKEND = 'django_ses.SESBackend'
-AWS_SES_ACCESS_KEY_ID = getenv('AWS_SES_ACCESS_KEY_ID')
-AWS_SES_SECRET_ACCESS_KEY_ID = getenv('AWS_SES_SECRET_ACCESS_KEY_ID')
-USE_SES_V2 = True
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'surepic342@gmail.com'
 
-AWS_SES_REGION_NAME = getenv('AWS_SES_REGION_NAME')
-AWS_SES_REGION_ENDPOINT = f'email.{AWS_SES_REGION_NAME}.amazonaws.com'
-AWS_SES_FROM_EMAIL = getenv('AWS_SES_FROM_EMAIL')
-DEFAULT_FROM_EMAIL = getenv('AWS_SES_FROM_EMAIL') # Used by djoser
+# EMAIL_BACKEND = 'django_ses.SESBackend'
+# AWS_SES_ACCESS_KEY_ID = getenv('AWS_SES_ACCESS_KEY_ID')
+# AWS_SES_SECRET_ACCESS_KEY_ID = getenv('AWS_SES_SECRET_ACCESS_KEY_ID')
+# USE_SES_V2 = True
+
+# AWS_SES_REGION_NAME = getenv('AWS_SES_REGION_NAME')
+# AWS_SES_REGION_ENDPOINT = f'email.{AWS_SES_REGION_NAME}.amazonaws.com'
+# AWS_SES_FROM_EMAIL = getenv('AWS_SES_FROM_EMAIL')
+# DEFAULT_FROM_EMAIL = getenv('AWS_SES_FROM_EMAIL') # Used by djoser
 
 DOMAIN = getenv('DOMAIN')
 SITE_NAME = 'UWPathr'
@@ -142,7 +145,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 REST_FRAMEWORK = {
   'DEFAULT_AUTHENTICATION_CLASSES': [
-    'rest_framework_simplejwt.authentication.CustomJWTAuthentication',
+    'users.authentication.CustomJWTAuthentication',
   ],
   'DEFAULT_PERMISSION_CLASSES': [
     'rest_framework.permissions.IsAuthenticated',
@@ -158,15 +161,23 @@ REST_FRAMEWORK = {
 }
 
 DJOSER = {
-  'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
-  'SEND_ACTIVATION_EMAIL': True,
-  'ACTIVATION_URL': 'activation/{uid}/{token}',
+#   'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
+#   'SEND_ACTIVATION_EMAIL': True,
+#   'ACTIVATION_URL': 'activation/{uid}/{token}',
   'USER_CREATE_PASSWORD_RETYPE': True,
   'SET_PASSWORD_RETYPE': True,
   'PASSWORD_RESET_CONFIRM_RETYPE': True,
   'TOKEN_MODEL': None,
   #'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': getenv('REDIRECT_URLS').split(',')
 }
+
+AUTH_COOKIE = 'access'
+AUTH_COOKIE_ACCESS_MAX_AGE = 60 * 5 # 5 minutes
+AUTH_COOKIE_REFRESH_MAX_AGE = 60 * 60 * 24 # 1 day
+AUTH_COOKIE_SECURE = getenv('AUTH_COOKIE_SECURE', 'True') == 'True'
+AUTH_COOKIE_HTTP_ONLY = True
+AUTH_COOKIE_PATH = '/'
+AUTH_COOKIE_SAME_SITE = 'None'
 
 CORS_ALLOWED_ORIGINS = getenv(
   'CORS_ALLOWED_ORIGINS', 

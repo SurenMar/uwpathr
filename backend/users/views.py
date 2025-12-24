@@ -36,9 +36,9 @@ class CustomProviderAuthView(ProviderAuthView):
         samesite=settings.AUTH_COOKIE_SAME_SITE
       )
 
-    # Remove from response body
-    response.data.pop("access", None)
-    response.data.pop("refresh", None)
+    # TODO Remove from response body
+    # response.data.pop("access", None)
+    # response.data.pop("refresh", None)
 
     return response
 
@@ -72,9 +72,9 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         samesite=settings.AUTH_COOKIE_SAME_SITE
       )
 
-    # Remove from response body
-    response.data.pop("access", None)
-    response.data.pop("refresh", None)
+    # TODO Remove from response body
+    # response.data.pop("access", None)
+    # response.data.pop("refresh", None)
 
     return response
   
@@ -102,8 +102,8 @@ class CustomTokenRefreshView(TokenRefreshView):
         samesite=settings.AUTH_COOKIE_SAME_SITE
       )
 
-    # Remove from response body
-    response.data.pop("access", None)
+    # TODO Remove from response body
+    # response.data.pop("access", None)
 
     return response
 
