@@ -8,9 +8,9 @@ router.register(
   basename='course'
 )
 router.register(
-  'requisites', 
+  'courses/requisites', 
   CourseRequisiteNodeViewSet, 
-  basename='requisite'
+  basename='course-requisite'
 )
 
 urlpatterns = router.urls

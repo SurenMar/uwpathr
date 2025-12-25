@@ -46,6 +46,9 @@ class UserAdditionalConstraintViewSet(ModelViewSet):
       return UserAdditionalConstraintsUpdateSerializer
     return UserAdditionalConstraintsListSerializer
   
+  def perform_create(self, serializer):
+    serializer.save(user=self.request.user)
+  
 
 class UserDepthListViewSet(ModelViewSet):
   filter_backends = [DjangoFilterBackend]
@@ -77,3 +80,6 @@ class UserDepthListViewSet(ModelViewSet):
     elif self.action == 'partial_update':
       return UserDepthListUpdateSerializer
     return UserDepthListDetailSerializer
+  
+  def perform_create(self, serializer):
+    serializer.save(user=self.request.user)

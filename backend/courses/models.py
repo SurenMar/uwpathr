@@ -46,6 +46,9 @@ class Course(models.Model):
     self.number = self.number.upper()
     super().save(*args, **kwargs)
 
+  def __str__(self):
+    return f"{self.code}{self.number}"
+
 
 class CourseRequisiteNode(MPTTModel):
   REQUISITE_TYPES = [

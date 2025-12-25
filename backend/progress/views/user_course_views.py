@@ -74,6 +74,9 @@ class UserCourseViewSet(ModelViewSet):
       return UserCourseCreateSerializer
     return UserCourseDetailSerializer
   
+  def perform_create(self, serializer):
+    serializer.save(user=self.request.user)
+  
 
 class UserPathNodeViewSet(ModelViewSet):
   http_method_names = ['get', 'patch', 'delete']
@@ -103,3 +106,6 @@ class UserPathNodeViewSet(ModelViewSet):
     elif self.action == 'create':
       return UserPathNodeCreateSerializer
     return UserPathNodeListSerializer
+  
+  def perform_create(self, serializer):
+    serializer.save(user=self.request.user)
