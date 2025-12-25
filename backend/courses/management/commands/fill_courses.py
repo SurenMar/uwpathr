@@ -4,24 +4,190 @@ from django.db import transaction
 from courses.models import Course, CourseRequisiteNode
 
 sample_json_data = [
-    {
-        'code': 'CS',
-        'number': '246',
-        'units': 10,
-        'offered_next_term': True,
-        'category': ['cs', 'math'],
-        'title': 'OOP with C++',
-        'description': 'learn oop with c++',
-        'num_uwflow_ratings': 100,
-        'uwflow_liked_rating': 60,
-        'uwflow_easy_ratings': 30,
-        'uwflow_useful_ratings': 90,
+  {
+    'code': 'CS',
+    'number': '115',
+    'units': 10,
+    'offered_next_term': True,
+    'category': ['cs', 'math'],
+    'title': 'racket',
+    'description': 'learn easier functions',
+    'num_uwflow_ratings': 100,
+    'uwflow_liked_rating': 60,
+    'uwflow_easy_ratings': 30,
+    'uwflow_useful_ratings': 90,
 
-        'pre': '1(CS_138 2(CS_136L CS_146)2(CS_136L CS_136))',
-        'co': '0()',
-        'anti': '0()',
-    },
+    'pre': '0()',
+    'co': '0()',
+    'anti': '0()',
+  },
+  {
+    'code': 'CS',
+    'number': '116',
+    'units': 10,
+    'offered_next_term': True,
+    'category': ['cs', 'math'],
+    'title': 'python',
+    'description': 'learn ds with python',
+    'num_uwflow_ratings': 100,
+    'uwflow_liked_rating': 60,
+    'uwflow_easy_ratings': 30,
+    'uwflow_useful_ratings': 90,
+
+    'pre': '1(CS_115)',
+    'co': '0()',
+    'anti': '0()',
+  },
+  {
+    'code': 'CS',
+    'number': '145',
+    'units': 10,
+    'offered_next_term': True,
+    'category': ['cs', 'math'],
+    'title': 'racket',
+    'description': 'learn functions',
+    'num_uwflow_ratings': 100,
+    'uwflow_liked_rating': 60,
+    'uwflow_easy_ratings': 30,
+    'uwflow_useful_ratings': 90,
+
+    'pre': '0()',
+    'co': '0()',
+    'anti': '0()',
+  },
+  {
+    'code': 'CS',
+    'number': '135',
+    'units': 10,
+    'offered_next_term': True,
+    'category': ['cs', 'math'],
+    'title': 'racket',
+    'description': 'learn functional programming',
+    'num_uwflow_ratings': 100,
+    'uwflow_liked_rating': 60,
+    'uwflow_easy_ratings': 30,
+    'uwflow_useful_ratings': 90,
+
+    'pre': '0()',
+    'co': '0()',
+    'anti': '0()',
+  },
+  {
+    'code': 'CS',
+    'number': '136',
+    'units': 10,
+    'offered_next_term': True,
+    'category': ['cs', 'math'],
+    'title': 'C',
+    'description': 'learn ds with c',
+    'num_uwflow_ratings': 100,
+    'uwflow_liked_rating': 60,
+    'uwflow_easy_ratings': 30,
+    'uwflow_useful_ratings': 90,
+
+    'pre': '1(CS_135 cs_145 cs_116)',
+    'co': '0()',
+    'anti': '0()',
+  },
+  {
+    'code': 'CS',
+    'number': '146',
+    'units': 10,
+    'offered_next_term': True,
+    'category': ['cs', 'math'],
+    'title': 'C',
+    'description': 'learn ds with c',
+    'num_uwflow_ratings': 100,
+    'uwflow_liked_rating': 60,
+    'uwflow_easy_ratings': 30,
+    'uwflow_useful_ratings': 90,
+
+    'pre': '1(CS_135 cs_145)',
+    'co': '0()',
+    'anti': '0()',
+  },
+  {
+    'code': 'CS',
+    'number': '136L',
+    'units': 10,
+    'offered_next_term': True,
+    'category': ['cs', 'math'],
+    'title': 'bash',
+    'description': 'learn terminal',
+    'num_uwflow_ratings': 100,
+    'uwflow_liked_rating': 60,
+    'uwflow_easy_ratings': 30,
+    'uwflow_useful_ratings': 90,
+
+    'pre': '1(CS_135 CS_145)',
+    'co': '0()',
+    'anti': '0()',
+  },
+  {
+    'code': 'CS',
+    'number': '138',
+    'units': 10,
+    'offered_next_term': True,
+    'category': ['cs', 'math'],
+    'title': 'C',
+    'description': 'learn ds with c',
+    'num_uwflow_ratings': 100,
+    'uwflow_liked_rating': 60,
+    'uwflow_easy_ratings': 30,
+    'uwflow_useful_ratings': 90,
+
+    'pre': '0()',
+    'co': '0()',
+    'anti': '0()',
+  },
+  {
+    'code': 'CS',
+    'number': '246',
+    'units': 5,
+    'offered_next_term': True,
+    'category': ['cs', 'math'],
+    'title': 'OOP with C++',
+    'description': 'learn oop with c++',
+    'num_uwflow_ratings': 100,
+    'uwflow_liked_rating': 60,
+    'uwflow_easy_ratings': 30,
+    'uwflow_useful_ratings': 90,
+
+    'pre': '1(CS_138 2(CS_136L CS_146)2(CS_136L CS_136))',
+    'co': '0()',
+    'anti': '0()',
+  },
 ]
+
+# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
+# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
+# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
+# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
+# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
+# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
+# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
+# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
+# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
+# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
+# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
+# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
+
 
 class Command(BaseCommand):
   help = "Fetch courses data and store them in the database" 
@@ -29,8 +195,8 @@ class Command(BaseCommand):
   def update_courses_model(self, item: dict):
     # TODO Manually add uwflow id so you can compare for course changes
     course, _ = Course.objects.update_or_create(
-        code=item['code'].lower(),
-        number=item['number'].lower(),
+        code=item['code'].upper(),
+        number=item['number'].upper(),
         defaults={
           'units': item['units'],
           'offered_next_term': item['offered_next_term'],
@@ -60,9 +226,8 @@ class Command(BaseCommand):
       req_type: 'pre'
       req_str: '1(CS_138 2(CS_136L CS_146)2(CS_136L CS_136))'
     """
-    CourseRequisiteNode.objects.disable_mptt_updates()
-    
-    try:
+    # Use context manager to temporarily disable mptt updates
+    with CourseRequisiteNode.objects.disable_mptt_updates():
       # Clear tree
       CourseRequisiteNode.objects.filter(
         target_course=target_course,
@@ -91,8 +256,8 @@ class Command(BaseCommand):
         # Create leaf course
         elif c == ' ':
           leaf_course = Course.objects.get( # Assumes course exists
-            code=course_code.lower(),
-            number=number.lower()
+            code=course_code.upper(),
+            number=number.upper()
           )
           CourseRequisiteNode.objects.create(
             target_course=target_course,
@@ -122,8 +287,8 @@ class Command(BaseCommand):
         elif c == ')':
           if course_code and number:
             leaf_course = Course.objects.get( # Assumes course exists
-              code=course_code.lower(),
-              number=number.lower()
+              code=course_code.upper(),
+              number=number.upper()
             )
             CourseRequisiteNode.objects.create(
               target_course=target_course,
@@ -139,14 +304,14 @@ class Command(BaseCommand):
           reading_course_num = False
           parent_stack.pop()
 
-    finally:
-      CourseRequisiteNode.objects.enable_mptt_updates()
-      CourseRequisiteNode.objects.rebuild()
-
+    # After bulk changes, rebuild the tree fields
+    CourseRequisiteNode.objects.rebuild()
     
   def handle(self, *args, **options):
     data = sample_json_data
 
     for item in data:
+      item['code'] = item['code'].upper()
+      item['number'] = item['number'].upper()
       course = self.update_courses_model(item)
       self.update_requisite_model(item, course)

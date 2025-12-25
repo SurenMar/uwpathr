@@ -15,7 +15,7 @@ class CourseAdmin(admin.ModelAdmin):
 
 
 @admin.register(CourseRequisiteNode)
-class CourseRequisiteNodeAdmin(admin.ModelAdmin):
+class CourseRequisiteNodeAdmin(MPTTModelAdmin):
   list_display = ['requisite_type', 'target_course_name', 'node_type', 'num_children_required', 'leaf_course']
   search_fields = ['target_course__code', 'target_course__number']
   list_filter = ['target_course__code', 'target_course__number']
