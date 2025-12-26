@@ -8,7 +8,7 @@ router.register(
   basename='course'
 )
 router.register(
-  'courses/prerequisites', 
+  'prerequisites', 
   CoursePrerequisiteNodeViewSet, 
   basename='course-prerequisite'
 )

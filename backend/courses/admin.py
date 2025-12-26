@@ -4,7 +4,7 @@ from courses.models import Course, CoursePrerequisiteNode
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
-  list_display = ['code', 'number', 'units', 'display_category', 'num_uwflow_ratings']
+  list_display = ['id', 'code', 'number', 'units', 'display_category', 'num_uwflow_ratings']
   search_fields = ['code', 'number']
   list_filter = ['code']
 

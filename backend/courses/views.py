@@ -56,7 +56,9 @@ class CoursePrerequisiteNodeViewSet(ReadOnlyModelViewSet):
   ViewSet for MPTT model
   """
   # Prefetch queryset
-  queryset = CoursePrerequisiteNode.objects.select_related(
+  queryset = CoursePrerequisiteNode.objects.filter(
+    parent__isnull=True  # Only return root nodes
+  ).select_related(
     # Foreign keys
     'target_course',
     'leaf_course',
