@@ -25,7 +25,6 @@ class UserCourse(models.Model):
   course_list = models.CharField(max_length=16, choices=COURSE_LIST_TYPES)
 
   class Meta:
-    # TODO Rework indexes and ordering for frontend csr
     indexes = [
       models.Index(fields=['user', 'course_list'])
     ]

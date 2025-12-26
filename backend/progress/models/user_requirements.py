@@ -95,8 +95,7 @@ class UserDepthList(models.Model):
   num_courses = models.PositiveSmallIntegerField(default=0)
 
   class Meta:
-   # TODO Rework indexes and ordering for frontend csr
-   pass
+    pass
 
 @receiver(post_save, sender=UserDepthList)
 def update_depth_list_counts_on_save(sender, instance, created, **kwargs):

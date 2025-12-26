@@ -46,7 +46,6 @@ class Course(models.Model):
   uwflow_useful_ratings = models.PositiveSmallIntegerField(blank=True, null=True)
 
   class Meta:
-    # TODO Rework indexes and ordering for frontend csr
     # Also sorts by code first then number (no need for seperate composite index)
     unique_together = ('code', 'number')
     indexes = [GinIndex(fields=['category'])]
@@ -92,7 +91,6 @@ class CoursePrerequisiteNode(MPTTModel):
   
   class Meta:
     indexes = [
-      # TODO Rework indexes and ordering for frontend csr
       models.Index(fields=['target_course', 'parent'])
     ]
     constraints = [

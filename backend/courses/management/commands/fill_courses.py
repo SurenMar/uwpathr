@@ -159,28 +159,12 @@ sample_json_data = [
   },
 ]
 
-# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-# WHEN USER ADDS COURSE I NEED TO CHECK IF THEY HAVE PREREQS FOR IT !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-# ----------------------------------------------------------------------------------------------------------------------
 
 class Command(BaseCommand):
   help = "Fetch courses data and store them in the database" 
 
   @staticmethod
   def update_courses_model(item: dict):
-    # TODO Manually add uwflow id so you can compare for course changes
     # Convert co and anti lists to combined code+number format (TODO Should i add spacing?)
     coreqs = [f"{code.upper()}_{num.upper()}" for code, num in item.get('co', [])]
     antireqs = [f"{code.upper()}_{num.upper()}" for code, num in item.get('anti', [])]
