@@ -192,7 +192,8 @@ sample_json_data = [
 class Command(BaseCommand):
   help = "Fetch courses data and store them in the database" 
 
-  def update_courses_model(self, item: dict):
+  @staticmethod
+  def update_courses_model(item: dict):
     # TODO Manually add uwflow id so you can compare for course changes
     course, _ = Course.objects.update_or_create(
         code=item['code'].upper(),
@@ -211,13 +212,15 @@ class Command(BaseCommand):
       )
     return course
     
-  def update_requisite_model(self, item: dict, target_course):
-    self.create_req_nodes(target_course, 'pre', item['pre'])
-    self.create_req_nodes(target_course, 'co', item['co'])
-    self.create_req_nodes(target_course, 'anti', item['anti'])
+  @staticmethod
+  def update_requisite_model(item: dict, target_course):
+    Command.create_req_nodes(target_course, 'pre', item['pre'])
+    Command.create_req_nodes(target_course, 'co', item['co'])
+    Command.create_req_nodes(target_course, 'anti', item['anti'])
 
   @transaction.atomic
-  def create_req_nodes(self, target_course, req_type: str, 
+  @staticmethod
+  def create_req_nodes(target_course, req_type: str, 
     req_str: str='0()'):
     """
     Parse req_str into MPTT node structure.
@@ -306,12 +309,18 @@ class Command(BaseCommand):
 
     # After bulk changes, rebuild the tree fields
     CourseRequisiteNode.objects.rebuild()
+
+  @staticmethod
+  @transaction.atomic
+  def update_course(item):
+    item['code'] = item['code'].upper()
+    item['number'] = item['number'].upper()
+    course = Command.update_courses_model(item)
+    Command.update_requisite_model(item, course)
     
   def handle(self, *args, **options):
     data = sample_json_data
 
     for item in data:
-      item['code'] = item['code'].upper()
-      item['number'] = item['number'].upper()
-      course = self.update_courses_model(item)
-      self.update_requisite_model(item, course)
+      Command.update_course(item)
+      

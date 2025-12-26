@@ -10,7 +10,7 @@ from progress.serializers.user_course_serializers import (
   UserCourseCreateSerializer,
 
   UserPathNodeListSerializer,
-  UserPathNodeCreateSerializer
+  UserPathNodeCreateSerializer,
 ) 
 
 

@@ -53,7 +53,7 @@ class UserCoursePathNode(MP_Node):
   requisite_node = models.ForeignKey(
     'courses.CourseRequisiteNode',
     on_delete=models.PROTECT, # Course requisites and paths will be fully updated before any removed courses are deleted
-    related_name='+'
+    related_name='user_paths'
   )
 
   class Meta:

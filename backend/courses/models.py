@@ -70,7 +70,7 @@ class CourseRequisiteNode(MPTTModel):
     related_name='req_nodes'
   )
   node_type = models.CharField(max_length=8, choices=NODE_TYPES)
-  parent = TreeForeignKey(
+  parent = TreeForeignKey
     'self',
     blank=True,
     null=True,
@@ -81,7 +81,7 @@ class CourseRequisiteNode(MPTTModel):
     'Course',
     blank=True,
     null=True,
-    on_delete=models.PROTECT, # Course requisites and paths will be fully updated before any removed courses are deleted
+    on_delete=models.CASCADE, # Course requisites and paths will be fully updated before any removed courses are deleted
     related_name='+'
   )
   num_children_required = models.PositiveSmallIntegerField(blank=True, null=True)
