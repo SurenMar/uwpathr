@@ -7,6 +7,7 @@ class UWFlowClient:
   url = 'https://uwflow.com/graphql'
 
   def find_categories(code: str, number: str):
+    pass
 
   def fetch_all_courses_data(self):
     courses_query = """
@@ -49,7 +50,7 @@ class UWFlowClient:
         'uwflow_useful_ratings': round(course['rating']['useful'] * 100, 2),
       })
 
-    return data
+    return courses
 
     # For testing
     # with open('uwflow_courses.json', 'w') as f:

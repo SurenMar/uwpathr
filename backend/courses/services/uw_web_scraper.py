@@ -7,14 +7,14 @@ from courses.services.uwflow_client import UWFlowClient
 class UWWebScraper:
   base_url = 'https://ucalendar.uwaterloo.ca/2324/COURSE/'
 
-  # TODO find unit count
-
-  def scrape_program_reqs(self, program: str):
+  def scrape_course_reqs(self, program: str):
+    """Scrapes course reqs and units for all courses in a program"""
     url = UWWebScraper.base_url + f'course-{program.upper()}.html'
     page = requests.get(url)
     soup = BeautifulSoup(page.text, 'html.parser')
     courses_html = soup.find_all('center')
     requisites = list()
+    
     for course_html in courses_html:
       # Find course name
       a_tag = course_html.find('a')
@@ -22,9 +22,23 @@ class UWWebScraper:
         continue
       course_name = a_tag['name']
       code, number = split_full_code(course_name)
+
+      # Find units
+      units = None
+      strong_tag = course_html.find('strong')
+      if strong_tag:
+        strong_text = strong_tag.get_text(' ', strip=True)
+        for part in reversed(strong_text.split()):
+          try:
+            units = float(part)
+            break
+          except ValueError:
+            continue
+      
       requisites.append({
         'code': code,
         'number': number,
+        'units': int(units * 100),
       })
 
       # Find course prereqs
@@ -83,12 +97,8 @@ class UWWebScraper:
 # - Have fill_courses orchestrate everything, meaning it should be the one to call
 #   fetch_all_program_codes from UWFlowClient. fill_course should have a main() 
 #   function to do this, along with calling the other services/ methods.
-# - Reorganize the data given from fetch_all_courses_data in UWFlowClient in a
-#   predictable format.
 # - Find correct course categories
-# - Find unit count in scraper
 # - THE PREREQS HAVE TO FIRST BE SENT TO GPT THEN TO FILL_COURSES!!!!!!!!!!!!!!!!!
 # - Remember to add a 1 second timeout in main()
-# - Add staticmethod to helper functions in uwflowclient
 # - Fill checklists from up to 4 years back
 # - Add scripts that copy appropriate checklist whenever user account is made
