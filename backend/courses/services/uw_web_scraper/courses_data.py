@@ -93,7 +93,8 @@ def scrape_courses(program: str):
 # - Have fill_courses orchestrate everything, meaning it should be the one to call
 #   fetch_all_program_codes from UWFlowClient. fill_course should have a main() 
 #   function to do this, along with calling the other services/ methods.
-# - Find correct course categories
+# - Have courses ordered in an order that they can be added to the list. Sort by each 
+#   program name and add them one at a time, from lowest to highest level.
 # - THE PREREQS HAVE TO FIRST BE SENT TO GPT THEN TO FILL_COURSES!!!!!!!!!!!!!!!!!
 # - Fill checklists from up to 4 years back
 # - Add scripts that copy appropriate checklist whenever user account is made

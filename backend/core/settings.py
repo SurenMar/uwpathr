@@ -13,6 +13,7 @@ if path.isfile(dotenv_file):
   dotenv.load_dotenv(dotenv_file)
 
 SECRET_KEY = getenv('DJANGO_SECRET_KEY', get_random_secret_key())
+OPENAI_API_KEY = getenv('OPENAI_API_KEY')
 DEBUG = getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = getenv('DJANGO_ALLOWED_HOSTS', 

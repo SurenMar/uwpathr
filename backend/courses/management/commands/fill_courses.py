@@ -2,8 +2,9 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 
 from courses.models import Course, CoursePrerequisiteNode
-from services.uwflow_client import UWFlowClient
-from backend.courses.services.uw_web_scraper.courses_data import UWWebScraper
+from courses.services.uwflow_client.courses_data import fetch_all_courses_data
+from courses.services.uw_web_scraper.courses_data import scrape_courses
+from courses.services.openai_client.course_data import parse_prereqs
 
 sample_json_data = [
   {
@@ -157,7 +158,7 @@ class Command(BaseCommand):
   help = "Fetch courses data and store them in the database" 
 
   @staticmethod
-  def update_courses_model(item: dict):
+  def _update_courses_model(item: dict):
     # Convert coreqs and antireqs lists to combined code+number format (TODO Should i add spacing?)
     coreqs = [f"{code.upper()}_{num.upper()}" for code, num in item.get('coreqs', [])]
     antireqs = [f"{code.upper()}_{num.upper()}" for code, num in item.get('antireqs', [])]
@@ -181,12 +182,12 @@ class Command(BaseCommand):
     return course
     
   @staticmethod
-  def update_prerequisite_model(item: dict, target_course):
-    Command.create_prerequisite_nodes(target_course, item['prereqs'])
+  def _update_prerequisite_model(item: dict, target_course):
+    Command._create_prerequisite_nodes(target_course, item['prereqs'])
 
   @transaction.atomic
   @staticmethod
-  def create_prerequisite_nodes(target_course, req_str: str='0()'):
+  def _create_prerequisite_nodes(target_course, req_str: str='0()'):
     """
     Parse req_str into MPTT node structure.
     Sample input for CS246:
@@ -272,17 +273,19 @@ class Command(BaseCommand):
 
   @staticmethod
   @transaction.atomic
-  def update_course(item):
+  def _update_course(item):
     item['code'] = item['code'].upper()
     item['number'] = item['number'].upper()
-    course = Command.update_courses_model(item)
-    Command.update_prerequisite_model(item, course)
+    course = Command._update_courses_model(item)
+    Command._update_prerequisite_model(item, course)
+
+  @staticmethod
+  def _filter_course_data():
+    pass
     
   def handle(self, *args, **options):
-    client = UWFlowClient()
-    scraper = UWWebScraper()
     data = sample_json_data
 
     for item in data:
-      Command.update_course(item)
+      Command._update_course(item)
       

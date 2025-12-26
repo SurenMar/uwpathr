@@ -242,11 +242,3 @@ def scrape_categories():
     'comm1': _find_comm1_courses(),         # Communications List 1
     'com,2': _find_comm2_courses(),         # Communications List 2
   }
-
-# categories = scrape_categories()
-# for category, codes in categories:
-#   print(category)
-#   print(codes)
-#   print('\n\n')
-
-print(scrape_categories())
