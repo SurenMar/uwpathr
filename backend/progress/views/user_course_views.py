@@ -17,14 +17,13 @@ from progress.serializers.user_course_serializers import (
 class UserCourseFilter(FilterSet):
   course_list = filters.CharFilter(method='filter_course_list')
   category = filters.CharFilter(method='filter_category')
-  offered_next_term = filters.BooleanFilter(field_name='course__offered_next_term')
   min_number = filters.NumberFilter(field_name='course__number', lookup_expr='gte')
   max_number = filters.NumberFilter(field_name='course__number', lookup_expr='lt')
 
   class Meta:
     model = UserCourse
     fields = [
-      'id', 'course__code', 'course__number', 'course__offered_next_term'
+      'id', 'course__code', 'course__number'
     ]
   
   def filter_course_list(self, queryset, name, value):

@@ -22,7 +22,6 @@ class Course(models.Model):
   code = models.CharField(max_length=8)
   number = models.CharField(max_length=8)
   units = models.PositiveSmallIntegerField()
-  offered_next_term = models.BooleanField(null=True) # Should we have null=True?
   category = ArrayField(
     models.CharField(max_length=32, choices=COURSE_CATEGORIES),
     default=list,

@@ -17,7 +17,7 @@ class CourseDetailSerializer(serializers.ModelSerializer):
 		model = Course
 		fields = [
 			'id', 'created_at', 'updated_at', 'code', 'number', 'units', 
-			'offered_next_term', 'category', 'corequisites', 'antirequisites',
+			'category', 'corequisites', 'antirequisites',
 			'title', 'description', 
 			'num_uwflow_ratings', 'uwflow_liked_rating', 'uwflow_easy_ratings', 
 			'uwflow_useful_ratings',

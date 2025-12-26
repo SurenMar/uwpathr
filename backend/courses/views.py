@@ -15,13 +15,12 @@ from courses.serializers import (
 class CourseFilter(FilterSet):
   # Comma-separated categories; matches any overlap in ArrayField
   category = filters.CharFilter(method='filter_category')
-  offered_next_term = filters.BooleanFilter(field_name='offered_next_term')
   min_number = filters.NumberFilter(field_name='number', lookup_expr='gte')
   max_number = filters.NumberFilter(field_name='number', lookup_expr='lt')
 
   class Meta:
     model = Course
-    fields = ['id', 'code', 'number', 'offered_next_term']
+    fields = ['id', 'code', 'number']
 
   def filter_category(self, queryset, name, value):
     values = [v.strip() for v in value.split(',') if v.strip()]
