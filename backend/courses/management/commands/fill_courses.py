@@ -2,6 +2,8 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 
 from courses.models import Course, CoursePrerequisiteNode
+from services.uwflow_client import UWFlowClient
+from services.uw_web_scraper import UWWebScraper
 
 sample_json_data = [
   {
@@ -16,9 +18,9 @@ sample_json_data = [
     'uwflow_easy_ratings': 30,
     'uwflow_useful_ratings': 90,
 
-    'pre': '0()',
-    'co': [],
-    'anti': [],
+    'prereqs': '0()',
+    'coreqs': [],
+    'antireqs': [],
   },
   {
     'code': 'CS',
@@ -32,9 +34,9 @@ sample_json_data = [
     'uwflow_easy_ratings': 30,
     'uwflow_useful_ratings': 90,
 
-    'pre': '1(CS_115)',
-    'co': [],
-    'anti': [],
+    'prereqs': '1(CS_115)',
+    'coreqs': [],
+    'antireqs': [],
   },
   {
     'code': 'CS',
@@ -48,9 +50,9 @@ sample_json_data = [
     'uwflow_easy_ratings': 30,
     'uwflow_useful_ratings': 90,
 
-    'pre': '0()',
-    'co': [],
-    'anti': [],
+    'prereqs': '0()',
+    'coreqs': [],
+    'antireqs': [],
   },
   {
     'code': 'CS',
@@ -64,9 +66,9 @@ sample_json_data = [
     'uwflow_easy_ratings': 30,
     'uwflow_useful_ratings': 90,
 
-    'pre': '0()',
-    'co': [],
-    'anti': [],
+    'prereqs': '0()',
+    'coreqs': [],
+    'antireqs': [],
   },
   {
     'code': 'CS',
@@ -80,9 +82,9 @@ sample_json_data = [
     'uwflow_easy_ratings': 30,
     'uwflow_useful_ratings': 90,
 
-    'pre': '1(CS_135 cs_145 cs_116)',
-    'co': [],
-    'anti': [],
+    'prereqs': '1(CS_135 cs_145 cs_116)',
+    'coreqs': [],
+    'antireqs': [],
   },
   {
     'code': 'CS',
@@ -96,9 +98,9 @@ sample_json_data = [
     'uwflow_easy_ratings': 30,
     'uwflow_useful_ratings': 90,
 
-    'pre': '1(CS_135 cs_145)',
-    'co': [],
-    'anti': [],
+    'prereqs': '1(CS_135 cs_145)',
+    'coreqs': [],
+    'antireqs': [],
   },
   {
     'code': 'CS',
@@ -112,9 +114,9 @@ sample_json_data = [
     'uwflow_easy_ratings': 30,
     'uwflow_useful_ratings': 90,
 
-    'pre': '1(CS_135 CS_145)',
-    'co': [],
-    'anti': [],
+    'prereqs': '1(CS_135 CS_145)',
+    'coreqs': [],
+    'antireqs': [],
   },
   {
     'code': 'CS',
@@ -128,9 +130,9 @@ sample_json_data = [
     'uwflow_easy_ratings': 30,
     'uwflow_useful_ratings': 90,
 
-    'pre': '0()',
-    'co': [],
-    'anti': [],
+    'prereqs': '0()',
+    'coreqs': [],
+    'antireqs': [],
   },
   {
     'code': 'CS',
@@ -144,9 +146,9 @@ sample_json_data = [
     'uwflow_easy_ratings': 30,
     'uwflow_useful_ratings': 90,
 
-    'pre': '1(CS_138 2(CS_136L CS_146)2(CS_136L CS_136))',
-    'co': [],
-    'anti': [],
+    'prereqs': '1(CS_138 2(CS_136L CS_146)2(CS_136L CS_136))',
+    'coreqs': [],
+    'antireqs': [],
   },
 ]
 
@@ -156,9 +158,9 @@ class Command(BaseCommand):
 
   @staticmethod
   def update_courses_model(item: dict):
-    # Convert co and anti lists to combined code+number format (TODO Should i add spacing?)
-    coreqs = [f"{code.upper()}_{num.upper()}" for code, num in item.get('co', [])]
-    antireqs = [f"{code.upper()}_{num.upper()}" for code, num in item.get('anti', [])]
+    # Convert coreqs and antireqs lists to combined code+number format (TODO Should i add spacing?)
+    coreqs = [f"{code.upper()}_{num.upper()}" for code, num in item.get('coreqs', [])]
+    antireqs = [f"{code.upper()}_{num.upper()}" for code, num in item.get('antireqs', [])]
     
     course, _ = Course.objects.update_or_create(
         code=item['code'].upper(),
@@ -180,7 +182,7 @@ class Command(BaseCommand):
     
   @staticmethod
   def update_prerequisite_model(item: dict, target_course):
-    Command.create_prerequisite_nodes(target_course, item['pre'])
+    Command.create_prerequisite_nodes(target_course, item['prereqs'])
 
   @transaction.atomic
   @staticmethod
@@ -277,6 +279,8 @@ class Command(BaseCommand):
     Command.update_prerequisite_model(item, course)
     
   def handle(self, *args, **options):
+    client = UWFlowClient()
+    scraper = UWWebScraper()
     data = sample_json_data
 
     for item in data:

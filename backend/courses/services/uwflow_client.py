@@ -1,6 +1,8 @@
 import requests
 import json
 
+from courses.utils.course_utils import split_full_code
+
 class UWFlowClient:
   url = 'https://uwflow.com/graphql'
 
@@ -8,58 +10,63 @@ class UWFlowClient:
     courses_query = """
       query {
         course {
-          id
           code
           name
           description
-          rating 
-          course_easy_buckets_aggregate {
-            aggregate_course_easy_buckets_aggregate
-          }
-          course_useful_buckets_aggregate {
-            aggregate_course_easy_buckets_aggregate
-          }
-        }
-      }
-    """
-
-    fields_query = """
-    query {
-      __type(name: "aggregate_course_rating") {
-        name
-        fields {
-          name
-          type {
-            kind
-            name
-            ofType {
-              kind
-              name
-            }
+          rating {
+            filled_count
+            liked
+            useful
+            easy
           }
         }
       }
-    }
     """
 
     response = requests.post(
       self.url, 
-      json={'query': fields_query},
+      json={'query': courses_query},
       timeout=15
     )
     response.raise_for_status()
 
     data = response.json()
-    with open('uwflow_courses_fields.json', 'w') as f:
-      json.dump(data, f, indent=2)
+    # TODO SPLIT DATA BEFORE RETURNING DATA
+    return data
+
+    # For testing
+    # with open('uwflow_courses.json', 'w') as f:
+    #   json.dump(data, f, indent=2)
+
+  def fetch_all_program_codes(self):
+    courses_query = """
+      query {
+        course {
+          code
+        }
+      }
+    """
+
+    response = requests.post(
+      self.url, 
+      json={'query': courses_query},
+      timeout=15
+    )
+    response.raise_for_status()
+
+    data = response.json()
+    program_codes = list()
+    for course in data['data']['course']:
+      code, _ = split_full_code(course['code'])
+      program_codes.append(code)
+
+    return program_codes
+  
+    # For testing
+    # with open('uwflow_courses_fields.json', 'w') as f:
+    #   json.dump(data, f, indent=2)
 
 
-'''
-from courses.services.uwflow_client import UWFlowClient
+# For testing
 client = UWFlowClient()
-data = client.fetch_course("CS246")
-print(data)
-'''
-
-client = UWFlowClient()
-client.fetch_all_courses_data()
+client.fetch_all_program_codes()
