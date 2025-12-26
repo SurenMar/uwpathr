@@ -1,5 +1,6 @@
 from os import getenv, path
 from pathlib import Path
+from datetime import timedelta
 from django.core.management.utils import get_random_secret_key
 import dotenv
 
@@ -180,12 +181,20 @@ DJOSER = {
 }
 
 AUTH_COOKIE = 'access'
-AUTH_COOKIE_ACCESS_MAX_AGE = 60 * 5 # 5 minutes
-AUTH_COOKIE_REFRESH_MAX_AGE = 60 * 60 * 24 # 1 day
+AUTH_COOKIE_ACCESS_MAX_AGE = 60 * 10 # 10 minutes
+AUTH_COOKIE_REFRESH_MAX_AGE = 60 * 60 * 24 * 30 # 30 days
 AUTH_COOKIE_SECURE = getenv('AUTH_COOKIE_SECURE', 'True') == 'True'
 AUTH_COOKIE_HTTP_ONLY = True
 AUTH_COOKIE_PATH = '/'
 AUTH_COOKIE_SAMESITE = 'None'
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': True,
+}
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = getenv('GOOGLE_AUTH_KEY')
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = getenv('GOOGLE_AUTH_SECRET_KEY')
