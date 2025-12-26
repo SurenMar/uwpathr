@@ -7,6 +7,8 @@ from courses.services.uwflow_client import UWFlowClient
 class UWWebScraper:
   base_url = 'https://ucalendar.uwaterloo.ca/2324/COURSE/'
 
+  # TODO find unit count
+
   def scrape_program_reqs(self, program: str):
     url = UWWebScraper.base_url + f'course-{program.upper()}.html'
     page = requests.get(url)
@@ -83,4 +85,10 @@ class UWWebScraper:
 #   function to do this, along with calling the other services/ methods.
 # - Reorganize the data given from fetch_all_courses_data in UWFlowClient in a
 #   predictable format.
+# - Find correct course categories
+# - Find unit count in scraper
 # - THE PREREQS HAVE TO FIRST BE SENT TO GPT THEN TO FILL_COURSES!!!!!!!!!!!!!!!!!
+# - Remember to add a 1 second timeout in main()
+# - Add staticmethod to helper functions in uwflowclient
+# - Fill checklists from up to 4 years back
+# - Add scripts that copy appropriate checklist whenever user account is made

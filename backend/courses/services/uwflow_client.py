@@ -6,6 +6,8 @@ from courses.utils.course_utils import split_full_code
 class UWFlowClient:
   url = 'https://uwflow.com/graphql'
 
+  def find_categories(code: str, number: str):
+
   def fetch_all_courses_data(self):
     courses_query = """
       query {
@@ -29,9 +31,24 @@ class UWFlowClient:
       timeout=15
     )
     response.raise_for_status()
-
     data = response.json()
-    # TODO SPLIT DATA BEFORE RETURNING DATA
+
+    # Clean up data and split course names
+    courses = list()
+    for course in data['data']['course']:
+      code, number = split_full_code(course['code'])
+      courses.append({
+        'code': code,
+        'number': number,
+        'category': UWFlowClient.find_categories(code, number),
+        'title': course['name'],
+        'description': course['description'],
+        'num_uwflow_ratings': course['rating']['filled_count'],
+        'uwflow_liked_rating': round(course['rating']['liked'] * 100, 2),
+        'uwflow_easy_ratings': round(course['rating']['easy'] * 100, 2),
+        'uwflow_useful_ratings': round(course['rating']['useful'] * 100, 2),
+      })
+
     return data
 
     # For testing
@@ -53,8 +70,8 @@ class UWFlowClient:
       timeout=15
     )
     response.raise_for_status()
-
     data = response.json()
+
     program_codes = list()
     for course in data['data']['course']:
       code, _ = split_full_code(course['code'])
