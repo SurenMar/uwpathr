@@ -3,7 +3,7 @@ from django.db import transaction
 
 from courses.models import Course, CoursePrerequisiteNode
 from services.uwflow_client import UWFlowClient
-from services.uw_web_scraper import UWWebScraper
+from backend.courses.services.uw_web_scraper.courses_data import UWWebScraper
 
 sample_json_data = [
   {
