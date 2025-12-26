@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from courses.models import Course, CourseRequisiteNode
+from courses.models import Course, CoursePrerequisiteNode
 
 
 class CourseListSerializer(serializers.ModelSerializer):
@@ -17,28 +17,29 @@ class CourseDetailSerializer(serializers.ModelSerializer):
 		model = Course
 		fields = [
 			'id', 'created_at', 'updated_at', 'code', 'number', 'units', 
-			'offered_next_term', 'category', 'title', 'description', 
+			'offered_next_term', 'category', 'corequisites', 'antirequisites',
+			'title', 'description', 
 			'num_uwflow_ratings', 'uwflow_liked_rating', 'uwflow_easy_ratings', 
 			'uwflow_useful_ratings',
 		]
 		
 
-class CourseRequisiteNodeListSerializer(serializers.ModelSerializer):
+class CoursePrerequisiteNodeListSerializer(serializers.ModelSerializer):
 	# Read-only method field that calls get_children on access
 	children = serializers.SerializerMethodField()
 	
 	class Meta:
-		model = CourseRequisiteNode
+		model = CoursePrerequisiteNode
 		fields = [
 			'id', 'created_at', 'updated_at',
-			'requisite_type', 'target_course', 'node_type',
+			'target_course', 'node_type',
 			'leaf_course', 'num_children_required', 'children',
 		]
 
 	def get_children(self, obj):
 		# Assumes queryset is prefetched in view
 		children = obj.get_children()
-		return CourseRequisiteNodeListSerializer(
+		return CoursePrerequisiteNodeListSerializer(
       children, 
       many=True,
       context=self.context

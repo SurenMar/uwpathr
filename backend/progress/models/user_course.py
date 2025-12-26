@@ -50,9 +50,9 @@ class UserCoursePathNode(MP_Node):
     on_delete=models.CASCADE,
     related_name='paths'
   )
-  requisite_node = models.ForeignKey(
-    'courses.CourseRequisiteNode',
-    on_delete=models.PROTECT, # Course requisites and paths will be fully updated before any removed courses are deleted
+  prerequisite_node = models.ForeignKey(
+    'courses.CoursePrerequisiteNode',
+    on_delete=models.CASCADE, 
     related_name='user_paths'
   )
 

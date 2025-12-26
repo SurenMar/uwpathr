@@ -1,5 +1,5 @@
 from rest_framework.routers import DefaultRouter
-from courses.views import CourseViewSet, CourseRequisiteNodeViewSet
+from courses.views import CourseViewSet, CoursePrerequisiteNodeViewSet
 
 router = DefaultRouter()
 router.register(
@@ -8,9 +8,9 @@ router.register(
   basename='course'
 )
 router.register(
-  'courses/requisites', 
-  CourseRequisiteNodeViewSet, 
-  basename='course-requisite'
+  'courses/prerequisites', 
+  CoursePrerequisiteNodeViewSet, 
+  basename='course-prerequisite'
 )
 
 urlpatterns = router.urls

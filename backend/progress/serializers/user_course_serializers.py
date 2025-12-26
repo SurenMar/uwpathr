@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from courses.models import Course, CourseRequisiteNode
+from courses.models import Course, CoursePrerequisiteNode
 from progress.models.user_course import UserCourse, UserCoursePathNode
 from courses.serializers import CourseListSerializer, CourseDetailSerializer
 from progress.serializers.user_requirements_serializers import CourseMinimalSerializer
@@ -42,20 +42,20 @@ class UserCourseCreateSerializer(serializers.ModelSerializer):
 class UserPathNodeListSerializer(serializers.ModelSerializer):
 	# Read-only method field that calls get_children on access
 	target_course = CourseMinimalSerializer(read_only=True)
-	requisite_node = serializers.PrimaryKeyRelatedField(
-		queryset=CourseRequisiteNode.objects.all()
+	prerequisite_node = serializers.PrimaryKeyRelatedField(
+		queryset=CoursePrerequisiteNode.objects.all()
 	)
 	
 	class Meta:
 		model = UserCoursePathNode
 		fields = [
-			'id', 'created_at', 'updated_at', 'requisite_node', 'target_course'
+			'id', 'created_at', 'updated_at', 'prerequisite_node', 'target_course'
 		]
 		
 
 class UserPathNodeCreateSerializer(serializers.ModelSerializer):
-	requisite_node = serializers.PrimaryKeyRelatedField(
-		queryset=CourseRequisiteNode.objects.all()
+	prerequisite_node = serializers.PrimaryKeyRelatedField(
+		queryset=CoursePrerequisiteNode.objects.all()
 	)
 	target_course = serializers.PrimaryKeyRelatedField(
 		queryset=Course.objects.all()
@@ -68,7 +68,7 @@ class UserPathNodeCreateSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = UserCoursePathNode
 		fields = [
-			'id', 'created_at', 'updated_at', 'requisite_node', 'target_course',
+			'id', 'created_at', 'updated_at', 'prerequisite_node', 'target_course',
 			'parent_node'
 		]
 		read_only_fields = ['id', 'created_at', 'updated_at']

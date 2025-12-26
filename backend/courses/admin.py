@@ -1,6 +1,6 @@
 from django.contrib import admin
 from mptt.admin import MPTTModelAdmin
-from courses.models import Course, CourseRequisiteNode
+from courses.models import Course, CoursePrerequisiteNode
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):
@@ -14,9 +14,9 @@ class CourseAdmin(admin.ModelAdmin):
   display_category.short_description = "Categories"
 
 
-@admin.register(CourseRequisiteNode)
-class CourseRequisiteNodeAdmin(MPTTModelAdmin):
-  list_display = ['requisite_type', 'target_course_name', 'node_type', 'num_children_required', 'leaf_course']
+@admin.register(CoursePrerequisiteNode)
+class CoursePrerequisiteNodeAdmin(MPTTModelAdmin):
+  list_display = ['target_course_name', 'node_type', 'num_children_required', 'leaf_course']
   search_fields = ['target_course__code', 'target_course__number']
   list_filter = ['target_course__code', 'target_course__number']
 

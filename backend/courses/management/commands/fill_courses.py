@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from django.db import transaction
 
-from courses.models import Course, CourseRequisiteNode
+from courses.models import Course, CoursePrerequisiteNode
 
 sample_json_data = [
   {
@@ -18,8 +18,8 @@ sample_json_data = [
     'uwflow_useful_ratings': 90,
 
     'pre': '0()',
-    'co': '0()',
-    'anti': '0()',
+    'co': [],
+    'anti': [],
   },
   {
     'code': 'CS',
@@ -35,8 +35,8 @@ sample_json_data = [
     'uwflow_useful_ratings': 90,
 
     'pre': '1(CS_115)',
-    'co': '0()',
-    'anti': '0()',
+    'co': [],
+    'anti': [],
   },
   {
     'code': 'CS',
@@ -52,8 +52,8 @@ sample_json_data = [
     'uwflow_useful_ratings': 90,
 
     'pre': '0()',
-    'co': '0()',
-    'anti': '0()',
+    'co': [],
+    'anti': [],
   },
   {
     'code': 'CS',
@@ -69,8 +69,8 @@ sample_json_data = [
     'uwflow_useful_ratings': 90,
 
     'pre': '0()',
-    'co': '0()',
-    'anti': '0()',
+    'co': [],
+    'anti': [],
   },
   {
     'code': 'CS',
@@ -86,8 +86,8 @@ sample_json_data = [
     'uwflow_useful_ratings': 90,
 
     'pre': '1(CS_135 cs_145 cs_116)',
-    'co': '0()',
-    'anti': '0()',
+    'co': [],
+    'anti': [],
   },
   {
     'code': 'CS',
@@ -103,8 +103,8 @@ sample_json_data = [
     'uwflow_useful_ratings': 90,
 
     'pre': '1(CS_135 cs_145)',
-    'co': '0()',
-    'anti': '0()',
+    'co': [],
+    'anti': [],
   },
   {
     'code': 'CS',
@@ -120,8 +120,8 @@ sample_json_data = [
     'uwflow_useful_ratings': 90,
 
     'pre': '1(CS_135 CS_145)',
-    'co': '0()',
-    'anti': '0()',
+    'co': [],
+    'anti': [],
   },
   {
     'code': 'CS',
@@ -137,8 +137,8 @@ sample_json_data = [
     'uwflow_useful_ratings': 90,
 
     'pre': '0()',
-    'co': '0()',
-    'anti': '0()',
+    'co': [],
+    'anti': [],
   },
   {
     'code': 'CS',
@@ -154,8 +154,8 @@ sample_json_data = [
     'uwflow_useful_ratings': 90,
 
     'pre': '1(CS_138 2(CS_136L CS_146)2(CS_136L CS_136))',
-    'co': '0()',
-    'anti': '0()',
+    'co': [],
+    'anti': [],
   },
 ]
 
@@ -175,26 +175,16 @@ sample_json_data = [
 
 # ----------------------------------------------------------------------------------------------------------------------
 
-# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
-# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
-# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
-# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
-# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
-# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
-# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
-# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
-# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
-# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
-# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
-# I NEED TO HANDLE COREQS AS WELL BUT ITS A PROBLEM SINCE I NEED MUTUAL DEPENDENCIES !!!!!!!!!!!!!!!!!!!!!!!!!
-
-
 class Command(BaseCommand):
   help = "Fetch courses data and store them in the database" 
 
   @staticmethod
   def update_courses_model(item: dict):
     # TODO Manually add uwflow id so you can compare for course changes
+    # Convert co and anti lists to combined code+number format (TODO Should i add spacing?)
+    coreqs = [f"{code.upper()}_{num.upper()}" for code, num in item.get('co', [])]
+    antireqs = [f"{code.upper()}_{num.upper()}" for code, num in item.get('anti', [])]
+    
     course, _ = Course.objects.update_or_create(
         code=item['code'].upper(),
         number=item['number'].upper(),
@@ -202,6 +192,8 @@ class Command(BaseCommand):
           'units': item['units'],
           'offered_next_term': item['offered_next_term'],
           'category': [c.lower() for c in item['category']],
+          'corequisites': coreqs,
+          'antirequisites': antireqs,
           'title': item['title'].title(),
           'description': item['description'],
           'num_uwflow_ratings': item['num_uwflow_ratings'],
@@ -213,28 +205,23 @@ class Command(BaseCommand):
     return course
     
   @staticmethod
-  def update_requisite_model(item: dict, target_course):
-    Command.create_req_nodes(target_course, 'pre', item['pre'])
-    Command.create_req_nodes(target_course, 'co', item['co'])
-    Command.create_req_nodes(target_course, 'anti', item['anti'])
+  def update_prerequisite_model(item: dict, target_course):
+    Command.create_prerequisite_nodes(target_course, item['pre'])
 
   @transaction.atomic
   @staticmethod
-  def create_req_nodes(target_course, req_type: str, 
-    req_str: str='0()'):
+  def create_prerequisite_nodes(target_course, req_str: str='0()'):
     """
     Parse req_str into MPTT node structure.
     Sample input for CS246:
       target_course: id for CS246
-      req_type: 'pre'
       req_str: '1(CS_138 2(CS_136L CS_146)2(CS_136L CS_136))'
     """
     # Use context manager to temporarily disable mptt updates
-    with CourseRequisiteNode.objects.disable_mptt_updates():
+    with CoursePrerequisiteNode.objects.disable_mptt_updates():
       # Clear tree
-      CourseRequisiteNode.objects.filter(
+      CoursePrerequisiteNode.objects.filter(
         target_course=target_course,
-        requisite_type=req_type,
       ).delete()
 
       number: str = ''
@@ -245,10 +232,9 @@ class Command(BaseCommand):
       for c in req_str:
         # Create group node
         if c == '(':
-          parent = CourseRequisiteNode.objects.create(
+          parent = CoursePrerequisiteNode.objects.create(
             target_course=target_course,
             parent=parent_stack[-1],
-            requisite_type=req_type,
             node_type='group',
             leaf_course=None,
             num_children_required=int(number),
@@ -262,10 +248,9 @@ class Command(BaseCommand):
             code=course_code.upper(),
             number=number.upper()
           )
-          CourseRequisiteNode.objects.create(
+          CoursePrerequisiteNode.objects.create(
             target_course=target_course,
             parent=parent_stack[-1],
-            requisite_type=req_type,
             node_type='course',
             leaf_course=leaf_course,
             num_children_required=None,
@@ -293,10 +278,9 @@ class Command(BaseCommand):
               code=course_code.upper(),
               number=number.upper()
             )
-            CourseRequisiteNode.objects.create(
+            CoursePrerequisiteNode.objects.create(
               target_course=target_course,
               parent=parent_stack[-1],
-              requisite_type=req_type,
               node_type='course',
               leaf_course=leaf_course,
               num_children_required=None,
@@ -308,7 +292,7 @@ class Command(BaseCommand):
           parent_stack.pop()
 
     # After bulk changes, rebuild the tree fields
-    CourseRequisiteNode.objects.rebuild()
+    CoursePrerequisiteNode.objects.rebuild()
 
   @staticmethod
   @transaction.atomic
@@ -316,7 +300,7 @@ class Command(BaseCommand):
     item['code'] = item['code'].upper()
     item['number'] = item['number'].upper()
     course = Command.update_courses_model(item)
-    Command.update_requisite_model(item, course)
+    Command.update_prerequisite_model(item, course)
     
   def handle(self, *args, **options):
     data = sample_json_data

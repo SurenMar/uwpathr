@@ -3,12 +3,12 @@ from django.db.models import Prefetch
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet, filters
 
-from courses.models import Course, CourseRequisiteNode
+from courses.models import Course, CoursePrerequisiteNode
 from courses.serializers import (
   CourseListSerializer,
   CourseDetailSerializer,
 
-  CourseRequisiteNodeListSerializer,
+  CoursePrerequisiteNodeListSerializer,
 ) 
 
 
@@ -51,12 +51,12 @@ class CourseViewSet(ReadOnlyModelViewSet):
       return CourseDetailSerializer
 
 
-class CourseRequisiteNodeViewSet(ReadOnlyModelViewSet):
+class CoursePrerequisiteNodeViewSet(ReadOnlyModelViewSet):
   """
   ViewSet for MPTT model
   """
   # Prefetch queryset
-  queryset = CourseRequisiteNode.objects.select_related(
+  queryset = CoursePrerequisiteNode.objects.select_related(
     # Foreign keys
     'target_course',
     'leaf_course',
@@ -64,7 +64,7 @@ class CourseRequisiteNodeViewSet(ReadOnlyModelViewSet):
     Prefetch(
       # Reverse foreign keys
       'children', 
-      queryset=CourseRequisiteNode.objects.all()
+      queryset=CoursePrerequisiteNode.objects.all()
     )
   )
 
@@ -74,4 +74,4 @@ class CourseRequisiteNodeViewSet(ReadOnlyModelViewSet):
   }
 
   def get_serializer_class(self):
-    return CourseRequisiteNodeListSerializer
+    return CoursePrerequisiteNodeListSerializer

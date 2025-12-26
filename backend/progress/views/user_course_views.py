@@ -84,7 +84,7 @@ class UserPathNodeViewSet(ModelViewSet):
   filter_backends = [DjangoFilterBackend]
   filterset_fields = {
     'target_course': ['exact'],
-    'requisite_node': ['exact'],
+    'prerequisite_node': ['exact'],
   }
 
   def get_queryset(self):
@@ -93,10 +93,10 @@ class UserPathNodeViewSet(ModelViewSet):
       .filter(user=self.request.user)
       .select_related(
         'target_course',
-        'requisite_node',
+        'prerequisite_node',
       ).order_by(
-        'requisite_node__tree_id',
-        'requisite_node__lft'
+        'prerequisite_node__tree_id',
+        'prerequisite_node__lft'
       )
     )
 
