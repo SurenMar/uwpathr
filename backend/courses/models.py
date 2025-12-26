@@ -8,6 +8,7 @@ from mptt.models import MPTTModel, TreeForeignKey
 class Course(models.Model):
   COURSE_CATEGORIES = [
     ('math', 'Math'),
+    ('non_math', 'Non-Math'),
     ('cs', 'CS'),
     ('hum', 'Humanities'),
     ('ss', 'Social Sciences'),
