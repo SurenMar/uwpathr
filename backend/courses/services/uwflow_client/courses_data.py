@@ -10,9 +10,13 @@ _CATEGORIES = scrape_categories()
 
 
 def _find_categories(code: str, number: str):
+  full_code = code + number
   found_categories = list()
+  
   for category, category_list in _CATEGORIES:
-    pass
+    if full_code in category_list:
+      found_categories.append(category)
+  return found_categories
 
 def fetch_all_courses_data(self):
   time.sleep(1)

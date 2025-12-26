@@ -12,7 +12,7 @@ def scrape_courses(program: str):
   """
   time.sleep(1)
   url = f'https://ucalendar.uwaterloo.ca/2324/COURSE/course-{program.upper()}.html'
-  page = requests.get(url)
+  page = requests.get(url, timeout=15)
   soup = BeautifulSoup(page.text, 'html.parser')
   courses_html = soup.find_all('center')
   requisites = list()
