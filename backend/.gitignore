@@ -9,8 +9,7 @@ db.sqlite3-journal
 media
 
 # Development json files
-uwflow_courses.json
-uwflow_courses_fields.json
+*.json
 
 # VSCode
 .vscode/settings.json

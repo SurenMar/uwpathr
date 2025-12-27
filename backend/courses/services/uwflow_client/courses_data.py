@@ -49,6 +49,9 @@ def fetch_all_courses_data(self):
   courses = list()
   for course in data['data']['course']:
     code, number = split_full_code(course['code'])
+    # Skip graduate courses
+    if number[0] >= 5:
+      continue
     courses.append({
       'code': code.upper(),
       'number': number.upper(),

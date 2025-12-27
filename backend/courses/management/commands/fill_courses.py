@@ -157,7 +157,7 @@ sample_json_data = [
 
 
 class Command(BaseCommand):
-  help = "Fetch courses data and store them in the database" 
+  help = "Fetch all undergrad course data and store them in the database" 
 
   @staticmethod
   def _update_courses_model(item: dict):
@@ -282,18 +282,62 @@ class Command(BaseCommand):
     Command._update_prerequisite_model(item, course)
 
   @staticmethod
-  def _filter_course_data():
+  def _filter_course_data(course_data1: list, course_data2: list):
+    """
+    course_data2 includes requisites and units, and course_data1 includes
+    everything else.
+    """
+    data = dict()
     # Merge courses for each program
+    for course1 in course_data1:
+      if course1['code'] in data:
+        data[course1['code']] = list()
+
+      data[course1['code']].append(course1)
+      # Find the same course in course_data2 and raise error if not found
+      match_found = False
+      for course2 in course_data2:
+        if course2['code'] == course1['code'] and \
+           course2['number'] == course1['number']:
+          data[course1['code']]['units'] = course2['units']
+          data[course1['code']]['prereqs'] = course2['prereqs']
+          data[course1['code']]['antireqs'] = course2['antireqs']
+          data[course1['code']]['coreqs'] = course2['coreqs']
+          match_found = True
+          break
+      if not match_found:
+        raise ValueError(
+          f"{course1['code']}{course1['number']} is not in html calenders."
+        )
+          
+        
+    # Check for missing course in reverse direction
+    for course2 in course_data2:
+      match_found = False
+      for course1 in course_data1:
+        if course2['code'] == course1['code'] and \
+           course2['number'] == course1['number']:
+          match_found = True
+          break
+      if not match_found:
+        raise ValueError(
+          f"{course2['code']}{course2['number']} is not in uwflow query."
+        )
 
     # Order courses in each program
+    for _, courses in data.items():
+      courses.sort(key=lambda course: course['number'])
+
+    return data
     
   def handle(self, *args, **options):
-    data = sample_json_data
     course_data1 = fetch_all_courses_data()
     with open('uw_course_reqs.json', 'r') as f:
       course_data2 = json.load(f)
-
+    data = Command._filter_course_data(course_data1, course_data2)
     # Translate 
+
+    with: open('finalized_data.json')
 
     for item in data:
       Command._update_course(item)
