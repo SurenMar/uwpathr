@@ -1,5 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.db import transaction
+import json
 
 from courses.models import Course, CoursePrerequisiteNode
 from courses.services.uwflow_client.program_data import fetch_all_program_codes
@@ -289,12 +290,8 @@ class Command(BaseCommand):
   def handle(self, *args, **options):
     data = sample_json_data
     course_data1 = fetch_all_courses_data()
-    course_data2 = [
-      course
-      for program in fetch_all_program_codes()
-      for course in scrape_courses(program.upper())
-    ]
-
+    with open('uw_course_reqs.json', 'r') as f:
+      course_data2 = json.load(f)
 
     # Translate 
 
