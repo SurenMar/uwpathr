@@ -290,26 +290,18 @@ class Command(BaseCommand):
     data = dict()
     # Merge courses for each program
     for course1 in course_data1:
-      if course1['code'] in data:
-        data[course1['code']] = list()
-
-      data[course1['code']].append(course1)
-      # Find the same course in course_data2 and raise error if not found
-      match_found = False
+      # Append course only if it is also in course_data2
       for course2 in course_data2:
-        if course2['code'] == course1['code'] and \
-           course2['number'] == course1['number']:
-          data[course1['code']]['units'] = course2['units']
-          data[course1['code']]['prereqs'] = course2['prereqs']
-          data[course1['code']]['antireqs'] = course2['antireqs']
-          data[course1['code']]['coreqs'] = course2['coreqs']
-          match_found = True
+        if (course2['code'] == course1['code'] and \
+            course2['number'] == course1['number']):
+          if course1['code'] not in data:
+            data[course1['code']] = list()
+          data[course1['code']].append(course1)
+          data[course1['code']][-1]['units'] = course2['units']
+          data[course1['code']][-1]['prereqs'] = course2['prereqs']
+          data[course1['code']][-1]['antireqs'] = course2['antireqs']
+          data[course1['code']][-1]['coreqs'] = course2['coreqs']
           break
-      if not match_found:
-        raise ValueError(
-          f"{course1['code']}{course1['number']} is not in html calenders."
-        )
-          
         
     # Check for missing course in reverse direction
     for course2 in course_data2:
@@ -337,8 +329,9 @@ class Command(BaseCommand):
     data = Command._filter_course_data(course_data1, course_data2)
     # Translate 
 
-    with: open('finalized_data.json')
+    with open('finalized_data.json', 'w') as f:
+      json.dump(data, f, indent=2)
 
-    for item in data:
-      Command._update_course(item)
+    # for item in data:
+    #   Command._update_course(item)
       

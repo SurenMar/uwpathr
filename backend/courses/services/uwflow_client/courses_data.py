@@ -1,12 +1,16 @@
 import requests
 import time
 
-from courses.utils.course_utils import split_full_code
+from courses.utils.course_utils import (
+  split_full_code, 
+  process_subject_code, 
+  strip_number,
+)
 from courses.services.uw_web_scraper.category_data import scrape_categories
 
 
 _URL = 'https://uwflow.com/graphql'
-_CATEGORIES = scrape_categories()
+#_CATEGORIES = scrape_categories()
 
 
 def _find_categories(code: str, number: str):
@@ -18,8 +22,11 @@ def _find_categories(code: str, number: str):
       found_categories.append(category)
   return found_categories
 
-def fetch_all_courses_data(self):
+def fetch_all_courses_data():
   time.sleep(1)
+
+  def percent_or_none(val):
+    return None if val is None else round(val * 100, 2)
 
   courses_query = """
     query {
@@ -49,19 +56,28 @@ def fetch_all_courses_data(self):
   courses = list()
   for course in data['data']['course']:
     code, number = split_full_code(course['code'])
-    # Skip graduate courses
-    if number[0] >= 5:
+    # Filter course
+    over_500 = [
+      'CIVE', 'GENE', 'SYDE', 'CHE', 'ARCH', 'GEO', 'GEOE', 'BME', 'ME', 
+      'MSCI', 'MTE', 'BET', 'ENVE', 'AE'
+    ]
+    if code.upper().endswith('XXX') or process_subject_code(code) == '' or \
+       (number and strip_number(number) >= 500  and code.upper() not in over_500) or \
+       (number and strip_number(number) >= 600):
       continue
     courses.append({
       'code': code.upper(),
       'number': number.upper(),
-      'category': _find_categories(code.upper(), number.upper()),
+      #'category': _find_categories(code.upper(), number.upper()),
       'title': course['name'],
       'description': course['description'],
-      'num_uwflow_ratings': course['rating']['filled_count'],
-      'uwflow_liked_rating': round(course['rating']['liked'] * 100, 2),
-      'uwflow_easy_ratings': round(course['rating']['easy'] * 100, 2),
-      'uwflow_useful_ratings': round(course['rating']['useful'] * 100, 2),
+      'num_uwflow_ratings': course['rating']['filled_count'] if course['rating']['filled_count'] is not None else None,
+      'uwflow_liked_rating': percent_or_none(course['rating']['liked']),
+      'uwflow_easy_ratings': percent_or_none(course['rating']['easy']),
+      'uwflow_useful_ratings': percent_or_none(course['rating']['useful']),
     })
+
+    # Manually add any missing courses
+    
 
   return courses

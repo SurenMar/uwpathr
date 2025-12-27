@@ -9,7 +9,7 @@ def scrape_courses(program: str):
   Scrapes course reqs and units for all courses in a program.
   Client must process the prerequisite list themeselves.
   """
-  time.sleep(3)
+  time.sleep(1.5)
   print(program)
   url = f'https://ucalendar.uwaterloo.ca/2324/COURSE/course-{program.upper()}.html'
   page = requests.get(url, timeout=120)
@@ -92,9 +92,6 @@ def scrape_courses(program: str):
 # TO DO LIST -----------------------------------------------------------------------------
 # TO DO LIST -----------------------------------------------------------------------------
 
-# - Have fill_courses orchestrate everything, meaning it should be the one to call
-#   fetch_all_program_codes from UWFlowClient. fill_course should have a main() 
-#   function to do this, along with calling the other services/ methods.
 # - Have courses ordered in an order that they can be added to the list. Sort by each 
 #   program name and add them one at a time, from lowest to highest level.
 # - THE PREREQS HAVE TO FIRST BE SENT TO GPT THEN TO FILL_COURSES!!!!!!!!!!!!!!!!!

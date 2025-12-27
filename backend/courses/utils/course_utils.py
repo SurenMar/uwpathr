@@ -13,6 +13,16 @@ def split_full_code(full_code: str):
         number += c
     return (code, number)
 
+
+def strip_number(num: str):
+  new_num = ''
+  for c in num:
+    if not c.isnumeric():
+      break
+    new_num += c
+  return int(new_num)
+
+
 def process_subject_code(code: str):
   """Trims course code: 'CSXXX' -> 'CS'"""
   code = code.upper()

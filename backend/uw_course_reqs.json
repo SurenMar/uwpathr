@@ -17176,14 +17176,6 @@
     "coreqs": " Coreq: PSYCH 499B"
   },
   {
-    "code": "BUS-----",
-    "number": "",
-    "units": 0,
-    "prereqs": null,
-    "antireqs": null,
-    "coreqs": null
-  },
-  {
     "code": "PACS",
     "number": "101",
     "units": 50,
