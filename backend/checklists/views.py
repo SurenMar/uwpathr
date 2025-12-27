@@ -2,10 +2,14 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from django_filters.rest_framework import DjangoFilterBackend
 
 from checklists.models.checklist import CheckboxAllowedCourses
-from checklists.models.requirements import AdditionalConstraintAllowedCourses
+from checklists.models.requirements import (
+  AdditionalConstraintAllowedCourses, 
+  Specialization
+)
 from checklists.serializers import (
   CheckboxAllowedCoursesListSerializer,
-  AdditionalConstraintAllowedCoursesListSerializer
+  AdditionalConstraintAllowedCoursesListSerializer,
+  SpecializationListSerializer,
 )
 
 
@@ -45,4 +49,9 @@ class AdditionalConstraintAllowedCoursesViewSet(ReadOnlyModelViewSet):
 
   def get_serializer_class(self):
     return AdditionalConstraintAllowedCoursesListSerializer
+
+
+class SpecializationViewSet(ReadOnlyModelViewSet):
+  queryset = Specialization.objects.all().order_by('name')
+  serializer_class = SpecializationListSerializer
   

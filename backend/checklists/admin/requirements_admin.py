@@ -10,13 +10,12 @@ from checklists.models.requirements import (
 
 @admin.register(Specialization)
 class SpecializationAdmin(admin.ModelAdmin):
-  list_display = ['id', 'name']
+  list_display = ['id', 'name', 'description']
 
 
 @admin.register(NonCourseRequirement)
 class NonCourseRequirementAdmin(admin.ModelAdmin):
   list_display = ['id', 'year', 'description', 'checklist_id_display']
-
 
 
 @admin.register(AdditionalConstraint)

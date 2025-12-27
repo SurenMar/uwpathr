@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from checklists.models.checklist import CheckboxAllowedCourses
+from checklists.models.requirements import Specialization
 from courses.models import Course
 
 
@@ -29,4 +30,10 @@ class AdditionalConstraintAllowedCoursesListSerializer(serializers.ModelSerializ
 		fields = [
 		  'id', 'created_at', 'updated_at', 'target_checkbox', 'courses',
     ]
+
+
+class SpecializationListSerializer(serializers.ModelSerializer):
+	class Meta:
+		model = Specialization
+		fields = ['id', 'created_at', 'updated_at', 'name', 'description']
 		

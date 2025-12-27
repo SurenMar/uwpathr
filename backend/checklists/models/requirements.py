@@ -6,6 +6,7 @@ class Specialization(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
   name = models.CharField(max_length=255)
+  description = models.TextField()
 
   def __str__(self):
     return self.name
@@ -84,7 +85,7 @@ class AdditionalConstraintAllowedCourses(models.Model):
     related_name='+',
   )
 
-  def target_requiremet_type(self):
+  def target_requirement_type(self):
     return self.target_checkbox.requirement_type
   
   def target_title(self):

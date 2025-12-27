@@ -1,7 +1,8 @@
 from rest_framework.routers import DefaultRouter
 from checklists.views import (
   CheckboxAllowedCoursesViewSet, 
-  AdditionalConstraintAllowedCoursesViewSet
+  AdditionalConstraintAllowedCoursesViewSet,
+  SpecializationViewSet,
 ) 
 
 router = DefaultRouter()
@@ -13,5 +14,10 @@ router.register(
   'additional-constraint-allowed-courses', 
   AdditionalConstraintAllowedCoursesViewSet, 
   basename='additional-constraint-allowed-course')
+router.register(
+  'specializations',
+  SpecializationViewSet,
+  basename='specialization'
+)
 
 urlpatterns = router.urls
