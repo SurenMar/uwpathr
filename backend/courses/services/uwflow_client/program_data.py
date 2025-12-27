@@ -1,6 +1,6 @@
 import requests
 import time
-from courses.utils.course_utils import split_full_code
+from courses.utils.course_utils import split_full_code, process_subject_code
 
 
 _URL = 'https://uwflow.com/graphql'
@@ -28,10 +28,15 @@ def fetch_all_program_codes():
   program_codes = list()
   for course in data['data']['course']:
     code, _ = split_full_code(course['code'])
+    code = process_subject_code(code)
+    if code == '':
+      continue
     program_codes.append(code.upper())
 
-  return program_codes
+  # Remove duplicates and return
+  return list(set(program_codes))
 
-  # For testing
-  # with open('uwflow_courses_fields.json', 'w') as f:
-  #   json.dump(data, f, indent=2)
+import json
+data = fetch_all_program_codes()
+with open('subject_codes.json', 'w') as f:
+  json.dump(data, f, indent=2)

@@ -2,7 +2,7 @@ import requests
 import time
 
 from courses.utils.course_utils import split_full_code
-from backend.courses.services.uw_web_scraper.category_data import scrape_categories
+from courses.services.uw_web_scraper.category_data import scrape_categories
 
 
 _URL = 'https://uwflow.com/graphql'
@@ -62,11 +62,3 @@ def fetch_all_courses_data(self):
     })
 
   return courses
-
-  # For testing
-  # with open('uwflow_courses.json', 'w') as f:
-  #   json.dump(data, f, indent=2)
-
-
-# For testing
-# fetch_all_program_codes()

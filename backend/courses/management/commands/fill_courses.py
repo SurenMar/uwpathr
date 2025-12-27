@@ -2,6 +2,7 @@ from django.core.management.base import BaseCommand
 from django.db import transaction
 
 from courses.models import Course, CoursePrerequisiteNode
+from courses.services.uwflow_client.program_data import fetch_all_program_codes
 from courses.services.uwflow_client.courses_data import fetch_all_courses_data
 from courses.services.uw_web_scraper.courses_data import scrape_courses
 from courses.services.openai_client.course_data import parse_prereqs
@@ -281,10 +282,21 @@ class Command(BaseCommand):
 
   @staticmethod
   def _filter_course_data():
-    pass
+    # Merge courses for each program
+
+    # Order courses in each program
     
   def handle(self, *args, **options):
     data = sample_json_data
+    course_data1 = fetch_all_courses_data()
+    course_data2 = [
+      course
+      for program in fetch_all_program_codes()
+      for course in scrape_courses(program.upper())
+    ]
+
+
+    # Translate 
 
     for item in data:
       Command._update_course(item)

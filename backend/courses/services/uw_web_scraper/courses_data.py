@@ -1,7 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
 import time
-
 from courses.utils.course_utils import split_full_code
 
 
@@ -10,9 +9,12 @@ def scrape_courses(program: str):
   Scrapes course reqs and units for all courses in a program.
   Client must process the prerequisite list themeselves.
   """
-  time.sleep(1)
+  time.sleep(3)
+  print(program)
   url = f'https://ucalendar.uwaterloo.ca/2324/COURSE/course-{program.upper()}.html'
-  page = requests.get(url, timeout=15)
+  page = requests.get(url, timeout=120)
+  if page.status_code == 404:
+    return []
   soup = BeautifulSoup(page.text, 'html.parser')
   courses_html = soup.find_all('center')
   requisites = list()
@@ -98,3 +100,16 @@ def scrape_courses(program: str):
 # - THE PREREQS HAVE TO FIRST BE SENT TO GPT THEN TO FILL_COURSES!!!!!!!!!!!!!!!!!
 # - Fill checklists from up to 4 years back
 # - Add scripts that copy appropriate checklist whenever user account is made
+
+
+from courses.services.uwflow_client.program_data import fetch_all_program_codes
+import json
+
+data = [
+  course
+  for code in fetch_all_program_codes()
+  for course in scrape_courses(code)
+]
+with open('uw_course_reqs.json', 'w') as f:
+  json.dump(data, f, indent=2)
+  

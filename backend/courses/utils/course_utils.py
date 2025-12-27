@@ -12,3 +12,18 @@ def split_full_code(full_code: str):
       else:
         number += c
     return (code, number)
+
+def process_subject_code(code: str):
+  """Trims course code: 'CSXXX' -> 'CS'"""
+  code = code.upper()
+  if code.endswith('XXX'):
+    return code.removesuffix('XXX')
+
+  # Return blank if code contains a non letter character (not a valid code)
+  for c in code:
+    c = c.upper()
+    if not c.isalpha():
+      return ''
+    
+  return code
+      

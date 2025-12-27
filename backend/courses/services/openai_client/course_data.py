@@ -1,5 +1,5 @@
 from django.conf import settings
 
-def parse_prereqs(prereq_str: str):
+def parse_prereqs(courses):
   parsed_prereqs = ''
   return parse_prereqs
