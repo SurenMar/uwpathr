@@ -53,6 +53,12 @@ class ChecklistNode(MPTTModel):
         name='only_group_has_units_required'
       )
     ]
+  
+  def target_year(self):
+    return self.target_checklist.year
+
+  def target_specialization(self):
+    return self.target_checklist.specialization
 
 
 class CheckboxAllowedCourses(models.Model):
@@ -67,3 +73,13 @@ class CheckboxAllowedCourses(models.Model):
     'courses.Course',
     related_name='+',
   )
+
+  def target_requiremet_type(self):
+    return self.target_checkbox.requirement_type
+  
+  def target_title(self):
+    return self.target_checkbox.title
+  
+  def course_list(self):
+    return ", ".join(str(i) for i in self.courses.all())
+  course_list.short_description = "Courses"

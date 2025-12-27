@@ -332,6 +332,14 @@ class Command(BaseCommand):
     with open('finalized_data.json', 'w') as f:
       json.dump(data, f, indent=2)
 
+    only_prereqs = dict()
+    for _, program in data.items():
+      for course in program:
+        only_prereqs[course['code']+course['number']] = course['prereqs']
+
+    with open('only_prereqs.json', 'w') as f:
+      json.dump(only_prereqs, f, indent=2)
+
     # for item in data:
     #   Command._update_course(item)
       

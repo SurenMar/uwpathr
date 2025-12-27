@@ -7,6 +7,9 @@ class Specialization(models.Model):
   updated_at = models.DateTimeField(auto_now=True)
   name = models.CharField(max_length=255)
 
+  def __str__(self):
+    return self.name
+
 
 class NonCourseRequirement(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
@@ -18,6 +21,9 @@ class NonCourseRequirement(models.Model):
     on_delete=models.CASCADE,
     related_name='non_course_requirements'
   )
+
+  def checklist_id_display(self):
+    return self.checklist_id
 
 
 class AdditionalConstraint(MPTTModel):
@@ -58,6 +64,12 @@ class AdditionalConstraint(MPTTModel):
       )
     ]
 
+  def target_year(self):
+    return self.target_checklist.year
+
+  def target_specialization(self):
+    return self.target_checklist.specialization
+
 
 class AdditionalConstraintAllowedCourses(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
@@ -71,3 +83,13 @@ class AdditionalConstraintAllowedCourses(models.Model):
     'courses.Course',
     related_name='+',
   )
+
+  def target_requiremet_type(self):
+    return self.target_checkbox.requirement_type
+  
+  def target_title(self):
+    return self.target_checkbox.title
+  
+  def course_list(self):
+    return ", ".join(str(i) for i in self.courses.all())
+  course_list.short_description = "Courses"
