@@ -362,21 +362,21 @@ class Command(BaseCommand):
 
     # with open('finalized_data.json', 'w') as f:
     #   json.dump(data, f, indent=2)
-
-    completed_courses = set()
-    while True:
-      completed = True
-      for _, program_courses in data.items():
-        for course in program_courses:
-          if f'{course['code']}{course['number']}' in completed_courses:
-            continue
-          try:
-            Command._update_course(course)
-            completed_courses.add(f'{course['code']}{course['number']}')
-          except Course.DoesNotExist:
-            continue
-          finally:
-            completed = False
-      if completed:
-        break
+    with transaction.atomic():
+      completed_courses = set()
+      while True:
+        completed = True
+        for _, program_courses in data.items():
+          for course in program_courses:
+            if f'{course['code']}{course['number']}' in completed_courses:
+              continue
+            try:
+              Command._update_course(course)
+              completed_courses.add(f'{course['code']}{course['number']}')
+            except Course.DoesNotExist:
+              continue
+            finally:
+              completed = False
+        if completed:
+          break
       
