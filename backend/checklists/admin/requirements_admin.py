@@ -15,7 +15,7 @@ class SpecializationAdmin(admin.ModelAdmin):
 
 @admin.register(NonCourseRequirement)
 class NonCourseRequirementAdmin(admin.ModelAdmin):
-  list_display = ['id', 'year', 'description', 'checklist_id_display']
+  list_display = ['id', 'year', 'description', 'checklist']
 
 
 @admin.register(AdditionalConstraint)

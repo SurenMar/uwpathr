@@ -9,7 +9,7 @@ class Specialization(models.Model):
   description = models.TextField(null=True, blank=True)
 
   def __str__(self):
-    return self.name
+    return self.name if self.name else 'None'
 
 
 class NonCourseRequirement(models.Model):
@@ -25,6 +25,9 @@ class NonCourseRequirement(models.Model):
 
   def checklist_id_display(self):
     return self.checklist_id
+  
+  def __str__(self):
+    return self.description[:10]
 
 
 class AdditionalConstraint(MPTTModel):

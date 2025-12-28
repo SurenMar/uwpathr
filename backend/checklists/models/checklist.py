@@ -14,6 +14,9 @@ class Checklist(models.Model):
     related_name='+'
   )
 
+  def __str__(self):
+    return f'{self.year} {self.specialization}'
+
 
 class ChecklistNode(MPTTModel):
   NODE_TYPES = [
@@ -25,7 +28,7 @@ class ChecklistNode(MPTTModel):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
   requirement_type = models.CharField(max_length=8, choices=NODE_TYPES)
-  title = models.CharField(max_length=64)
+  title = models.CharField(max_length=128)
   units_required = models.PositiveSmallIntegerField(blank=True, null=True)
   target_checklist = models.ForeignKey(
     'Checklist',
@@ -59,6 +62,9 @@ class ChecklistNode(MPTTModel):
 
   def target_specialization(self):
     return self.target_checklist.specialization
+  
+  def __str__(self):
+    return f'{self.title}, {self.target_checklist}, {self.requirement_type}'
 
 
 class CheckboxAllowedCourses(models.Model):
