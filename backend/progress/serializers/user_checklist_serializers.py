@@ -37,6 +37,30 @@ class UserChecklistNodeUpdateSerializer(serializers.ModelSerializer):
     ]
     read_only_fields = ['id', 'created_at', 'updated_at', 'requirement_type']
 
+  def validate_selected_course(self, value):
+    # Allow unsetting the course
+    if value is None:
+      return value
+    
+    # Only checkboxes can have selected courses
+    if self.instance and self.instance.requirement_type != 'checkbox':
+      raise serializers.ValidationError(
+        "Only checkbox nodes can have selected courses."
+      )
+    
+    # For updates, verify course is in allowed list
+    if self.instance and self.instance.original_checkbox:
+      if self.instance.original_checkbox.allowed_courses.courses.exists():
+        return value
+      allowed_courses = self.instance.original_checkbox.allowed_courses.courses.all()
+      if not allowed_courses.filter(pk=value.pk).exists():
+        raise serializers.ValidationError(
+          "Selected course is not in allowed courses."
+        )
+    
+    return value
+    
+
   def update(self, instance, validated_data):
     if 'selected_course' in validated_data and \
        instance.requirement_type == 'checkbox':
@@ -131,12 +155,10 @@ class UserChecklistCreateSerializer(serializers.Serializer):
       target_checklist=original_checklist
     ).order_by('tree_id', 'lft')  # MPTT ordering
 
-    # Bulk create to avoid triggering signals during copy
-    nodes_to_create = []
+    # Create nodes sequentially so MPTT fields (lft/rgt) are populated
     for original_node in checklist_nodes:
       parent = node_map.get(original_node.parent_id) if original_node.parent_id else None
-      
-      user_node = UserChecklistNode(
+      user_node = UserChecklistNode.objects.create(
         requirement_type=original_node.requirement_type,
         title=original_node.title,
         units_required=original_node.units_required,
@@ -148,14 +170,7 @@ class UserChecklistCreateSerializer(serializers.Serializer):
         selected_course=None,
         parent=parent
       )
-      nodes_to_create.append(user_node)
-      
-    # Bulk create without triggering signals
-    created_nodes = UserChecklistNode.objects.bulk_create(nodes_to_create)
-    
-    # Map created nodes for parent references
-    for i, original_node in enumerate(checklist_nodes):
-      node_map[original_node.id] = created_nodes[i]
+      node_map[original_node.id] = user_node
 
   def _copy_additional_constraints(self, original_checklist, user_checklist, user):
     """Copy AdditionalConstraint tree to UserAdditionalConstraint"""
@@ -164,12 +179,10 @@ class UserChecklistCreateSerializer(serializers.Serializer):
       target_checklist=original_checklist
     ).order_by('tree_id', 'lft')  # MPTT ordering
 
-    # Bulk create to avoid triggering signals during copy
-    constraints_to_create = []
+    # Create constraints sequentially so MPTT fields (lft/rgt) are populated
     for original_constraint in additional_constraints:
       parent = constraint_map.get(original_constraint.parent_id) if original_constraint.parent_id else None
-      
-      user_constraint = UserAdditionalConstraint(
+      user_constraint = UserAdditionalConstraint.objects.create(
         title=original_constraint.title,
         requirement_type=original_constraint.requirement_type,
         num_courses_required=original_constraint.num_courses_required,
@@ -180,12 +193,5 @@ class UserChecklistCreateSerializer(serializers.Serializer):
         original_checkbox=original_constraint if original_constraint.requirement_type == 'checkbox' else None,
         parent=parent
       )
-      constraints_to_create.append(user_constraint)
-    
-    # Bulk create without triggering signals
-    created_constraints = UserAdditionalConstraint.objects.bulk_create(constraints_to_create)
-    
-    # Map created constraints for parent references
-    for i, original_constraint in enumerate(additional_constraints):
-      constraint_map[original_constraint.id] = created_constraints[i]
+      constraint_map[original_constraint.id] = user_constraint
 

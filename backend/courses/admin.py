@@ -16,7 +16,7 @@ class CourseAdmin(admin.ModelAdmin):
 
 @admin.register(CoursePrerequisiteNode)
 class CoursePrerequisiteNodeAdmin(MPTTModelAdmin):
-  list_display = ['target_course_name', 'node_type', 'num_children_required', 'leaf_course']
+  list_display = ['id', 'target_course_name', 'node_type', 'num_children_required', 'leaf_course']
   search_fields = ['target_course__code', 'target_course__number']
   list_filter = ['target_course__code', 'target_course__number']
 

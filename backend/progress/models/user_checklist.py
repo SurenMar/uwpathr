@@ -47,7 +47,7 @@ class UserChecklistNode(MPTTModel):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
   requirement_type = models.CharField(max_length=8, choices=NODE_TYPES)
-  title = models.CharField(max_length=64)
+  title = models.CharField(max_length=128)
   units_required = models.PositiveSmallIntegerField(blank=True, null=True)
   units_gathered = models.PositiveSmallIntegerField(blank=True, null=True)
   completed = models.BooleanField(default=False)
@@ -108,7 +108,7 @@ class UserChecklistNode(MPTTModel):
           (Q(requirement_type='checkbox') &
            Q(original_checkbox__isnull=False))
         ),
-        name='only_checkboxes_have_checkbox_field'
+        name='only_checkboxes_have_checkbox_field_checklist'
       )
     ]
   

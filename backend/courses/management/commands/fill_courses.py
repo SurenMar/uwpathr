@@ -203,7 +203,6 @@ class Command(BaseCommand):
     
   @staticmethod
   def _update_prerequisite_model(item: dict, target_course):
-    print(f'{item['code']}{item['number']}')
     Command._create_prerequisite_nodes(target_course, item['prereqs'])
 
   @transaction.atomic
