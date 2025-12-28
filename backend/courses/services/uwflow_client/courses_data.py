@@ -69,6 +69,7 @@ def fetch_all_courses_data():
       'code': code.upper(),
       'number': number.upper(),
       #'category': _find_categories(code.upper(), number.upper()),
+      'category': [],
       'title': course['name'],
       'description': course['description'],
       'num_uwflow_ratings': course['rating']['filled_count'] if course['rating']['filled_count'] is not None else None,

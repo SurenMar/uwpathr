@@ -203,11 +203,14 @@ class Command(BaseCommand):
     
   @staticmethod
   def _update_prerequisite_model(item: dict, target_course):
+    print(f'{item['code']}{item['number']}')
     Command._create_prerequisite_nodes(target_course, item['prereqs'])
 
   @transaction.atomic
   @staticmethod
-  def _create_prerequisite_nodes(target_course, req_str: str='0()'):
+  def _create_prerequisite_nodes(target_course, req_str: str):
+    if req_str == None:
+      return
     """
     Parse req_str into MPTT node structure.
     Sample input for CS246:
@@ -241,7 +244,7 @@ class Command(BaseCommand):
           parent_stack.append(parent)
         # Create leaf course
         elif c == ' ':
-          leaf_course = Course.objects.get( # Assumes course exists
+          leaf_course = Course.objects.get(
             code=course_code.upper(),
             number=number.upper()
           )
@@ -357,12 +360,24 @@ class Command(BaseCommand):
     with open('uw_course_reqs.json', 'r') as f:
       course_data2 = json.load(f)
     data = Command._filter_course_data(course_data1, course_data2)
-    # Translate 
 
-    with open('finalized_data.json', 'w') as f:
-      json.dump(data, f, indent=2)
+    # with open('finalized_data.json', 'w') as f:
+    #   json.dump(data, f, indent=2)
 
-
-    # for item in data:
-    #   Command._update_course(item)
+    completed_courses = set()
+    while True:
+      completed = True
+      for _, program_courses in data.items():
+        for course in program_courses:
+          if f'{course['code']}{course['number']}' in completed_courses:
+            continue
+          try:
+            Command._update_course(course)
+            completed_courses.add(f'{course['code']}{course['number']}')
+          except Course.DoesNotExist:
+            continue
+          finally:
+            completed = False
+      if completed:
+        break
       
