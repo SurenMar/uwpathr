@@ -28,16 +28,8 @@ class Course(models.Model):
     default=list,
     blank=True,
   )
-  corequisites = ArrayField(
-    models.CharField(max_length=16),
-    default=list,
-    blank=True,
-  )
-  antirequisites = ArrayField(
-    models.CharField(max_length=16),
-    default=list,
-    blank=True,
-  )
+  corequisites = models.TextField()
+  antirequisites = models.TextField()
   title = models.TextField()
   description = models.TextField()
   num_uwflow_ratings = models.PositiveSmallIntegerField()

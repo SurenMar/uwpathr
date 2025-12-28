@@ -6,7 +6,7 @@ from courses.models import Course, CoursePrerequisiteNode
 from courses.services.uwflow_client.program_data import fetch_all_program_codes
 from courses.services.uwflow_client.courses_data import fetch_all_courses_data
 from courses.services.uw_web_scraper.courses_data import scrape_courses
-from courses.services.openai_client.course_data import parse_prereqs
+from courses.utils.course_utils import split_full_code
 
 sample_json_data = [
   {
@@ -22,8 +22,8 @@ sample_json_data = [
     'uwflow_useful_ratings': 90,
 
     'prereqs': '0()',
-    'coreqs': [],
-    'antireqs': [],
+    'coreqs': '',
+    'antireqs': '',
   },
   {
     'code': 'CS',
@@ -38,8 +38,8 @@ sample_json_data = [
     'uwflow_useful_ratings': 90,
 
     'prereqs': '1(CS_115)',
-    'coreqs': [],
-    'antireqs': [],
+    'coreqs': '',
+    'antireqs': '',
   },
   {
     'code': 'CS',
@@ -54,8 +54,8 @@ sample_json_data = [
     'uwflow_useful_ratings': 90,
 
     'prereqs': '0()',
-    'coreqs': [],
-    'antireqs': [],
+    'coreqs': '',
+    'antireqs': '',
   },
   {
     'code': 'CS',
@@ -70,8 +70,8 @@ sample_json_data = [
     'uwflow_useful_ratings': 90,
 
     'prereqs': '0()',
-    'coreqs': [],
-    'antireqs': [],
+    'coreqs': '',
+    'antireqs': '',
   },
   {
     'code': 'CS',
@@ -86,8 +86,8 @@ sample_json_data = [
     'uwflow_useful_ratings': 90,
 
     'prereqs': '1(CS_135 cs_145 cs_116)',
-    'coreqs': [],
-    'antireqs': [],
+    'coreqs': '',
+    'antireqs': '',
   },
   {
     'code': 'CS',
@@ -102,8 +102,8 @@ sample_json_data = [
     'uwflow_useful_ratings': 90,
 
     'prereqs': '1(CS_135 cs_145)',
-    'coreqs': [],
-    'antireqs': [],
+    'coreqs': '',
+    'antireqs': '',
   },
   {
     'code': 'CS',
@@ -118,8 +118,8 @@ sample_json_data = [
     'uwflow_useful_ratings': 90,
 
     'prereqs': '1(CS_135 CS_145)',
-    'coreqs': [],
-    'antireqs': [],
+    'coreqs': '',
+    'antireqs': '',
   },
   {
     'code': 'CS',
@@ -134,8 +134,8 @@ sample_json_data = [
     'uwflow_useful_ratings': 90,
 
     'prereqs': '0()',
-    'coreqs': [],
-    'antireqs': [],
+    'coreqs': '',
+    'antireqs': '',
   },
   {
     'code': 'CS',
@@ -150,8 +150,8 @@ sample_json_data = [
     'uwflow_useful_ratings': 90,
 
     'prereqs': '1(CS_138 2(CS_136L CS_146)2(CS_136L CS_136))',
-    'coreqs': [],
-    'antireqs': [],
+    'coreqs': '',
+    'antireqs': '',
   },
 ]
 
@@ -160,10 +160,28 @@ class Command(BaseCommand):
   help = "Fetch all undergrad course data and store them in the database" 
 
   @staticmethod
+  def _normalize_requisite_text(value):
+    """Return a safe string for coreqs/antireqs TextFields."""
+    if value is None:
+      return ''
+    if isinstance(value, str):
+      return value.strip()
+    if isinstance(value, (list, tuple)):
+      formatted = []
+      for item in value:
+        if isinstance(item, (list, tuple)) and len(item) == 2:
+          code, num = item
+          formatted.append(f"{code}_{num}".upper())
+        elif isinstance(item, str):
+          formatted.append(item.strip())
+      return ' '.join(formatted)
+    return str(value)
+
+  @staticmethod
   def _update_courses_model(item: dict):
-    # Convert coreqs and antireqs lists to combined code+number format (TODO Should i add spacing?)
-    coreqs = [f"{code.upper()}_{num.upper()}" for code, num in item.get('coreqs', [])]
-    antireqs = [f"{code.upper()}_{num.upper()}" for code, num in item.get('antireqs', [])]
+    # Normalize coreqs and antireqs into plain text for TextFields
+    coreqs = Command._normalize_requisite_text(item.get('coreqs'))
+    antireqs = Command._normalize_requisite_text(item.get('antireqs'))
     
     course, _ = Course.objects.update_or_create(
         code=item['code'].upper(),
@@ -320,6 +338,18 @@ class Command(BaseCommand):
     for _, courses in data.items():
       courses.sort(key=lambda course: course['number'])
 
+    prereqs = dict()
+    # Override prerequisites with curated mapping
+    with open('only_prereqs.json', 'r') as f:
+      prereqs = json.load(f)
+
+    for full_code, prereq in prereqs.items():
+      code, number = split_full_code(full_code)
+      for course in data[code]:
+        if course['number'] == number:
+          course['prereqs'] = prereq
+          break
+
     return data
     
   def handle(self, *args, **options):
@@ -332,13 +362,6 @@ class Command(BaseCommand):
     with open('finalized_data.json', 'w') as f:
       json.dump(data, f, indent=2)
 
-    only_prereqs = dict()
-    for _, program in data.items():
-      for course in program:
-        only_prereqs[course['code']+course['number']] = course['prereqs']
-
-    with open('only_prereqs.json', 'w') as f:
-      json.dump(only_prereqs, f, indent=2)
 
     # for item in data:
     #   Command._update_course(item)
