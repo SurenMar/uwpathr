@@ -1,5 +1,9 @@
 from rest_framework import serializers
+from django.db import transaction
 from progress.models.user_checklist import UserChecklist, UserChecklistNode
+from progress.models.user_requirements import UserAdditionalConstraint
+from checklists.models.checklist import Checklist, ChecklistNode
+from checklists.models.requirements import AdditionalConstraint
 
 
 class UserChecklistNodeListSerializer(serializers.ModelSerializer):
@@ -60,4 +64,128 @@ class UserChecklistDetailSerializer(serializers.ModelSerializer):
       many=True,
       context=self.context
     ).data
+
+
+class UserChecklistCreateSerializer(serializers.Serializer):
+  year = serializers.IntegerField()
+  specialization = serializers.IntegerField()
+
+  def validate(self, data):
+    # Check if checklist exists
+    try:
+      checklist = Checklist.objects.get(
+        year=data['year'],
+        specialization_id=data['specialization']
+      )
+      data['original_checklist'] = checklist
+    except Checklist.DoesNotExist:
+      raise serializers.ValidationError(
+        "Checklist not found for given year and specialization"
+      )
+    
+    # Check if user already has this checklist
+    user = self.context['request'].user
+    if UserChecklist.objects.filter(
+      user=user,
+      specialization_id=data['specialization']
+    ).exists():
+      raise serializers.ValidationError(
+        "User already has a checklist for this specialization"
+      )
+    
+    return data
+
+  def create(self, validated_data):
+    user = self.context['request'].user
+    original_checklist = validated_data['original_checklist']
+    
+    with transaction.atomic():
+      # Create UserChecklist
+      user_checklist = UserChecklist.objects.create(
+        year=validated_data['year'],
+        user=user,
+        units_required=original_checklist.units_required,
+        specialization_id=validated_data['specialization'],
+        original_checklist=original_checklist,
+        taken_course_units=0,
+        planned_course_units=0
+      )
+
+      # Copy ChecklistNode tree
+      self._copy_checklist_nodes(original_checklist, user_checklist, user)
+      
+      # Copy AdditionalConstraint tree
+      self._copy_additional_constraints(original_checklist, user_checklist, user)
+
+    return user_checklist
+  
+  def to_representation(self, instance):
+    """Return detailed representation using UserChecklistDetailSerializer"""
+    serializer = UserChecklistDetailSerializer(instance, context=self.context)
+    return serializer.data
+
+  def _copy_checklist_nodes(self, original_checklist, user_checklist, user):
+    """Copy ChecklistNode tree to UserChecklistNode"""
+    node_map = {}  # Maps original node id to new user node
+    checklist_nodes = ChecklistNode.objects.filter(
+      target_checklist=original_checklist
+    ).order_by('tree_id', 'lft')  # MPTT ordering
+
+    # Bulk create to avoid triggering signals during copy
+    nodes_to_create = []
+    for original_node in checklist_nodes:
+      parent = node_map.get(original_node.parent_id) if original_node.parent_id else None
+      
+      user_node = UserChecklistNode(
+        requirement_type=original_node.requirement_type,
+        title=original_node.title,
+        units_required=original_node.units_required,
+        units_gathered=0 if original_node.requirement_type == 'group' else None,
+        completed=False,
+        user=user,
+        target_checklist=user_checklist,
+        original_checkbox=original_node if original_node.requirement_type == 'checkbox' else None,
+        selected_course=None,
+        parent=parent
+      )
+      nodes_to_create.append(user_node)
+      
+    # Bulk create without triggering signals
+    created_nodes = UserChecklistNode.objects.bulk_create(nodes_to_create)
+    
+    # Map created nodes for parent references
+    for i, original_node in enumerate(checklist_nodes):
+      node_map[original_node.id] = created_nodes[i]
+
+  def _copy_additional_constraints(self, original_checklist, user_checklist, user):
+    """Copy AdditionalConstraint tree to UserAdditionalConstraint"""
+    constraint_map = {}  # Maps original constraint id to new user constraint
+    additional_constraints = AdditionalConstraint.objects.filter(
+      target_checklist=original_checklist
+    ).order_by('tree_id', 'lft')  # MPTT ordering
+
+    # Bulk create to avoid triggering signals during copy
+    constraints_to_create = []
+    for original_constraint in additional_constraints:
+      parent = constraint_map.get(original_constraint.parent_id) if original_constraint.parent_id else None
+      
+      user_constraint = UserAdditionalConstraint(
+        title=original_constraint.title,
+        requirement_type=original_constraint.requirement_type,
+        num_courses_required=original_constraint.num_courses_required,
+        num_courses_gathered=0 if original_constraint.requirement_type == 'group' else None,
+        completed=False,
+        user=user,
+        target_checklist=user_checklist,
+        original_checkbox=original_constraint if original_constraint.requirement_type == 'checkbox' else None,
+        parent=parent
+      )
+      constraints_to_create.append(user_constraint)
+    
+    # Bulk create without triggering signals
+    created_constraints = UserAdditionalConstraint.objects.bulk_create(constraints_to_create)
+    
+    # Map created constraints for parent references
+    for i, original_constraint in enumerate(additional_constraints):
+      constraint_map[original_constraint.id] = created_constraints[i]
 

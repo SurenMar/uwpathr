@@ -1,16 +1,17 @@
 from rest_framework.viewsets import GenericViewSet, ReadOnlyModelViewSet
-from rest_framework.mixins import UpdateModelMixin
+from rest_framework.mixins import UpdateModelMixin, CreateModelMixin
 from django.db.models import Prefetch
 from django_filters.rest_framework import DjangoFilterBackend
 
 from progress.models.user_checklist import UserChecklist, UserChecklistNode
 from progress.serializers.user_checklist_serializers import (
   UserChecklistDetailSerializer,
+  UserChecklistCreateSerializer,
   UserChecklistNodeUpdateSerializer,
 )
 
 
-class UserChecklistViewSet(ReadOnlyModelViewSet):
+class UserChecklistViewSet(ReadOnlyModelViewSet, CreateModelMixin):
   filter_backends = [DjangoFilterBackend]
   filterset_fields = {
     'year': ['exact'], 
@@ -40,7 +41,12 @@ class UserChecklistViewSet(ReadOnlyModelViewSet):
     )
   
   def get_serializer_class(self):
+    if self.action == 'create':
+      return UserChecklistCreateSerializer
     return UserChecklistDetailSerializer
+  
+  def perform_create(self, serializer):
+    serializer.save()
 
 
 class UserChecklistNodeViewSet(GenericViewSet, UpdateModelMixin):

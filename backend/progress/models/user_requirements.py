@@ -18,7 +18,7 @@ class UserAdditionalConstraint(MPTTModel):
   num_courses_required = models.PositiveSmallIntegerField(blank=True, null=True)
   num_courses_gathered = models.PositiveSmallIntegerField(blank=True, null=True)
   completed = models.BooleanField(default=False)
-  user = models.OneToOneField(
+  user = models.ForeignKey(
     'users.UserAccount',
     on_delete=models.CASCADE,
     related_name='additional_contraints'
@@ -99,14 +99,15 @@ class UserDepthList(models.Model):
 
 @receiver(post_save, sender=UserDepthList)
 def update_depth_list_counts_on_save(sender, instance, created, **kwargs):
-  for course in instance.courses:
-    if instance.is_chain:
-      instance.num_courses = instance.courses.count()
-    else:
-      instance.total_units = instance.courses.aggregate(
-        total=Sum('units'))['total'] or 0
+  if instance.is_chain:
+    num_courses = instance.courses.count()
+  else:
+    total_units = instance.courses.aggregate(
+      total=Sum('units'))['total'] or 0
+    num_courses = instance.courses.count()
+  
   # Avoid recursion
   sender.objects.filter(pk=instance.pk).update(
-    num_courses=instance.num_courses,
-    total_units=instance.total_units
+    num_courses=num_courses,
+    total_units=total_units if not instance.is_chain else instance.total_units
   )

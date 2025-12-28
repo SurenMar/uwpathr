@@ -27,3 +27,5 @@ class AdditionalConstraintAdmin(MPTTModelAdmin):
 @admin.register(AdditionalConstraintAllowedCourses)
 class AdditionalConstraintAllowedCoursesAdmin(admin.ModelAdmin):
   list_display = ['id', 'target_requirement_type', 'target_title', 'course_list']
+  search_fields = ['courses__code', 'courses__number']
+  autocomplete_fields = ['courses']

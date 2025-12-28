@@ -51,7 +51,7 @@ class UserChecklistNode(MPTTModel):
   units_required = models.PositiveSmallIntegerField(blank=True, null=True)
   units_gathered = models.PositiveSmallIntegerField(blank=True, null=True)
   completed = models.BooleanField(default=False)
-  user = models.OneToOneField(
+  user = models.ForeignKey(
     'users.UserAccount',
     on_delete=models.CASCADE,
     related_name='checklist_nodes'
@@ -106,12 +106,20 @@ class UserChecklistNode(MPTTModel):
            Q(selected_course__isnull=True))
            |
           (Q(requirement_type='checkbox') &
-           Q(original_checkbox__isnull=False) &
-           Q(selected_course__isnull=False))
+           Q(original_checkbox__isnull=False))
         ),
-        name='only_checkboxes_have_course_and_checkbox_field'
+        name='only_checkboxes_have_checkbox_field'
       )
     ]
+  
+  def save(self, *args, **kwargs):
+    if self.pk:  # If updating existing instance
+      try:
+        old = UserChecklistNode.objects.get(pk=self.pk)
+        self._old_selected_course = old.selected_course
+      except UserChecklistNode.DoesNotExist:
+        pass
+    super().save(*args, **kwargs)
 
 @receiver(post_save, sender=UserChecklistNode)
 def update_parent_on_child_update(sender, instance, created, **kwargs):
