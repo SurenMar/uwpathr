@@ -43,7 +43,7 @@ class UserChecklistNodeUpdateSerializer(serializers.ModelSerializer):
       return value
     
     # Only checkboxes can have selected courses
-    if self.instance and self.instance.requirement_type != 'checkbox':
+    if self.instance and self.instance.original_check.requirement_type != 'checkbox':
       raise serializers.ValidationError(
         "Only checkbox nodes can have selected courses."
       )

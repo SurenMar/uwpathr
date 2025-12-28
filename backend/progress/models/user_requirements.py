@@ -36,6 +36,13 @@ class UserAdditionalConstraint(MPTTModel):
     on_delete=models.PROTECT,
     related_name='+'
   )
+  selected_course = models.OneToOneField( # A course can only be selected once
+    'courses.Course',
+    blank=True,
+    null=True,
+    on_delete=models.SET_NULL,
+    related_name='+'
+  )
   parent = TreeForeignKey(
     'self',
     blank=True,

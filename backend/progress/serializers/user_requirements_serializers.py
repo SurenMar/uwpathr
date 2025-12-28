@@ -35,13 +35,36 @@ class UserAdditionalConstraintsUpdateSerializer(serializers.ModelSerializer):
   class Meta:
     model = UserAdditionalConstraint
     fields = [
-      'id', 'created_at', 'updated_at', 'requirement_type', 'title', 
+      'id', 'created_at', 'updated_at', 'requirement_type', 'title', 'selected_course',
       'num_courses_required', 'num_courses_gathered', 'completed',
     ]
     read_only_fields = [
       'id', 'created_at', 'updated_at', 'title', 'requirement_type',
       'num_courses_required', 'num_courses_gathered'
     ]
+
+  def validate_selected_course(self, value):
+    # Allow unsetting the course
+    if value is None:
+      return value
+    
+    # Only checkboxes can have selected courses
+    if self.instance and self.instance.requirement_type != 'checkbox':
+      raise serializers.ValidationError(
+        "Only checkbox nodes can have selected courses."
+      )
+    
+    # For updates, verify course is in allowed list
+    if self.instance and self.instance.original_checkbox:
+      if self.instance.original_checkbox.allowed_courses.courses.exists():
+        return value
+      allowed_courses = self.instance.original_checkbox.allowed_courses.courses.all()
+      if not allowed_courses.filter(pk=value.pk).exists():
+        raise serializers.ValidationError(
+          "Selected course is not in allowed courses."
+        )
+    
+    return value
 
   def update(self, instance, validated_data):
     completed = validated_data.get('completed', instance.completed)
