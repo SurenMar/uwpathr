@@ -1,0 +1,5 @@
+- Change serializer in user course serializer that accepts a prereqs_met field. Not applicable to
+  courses in taken list.
+- Add an error guard that checks if prereqs_met is actually valid and if the course has indeed 
+  met prereqs. If it hasn't, still accept it but modify the prereqs_met field as needed.
+- Bug for stat 230, probably a parent bug

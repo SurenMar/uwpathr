@@ -240,5 +240,5 @@ def scrape_categories():
     'ps': _find_ps_courses(),               # Pure Science
     'as': _find_as_courses(),               # Applied Science
     'comm1': _find_comm1_courses(),         # Communications List 1
-    'com,2': _find_comm2_courses(),         # Communications List 2
+    'comm2': _find_comm2_courses(),         # Communications List 2
   }

@@ -8,153 +8,6 @@ from courses.services.uwflow_client.courses_data import fetch_all_courses_data
 from courses.services.uw_web_scraper.courses_data import scrape_courses
 from courses.utils.course_utils import split_full_code
 
-sample_json_data = [
-  {
-    'code': 'CS',
-    'number': '115',
-    'units': 10,
-    'category': ['cs', 'math'],
-    'title': 'racket',
-    'description': 'learn easier functions',
-    'num_uwflow_ratings': 100,
-    'uwflow_liked_rating': 60,
-    'uwflow_easy_ratings': 30,
-    'uwflow_useful_ratings': 90,
-
-    'prereqs': '0()',
-    'coreqs': '',
-    'antireqs': '',
-  },
-  {
-    'code': 'CS',
-    'number': '116',
-    'units': 10,
-    'category': ['cs', 'math'],
-    'title': 'python',
-    'description': 'learn ds with python',
-    'num_uwflow_ratings': 100,
-    'uwflow_liked_rating': 60,
-    'uwflow_easy_ratings': 30,
-    'uwflow_useful_ratings': 90,
-
-    'prereqs': '1(CS_115)',
-    'coreqs': '',
-    'antireqs': '',
-  },
-  {
-    'code': 'CS',
-    'number': '145',
-    'units': 10,
-    'category': ['cs', 'math'],
-    'title': 'racket',
-    'description': 'learn functions',
-    'num_uwflow_ratings': 100,
-    'uwflow_liked_rating': 60,
-    'uwflow_easy_ratings': 30,
-    'uwflow_useful_ratings': 90,
-
-    'prereqs': '0()',
-    'coreqs': '',
-    'antireqs': '',
-  },
-  {
-    'code': 'CS',
-    'number': '135',
-    'units': 10,
-    'category': ['cs', 'math'],
-    'title': 'racket',
-    'description': 'learn functional programming',
-    'num_uwflow_ratings': 100,
-    'uwflow_liked_rating': 60,
-    'uwflow_easy_ratings': 30,
-    'uwflow_useful_ratings': 90,
-
-    'prereqs': '0()',
-    'coreqs': '',
-    'antireqs': '',
-  },
-  {
-    'code': 'CS',
-    'number': '136',
-    'units': 10,
-    'category': ['cs', 'math'],
-    'title': 'C',
-    'description': 'learn ds with c',
-    'num_uwflow_ratings': 100,
-    'uwflow_liked_rating': 60,
-    'uwflow_easy_ratings': 30,
-    'uwflow_useful_ratings': 90,
-
-    'prereqs': '1(CS_135 cs_145 cs_116)',
-    'coreqs': '',
-    'antireqs': '',
-  },
-  {
-    'code': 'CS',
-    'number': '146',
-    'units': 10,
-    'category': ['cs', 'math'],
-    'title': 'C',
-    'description': 'learn ds with c',
-    'num_uwflow_ratings': 100,
-    'uwflow_liked_rating': 60,
-    'uwflow_easy_ratings': 30,
-    'uwflow_useful_ratings': 90,
-
-    'prereqs': '1(CS_135 cs_145)',
-    'coreqs': '',
-    'antireqs': '',
-  },
-  {
-    'code': 'CS',
-    'number': '136L',
-    'units': 10,
-    'category': ['cs', 'math'],
-    'title': 'bash',
-    'description': 'learn terminal',
-    'num_uwflow_ratings': 100,
-    'uwflow_liked_rating': 60,
-    'uwflow_easy_ratings': 30,
-    'uwflow_useful_ratings': 90,
-
-    'prereqs': '1(CS_135 CS_145)',
-    'coreqs': '',
-    'antireqs': '',
-  },
-  {
-    'code': 'CS',
-    'number': '138',
-    'units': 10,
-    'category': ['cs', 'math'],
-    'title': 'C',
-    'description': 'learn ds with c',
-    'num_uwflow_ratings': 100,
-    'uwflow_liked_rating': 60,
-    'uwflow_easy_ratings': 30,
-    'uwflow_useful_ratings': 90,
-
-    'prereqs': '0()',
-    'coreqs': '',
-    'antireqs': '',
-  },
-  {
-    'code': 'CS',
-    'number': '246',
-    'units': 5,
-    'category': ['cs', 'math'],
-    'title': 'OOP with C++',
-    'description': 'learn oop with c++',
-    'num_uwflow_ratings': 100,
-    'uwflow_liked_rating': 60,
-    'uwflow_easy_ratings': 30,
-    'uwflow_useful_ratings': 90,
-
-    'prereqs': '1(CS_138 2(CS_136L CS_146)2(CS_136L CS_136))',
-    'coreqs': '',
-    'antireqs': '',
-  },
-]
-
 
 class Command(BaseCommand):
   help = "Fetch all undergrad course data and store them in the database" 
@@ -180,6 +33,7 @@ class Command(BaseCommand):
   @staticmethod
   def _update_courses_model(item: dict):
     # Normalize coreqs and antireqs into plain text for TextFields
+    #print('\tupdating course model')
     coreqs = Command._normalize_requisite_text(item.get('coreqs'))
     antireqs = Command._normalize_requisite_text(item.get('antireqs'))
     
@@ -200,14 +54,11 @@ class Command(BaseCommand):
         }
       )
     return course
-    
-  @staticmethod
-  def _update_prerequisite_model(item: dict, target_course):
-    Command._create_prerequisite_nodes(target_course, item['prereqs'])
 
   @transaction.atomic
   @staticmethod
   def _create_prerequisite_nodes(target_course, req_str: str):
+    #print('\tcreating prereq nodes')
     if req_str == None:
       return
     """
@@ -243,18 +94,19 @@ class Command(BaseCommand):
           parent_stack.append(parent)
         # Create leaf course
         elif c == ' ':
-          leaf_course = Course.objects.get(
-            code=course_code.upper(),
-            number=number.upper()
-          )
-          CoursePrerequisiteNode.objects.create(
-            target_course=target_course,
-            parent=parent_stack[-1],
-            node_type='course',
-            leaf_course=leaf_course,
-            num_children_required=None,
-          )
-
+          if course_code and number:
+            leaf_course = Course.objects.get(
+              code=course_code.upper(),
+              number=number.upper()
+            )
+            CoursePrerequisiteNode.objects.create(
+              target_course=target_course,
+              parent=parent_stack[-1],
+              node_type='course',
+              leaf_course=leaf_course,
+              num_children_required=None,
+            )
+          #print(f'\t\t{course_code}{number}')
           course_code = '' 
           number = ''
           reading_course_num = False
@@ -264,12 +116,13 @@ class Command(BaseCommand):
         # Read course
         elif (c.isalpha() or c.isnumeric()) and reading_course_num:
           number += c
+        # Read course number
+        elif c.isnumeric() and course_code:
+          reading_course_num = True
+          number += c
         # Read num_children_required count
         elif c.isnumeric():
           number += c
-        # Switch to course number
-        elif c == '_':
-          reading_course_num = True
         # Create leaf course and pop current parent
         elif c == ')':
           if course_code and number:
@@ -284,7 +137,7 @@ class Command(BaseCommand):
               leaf_course=leaf_course,
               num_children_required=None,
             )
-
+          #print(f'\t\t{course_code}{number}')
           course_code = '' 
           number = ''
           reading_course_num = False
@@ -299,7 +152,7 @@ class Command(BaseCommand):
     item['code'] = item['code'].upper()
     item['number'] = item['number'].upper()
     course = Command._update_courses_model(item)
-    Command._update_prerequisite_model(item, course)
+    Command._create_prerequisite_nodes(course, item['prereqs'])
 
   @staticmethod
   def _filter_course_data(course_data1: list, course_data2: list):
@@ -341,7 +194,7 @@ class Command(BaseCommand):
       courses.sort(key=lambda course: course['number'])
 
     prereqs = dict()
-    # Override prerequisites with curated mapping
+    # Override raw prerequisites with parsed
     with open('only_prereqs.json', 'r') as f:
       prereqs = json.load(f)
 
@@ -355,28 +208,43 @@ class Command(BaseCommand):
     return data
     
   def handle(self, *args, **options):
-    course_data1 = fetch_all_courses_data()
-    with open('uw_course_reqs.json', 'r') as f:
-      course_data2 = json.load(f)
-    data = Command._filter_course_data(course_data1, course_data2)
+    # course_data1 = fetch_all_courses_data()
+    # with open('uw_course_reqs.json', 'r') as f:
+    #   course_data2 = json.load(f)
+    # data = Command._filter_course_data(course_data1, course_data2)
 
-    # with open('finalized_data.json', 'w') as f:
-    #   json.dump(data, f, indent=2)
-    with transaction.atomic():
-      completed_courses = set()
-      while True:
-        completed = True
-        for _, program_courses in data.items():
-          for course in program_courses:
-            if f'{course['code']}{course['number']}' in completed_courses:
-              continue
+    with open('finalized_data.json', 'r') as f1:
+      data = json.load(f1)
+
+    # Fill categories
+    # for _, courses in data.items():
+    #   for course in courses:
+    #     course['category'] = find_categories(course['code'], course['number'])
+
+    # with open('finalized_data.json', 'w') as f2:
+    #   json.dump(data, f2, indent=2)
+
+    # with transaction.atomic():
+    # num_uploaded = Course.objects.count()
+    # Loop until every course has been added
+    try:
+      while data:
+        for program, program_courses in list(data.items()):
+          for course in list(program_courses):
             try:
+              # if not Course.objects.filter(
+              #    code=course['code'], number=course['number']).exists():
+              #print(course['code'], course['number'])
               Command._update_course(course)
-              completed_courses.add(f'{course['code']}{course['number']}')
+              data[program].remove(course)
+              if not data[program]:
+                del data[program]
+              # num_uploaded += 1
+              # if num_uploaded % 100 == 0:
+              #   print(num_uploaded)
             except Course.DoesNotExist:
               continue
-            finally:
-              completed = False
-        if completed:
-          break
+    except KeyboardInterrupt:
+      with open('remaining_data.json', 'w') as f3:
+        json.dump(data, f3, indent=2)
       

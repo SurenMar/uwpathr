@@ -217,3 +217,6 @@ CORS_ALLOW_CREDENTIALS = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.UserAccount'
+
+# Limit for bulk admin operations
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000

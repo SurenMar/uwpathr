@@ -10,17 +10,17 @@ from courses.services.uw_web_scraper.category_data import scrape_categories
 
 
 _URL = 'https://uwflow.com/graphql'
-_CATEGORIES = scrape_categories()
+#_CATEGORIES = scrape_categories()
 
 
-def _find_categories(code: str, number: str):
-  full_code = code + number
-  found_categories = list()
+# def find_categories(code: str, number: str):
+#   full_code = code + number
+#   found_categories = list()
   
-  for category, category_list in _CATEGORIES:
-    if full_code in category_list:
-      found_categories.append(category)
-  return found_categories
+#   for category, category_list in _CATEGORIES.items():
+#     if full_code in category_list:
+#       found_categories.append(category)
+  # return found_categories
 
 def fetch_all_courses_data():
   time.sleep(1)
@@ -68,7 +68,8 @@ def fetch_all_courses_data():
     courses.append({
       'code': code.upper(),
       'number': number.upper(),
-      'category': _find_categories(code.upper(), number.upper()),
+      #'category': _find_categories(code.upper(), number.upper()),
+      'category': [],
       'title': course['name'],
       'description': course['description'],
       'num_uwflow_ratings': course['rating']['filled_count'] if course['rating']['filled_count'] is not None else None,
@@ -76,7 +77,7 @@ def fetch_all_courses_data():
       'uwflow_easy_ratings': percent_or_none(course['rating']['easy']),
       'uwflow_useful_ratings': percent_or_none(course['rating']['useful']),
     })
-    
+
     # Manually add any missing courses
     
 

@@ -1,4 +1,5 @@
 from django.db import models, transaction
+from django.db.models import Q
 from treebeard.mp_tree import MP_Node
 from django.conf import settings
 
@@ -23,6 +24,7 @@ class UserCourse(models.Model):
     related_name='+'
   )
   course_list = models.CharField(max_length=16, choices=COURSE_LIST_TYPES)
+  prereqs_met = models.BooleanField(blank=True, null=True)
 
   class Meta:
     indexes = [
@@ -32,6 +34,12 @@ class UserCourse(models.Model):
       models.UniqueConstraint(
         fields=['user', 'course'], 
         name='unique_course_per_user'
+      ),
+      models.CheckConstraint(
+        check=(
+          ~Q(course_list='taken') | Q(prereqs_met__isnull=True)
+        ),
+        name='taken_courses_have_null_prereqs_met'
       )
     ]
 
