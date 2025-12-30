@@ -3,7 +3,7 @@ from rest_framework import serializers
 from courses.models import Course, CoursePrerequisiteNode
 from progress.models.user_course import UserCourse, UserCoursePathNode
 from courses.serializers import CourseListSerializer, CourseDetailSerializer
-from progress.serializers.user_requirements_serializers import CourseMinimalSerializer
+from progress.serializers.user_requirements_serializers import UserCourseMinimalSerializer
 
 
 class UserCourseListSerializer(serializers.ModelSerializer):
@@ -90,7 +90,7 @@ class UserCourseCreateSerializer(serializers.ModelSerializer):
 
 class UserPathNodeListSerializer(serializers.ModelSerializer):
 	# Read-only method field that calls get_children on access
-	target_course = CourseMinimalSerializer(read_only=True)
+	target_course = UserCourseMinimalSerializer(read_only=True)
 	prerequisite_node = serializers.PrimaryKeyRelatedField(
 		queryset=CoursePrerequisiteNode.objects.all()
 	)
