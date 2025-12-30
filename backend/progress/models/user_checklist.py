@@ -160,7 +160,20 @@ def update_all_parent_groups(old_selected_course, checkbox_instance):
       new_units_gathered = parent.units_gathered + units_delta
       
       # Check if group should be completed
-      is_completed = new_units_gathered >= parent.units_required
+      # ALL checkboxes must be completed
+      children = parent.get_children()
+      checkbox_children = children.filter(requirement_type='checkbox')
+      group_children = children.filter(requirement_type='group')
+      
+      all_checkboxes_complete = not checkbox_children.filter(completed=False).exists()
+      
+      if group_children.exists():
+        # Has group children: ALL checkboxes completed AND at least one group child completed
+        has_completed_group_child = group_children.filter(completed=True).exists()
+        is_completed = all_checkboxes_complete and has_completed_group_child
+      else:
+        # No group children: only ALL checkboxes must be completed
+        is_completed = all_checkboxes_complete
       
       type(parent).objects.filter(pk=parent.pk).update(
         units_gathered=new_units_gathered,
@@ -171,39 +184,40 @@ def update_all_parent_groups(old_selected_course, checkbox_instance):
       parent = parent.parent
 
 def update_head_on_group_change(group_instance):
-  parent = group_instance.parent
-  if parent is None:
-    return
-
-  # Propagate completion status up the tree with different logic based on type
+  """Update completion status starting from the given node and propagating up the tree"""
+  # Start with the given instance, then move up the tree
+  current = group_instance
+  
   with transaction.atomic():
-    while parent:
-      # Different completion logic based on parent type
-      if parent.requirement_type == 'head':
+    while current:
+      # Different completion logic based on current node type
+      if current.requirement_type == 'head':
         # Head: all children must be completed
-        is_completed = not parent.get_children().filter(completed=False).exists()
-      elif parent.requirement_type == 'group':
-        # Group: At least one group child completed AND units_gathered >= units_required
-        # If no group children, only check units requirement
-        group_children = parent.get_children().filter(requirement_type='group')
+        is_completed = not current.get_children().filter(completed=False).exists()
+      elif current.requirement_type == 'group':
+        # Group: ALL checkboxes must be completed AND at least one group child must be completed (if group children exist)
+        children = current.get_children()
+        checkbox_children = children.filter(requirement_type='checkbox')
+        group_children = children.filter(requirement_type='group')
+        
+        all_checkboxes_complete = not checkbox_children.filter(completed=False).exists()
         
         if group_children.exists():
-          # Has group children: at least one must be completed AND units requirement met
+          # Has group children: ALL checkboxes completed AND at least one group child completed
           has_completed_group_child = group_children.filter(completed=True).exists()
-          units_requirement_met = parent.units_gathered >= parent.units_required
-          is_completed = has_completed_group_child and units_requirement_met
+          is_completed = all_checkboxes_complete and has_completed_group_child
         else:
-          # No group children: only check units requirement
-          is_completed = parent.units_gathered >= parent.units_required
+          # No group children: only ALL checkboxes must be completed
+          is_completed = all_checkboxes_complete
       else:
         # Other types: skip
-        parent = parent.parent
+        current = current.parent
         continue
       
-      if is_completed != parent.completed:
-        type(parent).objects.filter(pk=parent.pk).update(completed=is_completed)
-        # Refresh the parent to get the updated completed status
-        parent.refresh_from_db()
+      if is_completed != current.completed:
+        type(current).objects.filter(pk=current.pk).update(completed=is_completed)
+        # Refresh the current to get the updated completed status
+        current.refresh_from_db()
 
-      parent = parent.parent
+      current = current.parent
     
