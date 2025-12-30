@@ -209,7 +209,7 @@ class Command(BaseCommand):
     
   def handle(self, *args, **options):
     # Simply read from this file now that it has been initialized
-    with open('finalized_data.json', 'r') as f1:
+    with open('course_data.json', 'r') as f1:
       data = json.load(f1)
 
     with transaction.atomic():
