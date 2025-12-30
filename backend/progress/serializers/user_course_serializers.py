@@ -107,11 +107,16 @@ class UserPathNodeCreateSerializer(serializers.ModelSerializer):
 		queryset=CoursePrerequisiteNode.objects.all()
 	)
 	target_course = serializers.PrimaryKeyRelatedField(
-		queryset=Course.objects.all()
+		queryset=UserCourse.objects.filter(course_list__in=[
+			'planned',
+			'wishlist',
+		])
 	)
 	parent_node = serializers.PrimaryKeyRelatedField(
 		queryset=UserCoursePathNode.objects.all(),
-		required=False
+		required=False,
+		allow_null=True,
+		write_only=True,
 	)
 	
 	class Meta:
@@ -125,7 +130,6 @@ class UserPathNodeCreateSerializer(serializers.ModelSerializer):
 	def create(self, validated_data):
 		parent_node = validated_data.pop('parent_node', None)
 		if parent_node:
-			parent_node = validated_data['parent_node']
 			new_node = parent_node.add_child(**validated_data)
 		else:
 			new_node = UserCoursePathNode.add_root(**validated_data)

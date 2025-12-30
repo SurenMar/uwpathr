@@ -49,5 +49,5 @@ class UserCourseAdmin(admin.ModelAdmin):
 
 @admin.register(UserCoursePathNode)
 class UserCoursePathNodeAdmin(admin.ModelAdmin):
-	list_display = ['id', 'user', 'target_course', 'prerequisite_node', 'depth', 'path']
+	list_display = ['id', 'user', 'target_course', 'prerequisite_node']
 	search_fields = ['user__email', 'user__username', 'target_course__course__code', 'target_course__course__number']

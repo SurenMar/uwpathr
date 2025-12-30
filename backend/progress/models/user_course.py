@@ -47,7 +47,7 @@ class UserCourse(models.Model):
     return str(self.course)
 
 
-class UserCoursePathNode(MP_Node):
+class UserCoursePathNode(models.Model):
   created_at = models.DateTimeField(auto_now_add=True)
   updated_at = models.DateTimeField(auto_now=True)
   user = models.ForeignKey(
@@ -65,15 +65,24 @@ class UserCoursePathNode(MP_Node):
     on_delete=models.CASCADE, 
     related_name='user_paths'
   )
+  parent = models.ForeignKey(
+    'self',
+    on_delete=models.CASCADE,
+    related_name='children',
+    null=True,
+    blank=True,
+    db_index=True
+  )
+  branch_completed = models.BooleanField(default=False)
 
   class Meta:
     constraints = [
       models.UniqueConstraint(
-        fields=['user', 'target_course'], 
-        name='unique_target_course_per_user'
+        fields=['user', 'target_course'],
+        condition=models.Q(parent__isnull=True),
+        name='unique_root_per_user_course'
       )
     ]
     indexes = [
-      models.Index(fields=['user', 'target_course', 'path']),
-      models.Index(fields=['user', 'target_course', 'depth']),
+      models.Index(fields=['user', 'target_course', 'parent'])
     ]
