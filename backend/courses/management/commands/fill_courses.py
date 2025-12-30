@@ -208,43 +208,20 @@ class Command(BaseCommand):
     return data
     
   def handle(self, *args, **options):
-    # course_data1 = fetch_all_courses_data()
-    # with open('uw_course_reqs.json', 'r') as f:
-    #   course_data2 = json.load(f)
-    # data = Command._filter_course_data(course_data1, course_data2)
-
+    # Simply read from this file now that it has been initialized
     with open('finalized_data.json', 'r') as f1:
       data = json.load(f1)
 
-    # Fill categories
-    # for _, courses in data.items():
-    #   for course in courses:
-    #     course['category'] = find_categories(course['code'], course['number'])
-
-    # with open('finalized_data.json', 'w') as f2:
-    #   json.dump(data, f2, indent=2)
-
-    # with transaction.atomic():
-    # num_uploaded = Course.objects.count()
-    # Loop until every course has been added
-    try:
+    with transaction.atomic():
+      # Loop until every course has been added
       while data:
         for program, program_courses in list(data.items()):
           for course in list(program_courses):
             try:
-              # if not Course.objects.filter(
-              #    code=course['code'], number=course['number']).exists():
-              #print(course['code'], course['number'])
               Command._update_course(course)
               data[program].remove(course)
               if not data[program]:
                 del data[program]
-              # num_uploaded += 1
-              # if num_uploaded % 100 == 0:
-              #   print(num_uploaded)
             except Course.DoesNotExist:
               continue
-    except KeyboardInterrupt:
-      with open('remaining_data.json', 'w') as f3:
-        json.dump(data, f3, indent=2)
       

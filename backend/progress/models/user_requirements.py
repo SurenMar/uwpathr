@@ -1,7 +1,7 @@
 from django.db import models
 from django.db.models import Q, Sum
 from django.dispatch import receiver
-from django.db.models.signals import m2m_changed, post_save, pre_delete
+from django.db.models.signals import post_save
 from mptt.models import MPTTModel, TreeForeignKey
 
 
