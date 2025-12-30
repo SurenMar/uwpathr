@@ -74,6 +74,11 @@ class UserCourseViewSet(ModelViewSet):
     return UserCourseDetailSerializer
   
   def perform_create(self, serializer):
+    # Delete entry if one already exists (course must be in at most 1 list)
+    course = serializer.validated_data['course']
+    user = self.request.user
+    UserCourse.objects.filter(user=user, course=course).delete()
+
     serializer.save(user=self.request.user)
   
 
