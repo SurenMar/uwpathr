@@ -56,10 +56,10 @@ class UserAdditionalConstraintsUpdateSerializer(serializers.ModelSerializer):
     
     # For updates, verify course is in allowed list
     if self.instance and self.instance.original_checkbox:
-      if self.instance.original_checkbox.allowed_courses.courses.exists():
-        return value
-      allowed_courses = self.instance.original_checkbox.allowed_courses.courses.all()
-      if not allowed_courses.filter(pk=value.pk).exists():
+      # Get the AdditionalConstraintAllowedCourses object
+      allowed_courses_obj = self.instance.original_checkbox.allowed_courses.first()
+      # Validate the selection
+      if not allowed_courses_obj.courses.filter(pk=value.pk).exists():
         raise serializers.ValidationError(
           "Selected course is not in allowed courses."
         )

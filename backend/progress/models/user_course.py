@@ -43,6 +43,9 @@ class UserCourse(models.Model):
       )
     ]
 
+  def __str__(self):
+    return str(self.course)
+
 
 class UserCoursePathNode(MP_Node):
   created_at = models.DateTimeField(auto_now_add=True)

@@ -43,17 +43,17 @@ class UserChecklistNodeUpdateSerializer(serializers.ModelSerializer):
       return value
     
     # Only checkboxes can have selected courses
-    if self.instance and self.instance.original_check.requirement_type != 'checkbox':
+    if self.instance and self.instance.requirement_type != 'checkbox':
       raise serializers.ValidationError(
         "Only checkbox nodes can have selected courses."
       )
     
     # For updates, verify course is in allowed list
     if self.instance and self.instance.original_checkbox:
-      if self.instance.original_checkbox.allowed_courses.courses.exists():
-        return value
-      allowed_courses = self.instance.original_checkbox.allowed_courses.courses.all()
-      if not allowed_courses.filter(pk=value.pk).exists():
+      # Get the CheckboxAllowedCourses object
+      allowed_courses_obj = self.instance.original_checkbox.allowed_courses.first()
+      # If allowed courses are defined, validate the selection
+      if not allowed_courses_obj.courses.filter(pk=value.pk).exists():
         raise serializers.ValidationError(
           "Selected course is not in allowed courses."
         )
@@ -65,7 +65,9 @@ class UserChecklistNodeUpdateSerializer(serializers.ModelSerializer):
     if 'selected_course' in validated_data and \
        instance.requirement_type == 'checkbox':
       instance.selected_course = validated_data['selected_course']
-    instance.save(update_fields=['selected_course'])
+      # Checkbox is completed if it has a selected course
+      instance.completed = validated_data['selected_course'] is not None
+      instance.save(update_fields=['selected_course', 'completed'])
     return instance
 
 

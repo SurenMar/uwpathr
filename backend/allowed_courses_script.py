@@ -22,6 +22,7 @@ ps_course = []
 comm1_course = []
 comm2_course = []
 non_math_course = []
+other = []
 
 
 for course in courses:
@@ -45,59 +46,48 @@ for course in courses:
     comm2_course.append(course)
   if 'non_math' in course.category:
     non_math_course.append(course)
+  if (course.code == 'EMLS' and (course.number == '103R' or course.number == '104R' or course.number == '110R')) or \
+     (course.code == 'MTHEL' and course.number == '300'):
+    other.append(course)
 
 with transaction.atomic():
-  for i in range(13, 16):
-    foo = CheckboxAllowedCourses.objects.create(
-      target_checkbox_id = i
-    )
-    foo.courses.add(*cs3xx)
-    foo.courses.add(*cs4xx)
-
-  for i in range(16, 18):
-    foo = CheckboxAllowedCourses.objects.create(
-      target_checkbox_id = i
-    )
-    foo.courses.add(*cs4xx)
-
   foo = CheckboxAllowedCourses.objects.create(
-    target_checkbox_id = 18
+    target_checkbox_id = 49
   )
-  co487 = Course.objects.get(code = 'CO', number = '487')
-  stat440 = Course.objects.get(code = 'STAT', number = '440')
-  cs499t = Course.objects.get(code = 'CS', number = '499T')
-  foo.courses.add(*cs4xx, co487, stat440, cs499t)
+  foo.courses.add(*comm1_course)
 
   foo = CheckboxAllowedCourses.objects.create(
-    target_checkbox_id = 29
+    target_checkbox_id = 50
   )
-  foo.courses.add(*ss_course)
-  foo = CheckboxAllowedCourses.objects.create(
-    target_checkbox_id = 30
-  )
-  foo.courses.add(*ss_course)
+  foo.courses.add(*comm2_course)
 
   foo = CheckboxAllowedCourses.objects.create(
-    target_checkbox_id = 31
+    target_checkbox_id = 51
   )
-  foo.courses.add(*ps_course)
+  foo.courses.add(*hum_course)
 
   foo = CheckboxAllowedCourses.objects.create(
-    target_checkbox_id = 32
+    target_checkbox_id = 52
   )
-  foo.courses.add(*ps_course, *as_course)
+  foo.courses.add(*hum_course)
 
   foo = CheckboxAllowedCourses.objects.create(
-    target_checkbox_id = 33
+    target_checkbox_id = 54
+  )
+  foo.courses.add(*comm1_course)
+
+  foo = CheckboxAllowedCourses.objects.create(
+    target_checkbox_id = 55
+  )
+  result = [x for x in comm2_course if x not in other]
+  foo.courses.add(*result)
+
+  foo = CheckboxAllowedCourses.objects.create(
+    target_checkbox_id = 56
+  )
+  foo.courses.add(*hum_course)
+
+  foo = CheckboxAllowedCourses.objects.create(
+    target_checkbox_id = 57
   )
   foo.courses.add(*non_math_course)
-
-  foo = CheckboxAllowedCourses.objects.create(
-    target_checkbox_id = 34
-  )
-  foo.courses.add(*non_math_course)
-
-  for i in range(36, 44):
-    foo = CheckboxAllowedCourses.objects.create(
-      target_checkbox_id = i
-    )

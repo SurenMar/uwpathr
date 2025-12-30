@@ -123,42 +123,87 @@ class UserChecklistNode(MPTTModel):
 
 @receiver(post_save, sender=UserChecklistNode)
 def update_parent_on_child_update(sender, instance, created, **kwargs):
-  if not created and instance.requirement_type == 'checkbox' and \
-     instance.parent.requirement_type == 'group':
-    old = sender.objects.get(pk=instance.pk)
-    update_group_on_course_change(old, instance)
-    instance = instance.parent
+  if created:
+    return
   
-  if not created and instance.requirement_type == 'group' and \
-     instance.parent.requirement_type == 'head':
+  # Handle checkbox updates - update all parent groups
+  if instance.requirement_type == 'checkbox' and instance.parent:
+    # Get the old selected course from the instance attribute set in save()
+    old_selected_course = getattr(instance, '_old_selected_course', None)
+    update_all_parent_groups(old_selected_course, instance)
+    
+    # After updating groups, find and update the head
+    head_parent = instance.parent
+    while head_parent and head_parent.requirement_type == 'group':
+      head_parent = head_parent.parent
+    
+    if head_parent and head_parent.requirement_type == 'head':
+      update_head_on_group_change(head_parent)
+  
+  # Handle group updates - update parent head
+  elif instance.requirement_type == 'group' and \
+       instance.parent and instance.parent.requirement_type == 'head':
     update_head_on_group_change(instance)
     
-def update_group_on_course_change(old_instance, new_instance):
-  parent = getattr(new_instance, 'parent', None)
-  if parent is None:
-    return  # nothing to update
-
-  old_units = old_instance.selected_course.units \
-    if old_instance.selected_course else 0
-  new_units = new_instance.selected_course.units \
-    if new_instance.selected_course else 0
-
-  # Update units_gathered safely
+def update_all_parent_groups(old_selected_course, checkbox_instance):
+  """Update units_gathered for all parent groups (not just immediate parent)"""
+  old_units = old_selected_course.units if old_selected_course else 0
+  new_units = checkbox_instance.selected_course.units \
+    if checkbox_instance.selected_course else 0
+  units_delta = new_units - old_units
+  
+  # Traverse up through all group parents and update their units
   with transaction.atomic():
-    # Use update() to avoid triggering signals on parent
-    type(parent).objects.filter(pk=parent.pk).update(
-      units_gathered=parent.units_gathered - old_units + new_units
-    )
+    parent = checkbox_instance.parent
+    while parent and parent.requirement_type == 'group':
+      # Update this group's units_gathered
+      new_units_gathered = parent.units_gathered + units_delta
+      
+      # Check if group should be completed
+      is_completed = new_units_gathered >= parent.units_required
+      
+      type(parent).objects.filter(pk=parent.pk).update(
+        units_gathered=new_units_gathered,
+        completed=is_completed
+      )
+      
+      # Move to next parent
+      parent = parent.parent
 
-def update_head_on_group_change(new_instance):
-  parent = getattr(new_instance, 'parent', None)
+def update_head_on_group_change(group_instance):
+  parent = group_instance.parent
   if parent is None:
-    return  # nothing to update
+    return
 
-  if new_instance.units_gathered == new_instance.units_required:
-    # Update parent safely
-    with transaction.atomic():
-      parent.completed = True
-      # Save only the completed field
-      type(parent).objects.filter(pk=parent.pk).update(completed=True)
+  # Propagate completion status up the tree with different logic based on type
+  with transaction.atomic():
+    while parent:
+      # Different completion logic based on parent type
+      if parent.requirement_type == 'head':
+        # Head: all children must be completed
+        is_completed = not parent.get_children().filter(completed=False).exists()
+      elif parent.requirement_type == 'group':
+        # Group: At least one group child completed AND units_gathered >= units_required
+        # If no group children, only check units requirement
+        group_children = parent.get_children().filter(requirement_type='group')
+        
+        if group_children.exists():
+          # Has group children: at least one must be completed AND units requirement met
+          has_completed_group_child = group_children.filter(completed=True).exists()
+          units_requirement_met = parent.units_gathered >= parent.units_required
+          is_completed = has_completed_group_child and units_requirement_met
+        else:
+          # No group children: only check units requirement
+          is_completed = parent.units_gathered >= parent.units_required
+      else:
+        # Other types: skip
+        parent = parent.parent
+        continue
+      
+      if is_completed != parent.completed:
+        type(parent).objects.filter(pk=parent.pk).update(completed=is_completed)
+        # Refresh the parent to get the updated completed status
+        parent.refresh_from_db()
+
+      parent = parent.parent
     

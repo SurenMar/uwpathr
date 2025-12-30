@@ -83,7 +83,7 @@ class UserCourseViewSet(ModelViewSet):
   
 
 class UserPathNodeViewSet(ModelViewSet):
-  http_method_names = ['get', 'patch', 'delete']
+  http_method_names = ['get', 'post', 'delete']
 
   filter_backends = [DjangoFilterBackend]
   filterset_fields = {
