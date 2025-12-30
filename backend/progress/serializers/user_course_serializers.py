@@ -98,40 +98,65 @@ class UserPathNodeListSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = UserCoursePathNode
 		fields = [
-			'id', 'created_at', 'updated_at', 'prerequisite_node', 'target_course'
+			'id', 'created_at', 'updated_at', 'prerequisite_node', 'target_course',
+			'branch_completed'
 		]
 		
 
-class UserPathNodeCreateSerializer(serializers.ModelSerializer):
+class UserPathNodeCreateSerializer(serializers.Serializer):
 	prerequisite_node = serializers.PrimaryKeyRelatedField(
 		queryset=CoursePrerequisiteNode.objects.all()
 	)
 	target_course = serializers.PrimaryKeyRelatedField(
-		queryset=UserCourse.objects.filter(course_list__in=[
-			'planned',
-			'wishlist',
-		])
+		queryset=UserCourse.objects.filter(
+			course_list__in=['planned', 'wishlist'])
 	)
-	parent_node = serializers.PrimaryKeyRelatedField(
-		queryset=UserCoursePathNode.objects.all(),
+	children = serializers.ListField(
+		child=serializers.DictField(),
 		required=False,
-		allow_null=True,
-		write_only=True,
+		default=[]
 	)
-	
-	class Meta:
-		model = UserCoursePathNode
-		fields = [
-			'id', 'created_at', 'updated_at', 'prerequisite_node', 'target_course',
-			'parent_node'
-		]
-		read_only_fields = ['id', 'created_at', 'updated_at']
 
-	def create(self, validated_data):
-		parent_node = validated_data.pop('parent_node', None)
-		if parent_node:
-			new_node = parent_node.add_child(**validated_data)
-		else:
-			new_node = UserCoursePathNode.add_root(**validated_data)
-		return new_node
+	def validate(self, data):
+		def validate_node(node):
+			# Required keys
+			required_keys = {'target_course', 'prerequisite_node'}
+			missing = required_keys - node.keys()
+			if missing:
+				raise serializers.ValidationError(
+					f"Missing required fields: {missing}"
+				)
+
+			# Validate that IDs exist (handle both objects and IDs)
+			prereq = node['prerequisite_node']
+			prereq_id = prereq.id if hasattr(prereq, 'id') else prereq
+			if not CoursePrerequisiteNode.objects.filter(pk=prereq_id).exists():
+				raise serializers.ValidationError(
+					f"CoursePrerequisiteNode {prereq_id} does not exist"
+				)
+			
+			target = node['target_course']
+			target_id = target.id if hasattr(target, 'id') else target
+			if not UserCourse.objects.filter(pk=target_id).exists():
+				raise serializers.ValidationError(
+					f"UserCourse {target_id} does not exist"
+				)
+
+			# Type checks and recursive validation
+			children = node.get('children', [])
+			if not isinstance(children, list):
+				raise serializers.ValidationError(
+					"children must be a list"
+				)
+
+			for child in children:
+				if not isinstance(child, dict):
+					raise serializers.ValidationError(
+						"Each child must be an object"
+					)
+				validate_node(child)
+
+		validate_node(data)
+		return data
+
 	

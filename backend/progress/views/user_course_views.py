@@ -1,8 +1,9 @@
 from rest_framework.viewsets import ModelViewSet
-from django.db.models import Prefetch
+from django.db import transaction
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet, filters
 
+from courses.models import CoursePrerequisiteNode
 from progress.models.user_course import UserCourse, UserCoursePathNode
 from progress.serializers.user_course_serializers import (
   UserCourseListSerializer,
@@ -83,6 +84,29 @@ class UserCourseViewSet(ModelViewSet):
   
 
 class UserPathNodeViewSet(ModelViewSet):
+  @staticmethod
+  def _create_tree_recursive(user, target_course_id, prerequisite_node_id, children, parent=None):
+    # Fetch the objects from IDs
+    prerequisite_node = CoursePrerequisiteNode.objects.get(pk=prerequisite_node_id)
+    target_course = UserCourse.objects.get(pk=target_course_id)
+    
+    node = UserCoursePathNode.objects.create(
+      user=user,
+      target_course=target_course,
+      prerequisite_node=prerequisite_node,
+      branch_completed=False if prerequisite_node.node_type == 'group' else True,
+      parent=parent
+    )
+
+    for child in children:
+      UserPathNodeViewSet._create_tree_recursive(
+        user,
+        target_course_id,  # Same target course for all nodes in tree
+        child['prerequisite_node'],
+        child['children'],
+        parent=node
+      )
+
   http_method_names = ['get', 'post', 'delete']
 
   filter_backends = [DjangoFilterBackend]
@@ -112,4 +136,19 @@ class UserPathNodeViewSet(ModelViewSet):
     return UserPathNodeListSerializer
   
   def perform_create(self, serializer):
-    serializer.save(user=self.request.user)
+    # Extract IDs (PrimaryKeyRelatedField converts to objects at top level)
+    target_course_id = serializer.validated_data['target_course'].id
+    prerequisite_node_id = serializer.validated_data['prerequisite_node'].id
+    
+    # Delete existing tree if it already exists for this target course
+    UserCoursePathNode.objects.filter(
+      user=self.request.user, 
+      target_course_id=target_course_id,
+    ).delete()
+    
+    UserPathNodeViewSet._create_tree_recursive(
+      self.request.user,
+      target_course_id,
+      prerequisite_node_id,
+      serializer.validated_data['children']
+    )
