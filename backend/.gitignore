@@ -8,6 +8,8 @@ db.sqlite3
 db.sqlite3-journal
 media
 
+Docker.raw
+
 # Development json files
 *.json
 

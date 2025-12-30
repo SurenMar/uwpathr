@@ -89,3 +89,6 @@ class CheckboxAllowedCourses(models.Model):
   def course_list(self):
     return ", ".join(str(i) for i in self.courses.all())
   course_list.short_description = "Courses"
+
+  def __str__(self):
+    return f'{self.target_checkbox}'

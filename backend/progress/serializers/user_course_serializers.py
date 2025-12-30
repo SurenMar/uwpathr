@@ -37,6 +37,55 @@ class UserCourseCreateSerializer(serializers.ModelSerializer):
 			'id', 'created_at', 'updated_at', 'course', 'course_list'
 		]
 		read_only_fields = ['id', 'created_at', 'updated_at']
+
+	def validate(self, attrs):
+		# Check if user has correct prerequisites to add course:
+		if attrs.get('course_list') == 'taken' :
+			course = attrs.get('course')
+			try:
+				root = CoursePrerequisiteNode.objects.get(
+					target_course=course,
+					parent=None,
+				)
+			# Succeed if course has no required prereqs
+			except CoursePrerequisiteNode.DoesNotExist:
+				return attrs
+
+			prereq_subtree = root.get_descendants(include_self=True)
+			taken_courses = set(
+				UserCourse.objects
+				.filter(
+					user = self.context['request'].user, 
+					course_list='taken'
+				).values_list('course_id', flat=True)
+			)
+
+			# Build prereq tree:
+			children_map = {}
+			for node in prereq_subtree:
+				children_map.setdefault(node.parent_id, []).append(node)
+
+			def prereqs_taken(node):
+				"""Recursive function that checks if all prereqs have been taken"""
+				# Base case:
+				if node.node_type == 'course':
+					return node.leaf_course_id in taken_courses
+				# Recursive case:
+				else:
+					prereq_match_count = 0
+					for child in children_map.get(node.id, []):
+						if prereqs_taken(child):
+							prereq_match_count += 1
+					return prereq_match_count >= node.num_children_required
+
+			if prereqs_taken(root):
+				return attrs
+			else:
+				raise serializers.ValidationError(
+					"Prerequisites for this course have not been met"
+				)
+
+		return attrs
 		
 
 class UserPathNodeListSerializer(serializers.ModelSerializer):
