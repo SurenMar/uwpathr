@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.db import transaction
 from progress.models.user_checklist import UserChecklist, UserChecklistNode
 from progress.models.user_requirements import UserAdditionalConstraint
+from progress.models.user_course import UserCourse
 from checklists.models.checklist import Checklist, ChecklistNode
 from checklists.models.requirements import AdditionalConstraint
 
@@ -48,7 +49,13 @@ class UserChecklistNodeUpdateSerializer(serializers.ModelSerializer):
         "Only checkbox nodes can have selected courses."
       )
     
-    # For updates, verify course is in allowed list
+    # Verify that selected course is taken
+    if not UserCourse.objects.filter(course=value, course_list='taken').exists():
+      raise serializers.ValidationError(
+        'Selected course has not been taken'
+      )
+    
+    # For updates, verify selected course is in allowed list
     if self.instance and self.instance.original_checkbox:
       # Get the CheckboxAllowedCourses object
       allowed_courses_obj = self.instance.original_checkbox.allowed_courses.first()
