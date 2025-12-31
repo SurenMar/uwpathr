@@ -52,7 +52,7 @@ class UserChecklistNodeUpdateSerializer(serializers.ModelSerializer):
     # Verify that selected course is taken
     if not UserCourse.objects.filter(course=value, course_list='taken').exists():
       raise serializers.ValidationError(
-        'Selected course has not been taken'
+        'Selected course has not been taken.'
       )
     
     # For updates, verify selected course is in allowed list
