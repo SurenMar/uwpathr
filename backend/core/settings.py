@@ -92,17 +92,6 @@ DATABASES = {
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 DEFAULT_FROM_EMAIL = 'surepic342@gmail.com'
-
-# EMAIL_BACKEND = 'django_ses.SESBackend'
-# AWS_SES_ACCESS_KEY_ID = getenv('AWS_SES_ACCESS_KEY_ID')
-# AWS_SES_SECRET_ACCESS_KEY_ID = getenv('AWS_SES_SECRET_ACCESS_KEY_ID')
-# USE_SES_V2 = True
-
-# AWS_SES_REGION_NAME = getenv('AWS_SES_REGION_NAME')
-# AWS_SES_REGION_ENDPOINT = f'email.{AWS_SES_REGION_NAME}.amazonaws.com'
-# AWS_SES_FROM_EMAIL = getenv('AWS_SES_FROM_EMAIL')
-# DEFAULT_FROM_EMAIL = getenv('AWS_SES_FROM_EMAIL') # Used by djoser
-
 DOMAIN = getenv('DOMAIN')
 SITE_NAME = 'UWPathr'
 
@@ -170,9 +159,6 @@ REST_FRAMEWORK = {
 }
 
 DJOSER = {
-#   'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
-#   'SEND_ACTIVATION_EMAIL': True,
-#   'ACTIVATION_URL': 'activation/{uid}/{token}',
   'USER_CREATE_PASSWORD_RETYPE': True,
   'SET_PASSWORD_RETYPE': True,
   'PASSWORD_RESET_CONFIRM_RETYPE': True,
@@ -211,11 +197,12 @@ CORS_ALLOWED_ORIGINS = getenv(
 ).split(',')
 CORS_ALLOW_CREDENTIALS = True
 
-# Default primary key field type
+# Default primary key field type and user model
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.UserAccount'
 
 # Limit for bulk admin operations
+
 DATA_UPLOAD_MAX_NUMBER_FIELDS = 1000
