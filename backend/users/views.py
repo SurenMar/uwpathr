@@ -9,6 +9,7 @@ from rest_framework_simplejwt.views import (
   TokenVerifyView
 )
 
+
 class CustomProviderAuthView(ProviderAuthView):
   def post(self, request, *args, **kwargs):
     response = super().post(request, *args, **kwargs)
@@ -42,7 +43,6 @@ class CustomProviderAuthView(ProviderAuthView):
 
     return response
 
-# Override following methods to handle cookies
 
 # Grab tokens from request body and place them in cookies
 class CustomTokenObtainPairView(TokenObtainPairView):

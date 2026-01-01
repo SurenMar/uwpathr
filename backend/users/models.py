@@ -10,7 +10,7 @@ from .utils import current_year
 
 # Tells django how to create my custom users and superusers
 class UserAccountManager(BaseUserManager):
-  def create_user(self, email, first_name, password=None, **kwargs):
+  def create_user(self, email, first_name=None, password=None, **kwargs):
     if not email:
       raise ValueError("Users must have an email address")
     # This auto formats the email after @
