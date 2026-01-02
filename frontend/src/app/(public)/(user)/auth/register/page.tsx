@@ -5,7 +5,7 @@ import { useState, ChangeEvent, FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
 import { useRegisterMutation } from '@/store/features/auth/authApiSlice';
 import { toast } from 'react-toastify';
-import Spinner from '@/components/utils/Spinner';
+import Spinner from '@/components/common/Spinner';
 
 export default function Page() {
   const router = useRouter();
