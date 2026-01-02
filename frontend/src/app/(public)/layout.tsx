@@ -1,7 +1,7 @@
-import Navbar from "@/components/marketing/commons/Navbar";
-import Footer from "@/components/marketing/commons/Footer";
+import Navbar from "@/components/public/commons/Navbar";
+import Footer from "@/components/public/commons/Footer";
 
-export default function MarketingLayout({
+export default function PublicLayout({
   children 
 }: { 
   children: React.ReactNode 
