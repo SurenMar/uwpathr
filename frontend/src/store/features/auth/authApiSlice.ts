@@ -69,6 +69,13 @@ const authApiSlice = apiSlice.injectEndpoints({
 				method: 'POST',
 			}),
 		}),
+    activation: builder.mutation({
+			query: ({ uid, token }) => ({
+				url: '/users/activation/',
+				method: 'POST',
+				body: { uid, token },
+			}),
+		}),
 		resetPassword: builder.mutation({
 			query: email => ({
 				url: '/users/reset_password/',
