@@ -90,8 +90,16 @@ DATABASES = {
 
 # Email settings
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-DEFAULT_FROM_EMAIL = 'surepic342@gmail.com'
+EMAIL_BACKEND = 'django_ses.SESBackend'
+DEFAULT_FROM_EMAIL = getenv('AWS_SES_FROM_EMAIL')
+
+AWS_SES_ACCESS_KEY_ID = getenv('AWS_SES_ACCESS_KEY_ID')
+AWS_SES_SECRET_ACCESS_KEY = getenv('AWS_SES_SECRET_ACCESS_KEY')
+AWS_SES_REGION_NAME = getenv('AWS_SES_REGION_NAME')
+AWS_SES_REGION_ENDPOINT = f'email.{AWS_SES_REGION_NAME}.amazonaws.com'
+AWS_SES_FROM_EMAIL = getenv('AWS_SES_FROM_EMAIL')
+USE_SES_V2 = True
+
 DOMAIN = getenv('DOMAIN')
 SITE_NAME = 'UWPathr'
 
@@ -160,7 +168,9 @@ REST_FRAMEWORK = {
 
 DJOSER = {
   'USER_CREATE_PASSWORD_RETYPE': True,
-  'SET_PASSWORD_RETYPE': True,
+  'SEND_ACTIVATION_EMAIL': True,
+  'ACTIVATION_URL': 'activation/{uid}/{token}',
+  'USER_CREATE_PASSWORD_RETYPE': True,
   'PASSWORD_RESET_CONFIRM_RETYPE': True,
   'TOKEN_MODEL': None,
   'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': getenv('REDIRECT_URLS').split(',')
