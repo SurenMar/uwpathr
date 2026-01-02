@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import TopbarUserDropdown from "./TopbarUserDropdown";
 import { useAppSelector } from "@/store/hooks";
