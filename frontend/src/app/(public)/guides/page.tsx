@@ -2,7 +2,7 @@ export default function Checklist() {
   return (
     <main>
       <h1>
-        CS Checklist
+        How to use UWPathr
       </h1>
     </main>
   );

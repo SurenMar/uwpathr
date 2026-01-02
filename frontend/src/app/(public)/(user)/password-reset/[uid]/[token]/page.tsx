@@ -1,8 +1,8 @@
-export default function Checklist() {
+export default function Page() {
   return (
     <main>
       <h1>
-        CS Checklist
+        Set New Password
       </h1>
     </main>
   );
