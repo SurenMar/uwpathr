@@ -1,12 +1,18 @@
 import { ImSpinner } from "react-icons/im";
 import cn from "classnames";
 
-export default function Spinner({ sm, md, lg }) {
-  const classNames = cn(
-    "flex",
-    "items-center",
-    "justify-center",
-  );
+interface Props {
+  sm?: boolean;
+  md?: boolean;
+  lg?: boolean;
+}
+
+export default function Spinner({ sm, md, lg }: Props ) {
+  const className = cn('animate-spin text-white-300 fill-white-300 mr-2', {
+    'w-4 h-4': sm,
+    'w-6 h-6': md,
+    'w-8 h-8': lg,
+  });
 
   return (
     <div className="flex items-center justify-center">
@@ -15,6 +21,7 @@ export default function Spinner({ sm, md, lg }) {
         role='status'
       >
         <ImSpinner className="w-full h-full text-blue-500" />
+        <span className="sr-only">Loading...</span>
       </div>
     </div>
   );
