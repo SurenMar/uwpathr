@@ -102,7 +102,7 @@ function CourseSearchInput({ checkboxId, onCourseSelect, onClearSelection, selec
         className="w-48 px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
       {showDropdown && (
-        <div className="absolute z-10 w-64 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
+        <div className="absolute z-50 w-64 mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto">
           {isLoading ? (
             <div className="p-3 text-center text-sm text-gray-500">
               Loading courses...
@@ -284,20 +284,21 @@ export default function Checklist() {
   return (
     <main className="p-6">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">CS Checklist</h1>
-        <div className="flex gap-4 text-sm text-gray-600">
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          {checklist.specialization?.name 
+            ? `BCS Checklist: ${checklist.specialization.name} Specialization`
+            : 'BCS Checklist'
+          }
+        </h1>
+        <div className="text-sm text-gray-600">
           <span>Year: {checklist.year}</span>
-          <span>•</span>
-          <span>{checklist.taken_course_units}/{checklist.units_required} Total Units</span>
-          <span>•</span>
-          <span>Planned: {checklist.planned_course_units}</span>
         </div>
       </div>
 
       <div className="space-y-4">
         {checklist.nodes && checklist.nodes.length > 0 ? (
           checklist.nodes.map((node) => (
-            <div key={node.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div key={node.id} className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-visible">
               <ChecklistNodeComponent node={node} />
             </div>
           ))
