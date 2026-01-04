@@ -38,8 +38,8 @@ class CustomProviderAuthView(ProviderAuthView):
       )
 
     # TODO Remove from response body
-    # response.data.pop("access", None)
-    # response.data.pop("refresh", None)
+    response.data.pop("access", None)
+    response.data.pop("refresh", None)
 
     return response
 
@@ -73,8 +73,8 @@ class CustomTokenObtainPairView(TokenObtainPairView):
       )
 
     # TODO Remove from response body
-    # response.data.pop("access", None)
-    # response.data.pop("refresh", None)
+    response.data.pop("access", None)
+    response.data.pop("refresh", None)
 
     return response
   
@@ -103,7 +103,7 @@ class CustomTokenRefreshView(TokenRefreshView):
       )
 
     # TODO Remove from response body
-    # response.data.pop("access", None)
+    response.data.pop("access", None)
 
     return response
 

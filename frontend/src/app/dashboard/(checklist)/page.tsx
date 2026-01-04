@@ -295,7 +295,7 @@ export default function Checklist() {
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium text-gray-700">
-                Progress: {checklist.taken_course_units}/{checklist.units_required} units
+                Progress: {Math.round((checklist.taken_course_units / checklist.units_required) * 100)}%
               </span>
               {checklist.completed && (
                 <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
