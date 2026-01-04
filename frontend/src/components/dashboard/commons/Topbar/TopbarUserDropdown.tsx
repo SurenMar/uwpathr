@@ -2,10 +2,11 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useRetrieveUserQuery, useLogoutMutation } from "@/store/features/auth/authApiSlice";
+import { useRetrieveUserQuery, useLogoutMutation, useDeleteAccountMutation } from "@/store/features/auth/authApiSlice";
 import { useAppDispatch } from "@/store/hooks";
 import { logout as logoutAction } from "@/store/features/auth/authSlice";
 import { apiSlice } from "@/store/services/apiSlice";
+import { toast } from "react-toastify";
 
 export default function TopbarUserDropdown() {
   const [open, setOpen] = useState(false);
@@ -15,6 +16,7 @@ export default function TopbarUserDropdown() {
   const dispatch = useAppDispatch();
   const { data: user } = useRetrieveUserQuery();
   const [logout] = useLogoutMutation();
+  const [deleteAccount] = useDeleteAccountMutation();
 
   // Get display name: use first_name if available, otherwise email prefix
   const displayName = user?.first_name || user?.email?.split('@')[0] || 'Me';
@@ -56,6 +58,30 @@ export default function TopbarUserDropdown() {
     router.replace('/');
   };
 
+  const handleDeleteAccount = async () => {
+    if (!window.confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+      return;
+    }
+    
+    setOpen(false);
+    
+    try {
+      await deleteAccount(undefined).unwrap();
+      
+      // Clear state
+      dispatch(logoutAction());
+      dispatch(apiSlice.util.resetApiState());
+      
+      // Navigate to home
+      router.replace('/');
+      
+      toast.success('Account deleted successfully');
+    } catch (error: any) {
+      toast.error('Failed to delete account');
+      console.error('Delete account error:', error);
+    }
+  };
+
   return (
     <div className="relative flex items-center gap-2" ref={dropdownRef}>
       <span className="text-gray-700 font-medium">{displayName}</span>
@@ -83,6 +109,7 @@ export default function TopbarUserDropdown() {
             Logout
           </button>
           <button
+            onClick={handleDeleteAccount}
             className="w-full text-left px-4 py-3 text-sm text-red-600 hover:bg-red-50 transition-colors border-t border-gray-100"
           >
             Delete Account

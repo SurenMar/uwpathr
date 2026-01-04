@@ -109,6 +109,12 @@ const authApiSlice = apiSlice.injectEndpoints({
 				method: 'POST',
 			}),
 		}),
+		deleteAccount: builder.mutation({
+			query: () => ({
+				url: '/delete-account/',
+				method: 'DELETE',
+			}),
+		}),
 		createChecklist: builder.mutation({
 			query: ({ specialization, year }: { specialization: number; year: number }) => ({
 				url: '/user-checklists/',
@@ -165,6 +171,7 @@ export const {
 	useRegisterMutation,
 	useVerifyMutation,
 	useLogoutMutation,
+	useDeleteAccountMutation,
 	useCreateChecklistMutation,
 	useCreateUserCourseMutation,
 	useUpdateCheckboxNodeMutation,

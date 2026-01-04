@@ -127,4 +127,13 @@ class LogoutView(APIView):
     return response
 
 
+class DeleteAccountView(APIView):
+  def delete(self, request, *args, **kwargs):
+    user = request.user
+    user.delete()
     
+    response = Response(status=status.HTTP_204_NO_CONTENT)
+    response.delete_cookie('access')
+    response.delete_cookie('refresh')
+    
+    return response

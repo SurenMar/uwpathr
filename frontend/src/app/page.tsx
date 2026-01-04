@@ -23,9 +23,9 @@ export default function LandingPage() {
     },
     {
       id: 'planning',
-      title: 'Flexible Course Planning',
-      description: 'Plan your courses across different categories to match your schedule.',
-      details: 'Organize courses into "Taken", "Planned", and "Wishlist" sections. See your progress update automatically as you add or remove courses.',
+      title: 'Course Path Planning',
+      description: 'Build a clear roadmap to upper-year courses by planning your prerequisites.',
+      details: 'Create a visual path showing which prerequisite courses you need to take to reach your desired upper-year courses. Perfect for first and second-year students planning their academic journey.',
       icon: '📋',
     },
     {
@@ -183,11 +183,11 @@ export default function LandingPage() {
                   2
                 </div>
                 <h4 className="text-lg font-semibold text-gray-900">
-                  Search for Courses
+                  Add Courses to Lists
                 </h4>
               </div>
               <p className="text-gray-700">
-                Use the Search Courses button in the sidebar to find courses. Type the course code, then a space, then the course number to filter results.
+                Select a course and choose whether to add it to "Taken", "Planned", or "Wishlist". Your checklist will update automatically to reflect your selections.
               </p>
             </div>
 
@@ -197,11 +197,11 @@ export default function LandingPage() {
                   3
                 </div>
                 <h4 className="text-lg font-semibold text-gray-900">
-                  Add Courses to Lists
+                  Plan Your Course Path
                 </h4>
               </div>
               <p className="text-gray-700">
-                Select a course and choose whether to add it to "Taken", "Planned", or "Wishlist". Your checklist will update automatically to reflect your selections.
+                For planned or wishlist courses, create a visual path showing the prerequisite courses you need to take. Use "Create Path" to create a new path and "View Path" to see the existing one.
               </p>
             </div>
 
@@ -215,7 +215,7 @@ export default function LandingPage() {
                 </h4>
               </div>
               <p className="text-gray-700">
-                Watch your progress bar fill up as you mark courses as taken. When you've completed all requirements, you'll see a checkmark next to your progress.
+                Watch your progress bar fill up as you mark courses as taken. Celebrate completing requirements and stay motivated to finish your degree!
               </p>
             </div>
           </div>
