@@ -17,10 +17,48 @@ interface CreateUserResponse {
 	user: User;
 }
 
+interface UserChecklistNode {
+	id: string;
+	title: string;
+	requirement_type: string;
+	units_required: number | null;
+	units_gathered: number | null;
+	children: UserChecklistNode[];
+	completed: boolean;
+}
+
+interface UserChecklist {
+	id: string;
+	year: number;
+	specialization: number;
+	units_required: number;
+	taken_course_units: number;
+	planned_course_units: number;
+	nodes: UserChecklistNode[];
+}
+
+interface Course {
+	id: string;
+	code: string;
+	number: string;
+}
+
+interface CheckboxAllowedCoursesResponse {
+	id: string;
+	target_checkbox: string;
+	courses: Course[];
+}
+
 const authApiSlice = apiSlice.injectEndpoints({
 	endpoints: builder => ({
 		retrieveUser: builder.query<User, void>({
 			query: () => '/users/me/',
+		}),
+		retrieveUserChecklists: builder.query<UserChecklist[], void>({
+			query: () => '/user-checklists/',
+		}),
+		retrieveCheckboxAllowedCourses: builder.query<CheckboxAllowedCoursesResponse[], string>({
+			query: (checkboxId) => `/checkbox-allowed-courses/?target_checkbox=${checkboxId}`,
 		}),
 		socialAuthenticate: builder.mutation<
 			CreateUserResponse,
@@ -69,37 +107,24 @@ const authApiSlice = apiSlice.injectEndpoints({
 				method: 'POST',
 			}),
 		}),
-    activation: builder.mutation({
-			query: ({ uid, token }) => ({
-				url: '/users/activation/',
+		createChecklist: builder.mutation({
+			query: ({ specialization, year }: { specialization: number; year: number }) => ({
+				url: '/user-checklists/',
 				method: 'POST',
-				body: { uid, token },
+				body: { specialization, year },
 			}),
 		}),
-		resetPassword: builder.mutation({
-			query: email => ({
-				url: '/users/reset_password/',
-				method: 'POST',
-				body: { email },
-			}),
-		}),
-		resetPasswordConfirm: builder.mutation({
-			query: ({ uid, token, new_password, re_new_password }) => ({
-				url: '/users/reset_password_confirm/',
-				method: 'POST',
-				body: { uid, token, new_password, re_new_password },
-			}),
-		}),
-	}),
+	})
 });
 
 export const {
 	useRetrieveUserQuery,
+	useRetrieveUserChecklistsQuery,
+	useRetrieveCheckboxAllowedCoursesQuery,
 	useSocialAuthenticateMutation,
 	useLoginMutation,
 	useRegisterMutation,
 	useVerifyMutation,
 	useLogoutMutation,
-	useResetPasswordMutation,
-	useResetPasswordConfirmMutation,
+	useCreateChecklistMutation,
 } = authApiSlice;

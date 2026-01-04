@@ -90,20 +90,15 @@ DATABASES = {
 
 # Email settings
 
-EMAIL_BACKEND = 'django_ses.SESBackend'
-DEFAULT_FROM_EMAIL = getenv('AWS_SES_FROM_EMAIL')
-SERVER_EMAIL = getenv('AWS_SES_FROM_EMAIL')
+# EMAIL_BACKEND = 'django_ses.SESBackend'
+# DEFAULT_FROM_EMAIL = getenv('AWS_SES_FROM_EMAIL')
 
-# Debug: Print the email being used
-import sys
-print(f"DEFAULT_FROM_EMAIL is set to: {DEFAULT_FROM_EMAIL}", file=sys.stderr)
-
-AWS_SES_ACCESS_KEY_ID = getenv('AWS_SES_ACCESS_KEY_ID')
-AWS_SES_SECRET_ACCESS_KEY = getenv('AWS_SES_SECRET_ACCESS_KEY')
-AWS_SES_REGION_NAME = getenv('AWS_SES_REGION_NAME')
-AWS_SES_REGION_ENDPOINT = f'email.{AWS_SES_REGION_NAME}.amazonaws.com'
-AWS_SES_FROM_EMAIL = getenv('AWS_SES_FROM_EMAIL')
-USE_SES_V2 = True
+# AWS_SES_ACCESS_KEY_ID = getenv('AWS_SES_ACCESS_KEY_ID')
+# AWS_SES_SECRET_ACCESS_KEY = getenv('AWS_SES_SECRET_ACCESS_KEY')
+# AWS_SES_REGION_NAME = getenv('AWS_SES_REGION_NAME')
+# AWS_SES_REGION_ENDPOINT = f'email.{AWS_SES_REGION_NAME}.amazonaws.com'
+# AWS_SES_FROM_EMAIL = getenv('AWS_SES_FROM_EMAIL')
+# USE_SES_V2 = True
 
 DOMAIN = getenv('DOMAIN')
 SITE_NAME = 'UWPathr'
@@ -172,16 +167,13 @@ REST_FRAMEWORK = {
 }
 
 DJOSER = {
+  # 'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}'
+  # 'SEND_ACTIVATION_EMAIL': True,
+  # 'ACTIVATION_URL': 'activation/{uid}/{token}',
+  # 'PASSWORD_RESET_CONFIRM_RETYPE': True,
   'USER_CREATE_PASSWORD_RETYPE': True,
-  'SEND_ACTIVATION_EMAIL': True,
-  'ACTIVATION_URL': 'activation/{uid}/{token}',
-  'USER_CREATE_PASSWORD_RETYPE': True,
-  'PASSWORD_RESET_CONFIRM_RETYPE': True,
   'TOKEN_MODEL': None,
   'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': getenv('REDIRECT_URLS').split(','),
-  "EMAIL": {
-    "activation": "core.email.ActivationEmail",
-  }
 }
 
 AUTH_COOKIE = 'access'

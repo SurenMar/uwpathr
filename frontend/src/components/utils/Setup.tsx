@@ -1,5 +1,12 @@
-import { ToastContainer } from "react-toastify";
+'use client';
+
+import { useVerify, useChecklistInit } from '@/hooks/auth';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Setup() {
-  return <ToastContainer />;
+	useVerify();
+	useChecklistInit();
+
+	return <ToastContainer />;
 }

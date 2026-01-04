@@ -25,7 +25,7 @@ class CheckboxAllowedCoursesViewSet(ReadOnlyModelViewSet):
 
   filter_backends = [DjangoFilterBackend]
   filterset_fields = {
-    'target_course': ['exact'],
+    'target_checkbox': ['exact'],
   }
 
   def get_serializer_class(self):
