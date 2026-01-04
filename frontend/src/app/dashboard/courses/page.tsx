@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { useGetUserCoursesQuery } from '@/store/features/progress/progressApiSlice';
+import { useGetUserCoursesQuery, useDeleteUserCourseMutation } from '@/store/features/progress/progressApiSlice';
 import Spinner from '@/components/common/Spinner';
 
 type CourseList = 'taken' | 'planned' | 'wishlist';
@@ -31,8 +31,24 @@ const COURSE_SECTIONS: CourseSection[] = [
 ];
 
 export default function CoursesPage() {
-    const { data: courses, isLoading, error } = useGetUserCoursesQuery();
+    const { data: courses, isLoading, error, refetch } = useGetUserCoursesQuery({ course_list: 'taken' });
     const [expandedCodes, setExpandedCodes] = useState<Record<string, boolean>>({});
+    const [deleteUserCourse] = useDeleteUserCourseMutation();
+    const [deletingIds, setDeletingIds] = useState<Set<number>>(new Set());
+
+    const handleRemoveCourse = async (userCourseId: number) => {
+        setDeletingIds(prev => new Set([...prev, userCourseId]));
+        try {
+            await deleteUserCourse(userCourseId).unwrap();
+        } catch (err) {
+            console.error('Failed to remove course:', err);
+            setDeletingIds(prev => {
+                const newSet = new Set(prev);
+                newSet.delete(userCourseId);
+                return newSet;
+            });
+        }
+    };
 
     const groupedCourses = useMemo(() => {
         const initial: Record<CourseList, typeof courses> = {
@@ -259,21 +275,28 @@ export default function CoursesPage() {
                                                             )}
                                                         </div>
                                                         <div className='ml-auto'>
-                                                            {userCourse.course_list === 'taken' && (
-                                                                <span className='inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800'>
-                                                                    Completed
-                                                                </span>
-                                                            )}
-                                                            {userCourse.course_list === 'planned' && (
-                                                                <span className='inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800'>
-                                                                    Planned
-                                                                </span>
-                                                            )}
-                                                            {userCourse.course_list === 'wishlist' && (
-                                                                <span className='inline-flex items-center rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-800'>
-                                                                    Wishlist
-                                                                </span>
-                                                            )}
+                                                            <button
+                                                                onClick={() => handleRemoveCourse(userCourse.id)}
+                                                                disabled={deletingIds.has(userCourse.id)}
+                                                                className='inline-flex items-center gap-2 px-3 py-1 text-sm font-medium rounded-md bg-gray-200 text-gray-800 hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors'
+                                                            >
+                                                                {deletingIds.has(userCourse.id) ? (
+                                                                    <>
+                                                                        <svg className='w-4 h-4 animate-spin' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                                                            <circle cx='12' cy='12' r='10' stroke='currentColor' strokeWidth='2' fill='none' opacity='0.25' />
+                                                                            <path fill='currentColor' d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z' />
+                                                                        </svg>
+                                                                        Removing...
+                                                                    </>
+                                                                ) : (
+                                                                    <>
+                                                                        <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                                                                            <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16' />
+                                                                        </svg>
+                                                                        Remove
+                                                                    </>
+                                                                )}
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>

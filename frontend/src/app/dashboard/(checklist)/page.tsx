@@ -142,17 +142,26 @@ function ChecklistNodeComponent({ node, level = 0 }: { node: ChecklistNode; leve
   const [createUserCourse] = useCreateUserCourseMutation();
   const hasChildren = node.children && node.children.length > 0;
   
+  // Sync checkbox state with selected_course whenever the node data changes
+  useEffect(() => {
+    setIsChecked(!!node.selected_course);
+  }, [node.selected_course]);
+  
   const bgColor = node.requirement_type === 'head' ? 'bg-blue-50' : 
                   node.requirement_type === 'group' ? 'bg-gray-50' : 
                   'bg-white';
   
   const handleCourseSelect = async (course: Course) => {
     try {
-      // First, add the course to user's taken courses
-      await createUserCourse({ courseId: course.id }).unwrap();
+      // First, add the course to user's taken courses and get the UserCourse ID
+      console.log('Creating UserCourse for course:', course.id);
+      const userCourse = await createUserCourse({ courseId: course.id }).unwrap();
+      console.log('UserCourse created:', userCourse);
       
-      // Then, update the checkbox node with the selected course
-      await updateCheckboxNode({ nodeId: node.id, selectedCourseId: course.id }).unwrap();
+      // Then, update the checkbox node with the UserCourse ID
+      console.log('Updating checkbox node with userCourseId:', userCourse.id);
+      await updateCheckboxNode({ nodeId: node.id, userCourseId: userCourse.id }).unwrap();
+      console.log('Checkbox node updated successfully');
       setIsChecked(true);
     } catch (error: any) {
       console.error('Failed to select course:', error);
@@ -175,7 +184,7 @@ function ChecklistNodeComponent({ node, level = 0 }: { node: ChecklistNode; leve
 
   const handleClearSelection = async () => {
     try {
-      await updateCheckboxNode({ nodeId: node.id, selectedCourseId: null }).unwrap();
+      await updateCheckboxNode({ nodeId: node.id, userCourseId: null }).unwrap();
       setIsChecked(false);
     } catch (error) {
       console.error('Failed to clear selection:', error);

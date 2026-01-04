@@ -30,8 +30,8 @@ class UserCourseFilter(FilterSet):
     values = [v.strip() for v in value.split(',') if v.strip()]
     if not values:
       return queryset
-    # ArrayField overlap: returns rows where course_list overlaps with provided list
-    return queryset.filter(course_list__overlap=values)
+    # CharField filter: returns rows where course_list is in the provided list
+    return queryset.filter(course_list__in=values)
   
   def filter_category(self, queryset, name, value):
     values = [v.strip() for v in value.split(',') if v.strip()]

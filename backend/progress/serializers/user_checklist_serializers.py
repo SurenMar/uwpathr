@@ -16,7 +16,17 @@ class CourseDetailSerializer(serializers.Serializer):
 
 class UserChecklistNodeListSerializer(serializers.ModelSerializer):
   children = serializers.SerializerMethodField()
-  selected_course = CourseDetailSerializer(read_only=True, allow_null=True)
+  selected_course = serializers.SerializerMethodField()
+
+  def get_selected_course(self, obj):
+    """Extract course details from UserCourse"""
+    if obj.selected_course and obj.selected_course.course:
+      return {
+        'id': str(obj.selected_course.course.id),
+        'code': obj.selected_course.course.code,
+        'number': obj.selected_course.course.number,
+      }
+    return None
 
   class Meta:
     model = UserChecklistNode
@@ -57,18 +67,23 @@ class UserChecklistNodeUpdateSerializer(serializers.ModelSerializer):
         "Only checkbox nodes can have selected courses."
       )
     
-    # Verify that selected course is taken
-    if not UserCourse.objects.filter(course=value, course_list='taken').exists():
+    # Verify that the UserCourse belongs to the user and is taken
+    if value.user != self.context['request'].user:
+      raise serializers.ValidationError(
+        'Cannot select a course that does not belong to you.'
+      )
+    
+    if value.course_list != 'taken':
       raise serializers.ValidationError(
         'Selected course has not been taken.'
       )
     
-    # For updates, verify selected course is in allowed list
+    # For updates, verify the course is in allowed list
     if self.instance and self.instance.original_checkbox:
       # Get the CheckboxAllowedCourses object
       allowed_courses_obj = self.instance.original_checkbox.allowed_courses.first()
       # If allowed courses are defined, validate the selection
-      if not allowed_courses_obj.courses.filter(pk=value.pk).exists():
+      if not allowed_courses_obj.courses.filter(pk=value.course.pk).exists():
         raise serializers.ValidationError(
           "Selected course is not in allowed courses."
         )

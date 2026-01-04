@@ -44,10 +44,18 @@ const progressApiSlice = apiSlice.injectEndpoints({
         }),
         deleteUserCourse: builder.mutation<void, number>({
             query: (userCourseId) => ({
-                url: `/progress/user-courses/${userCourseId}/`,
+                url: `/user-courses/${userCourseId}/`,
                 method: 'DELETE',
             }),
-            invalidatesTags: ['UserCourses'],
+            async onQueryStarted(userCourseId, { dispatch, queryFulfilled }) {
+                try {
+                    await queryFulfilled;
+                    // Invalidate both UserCourses and UserChecklists tags
+                    dispatch(progressApiSlice.util.invalidateTags(['UserCourses', 'UserChecklists']));
+                } catch (err) {
+                    console.error('Failed to delete user course:', err);
+                }
+            },
         }),
     }),
 });

@@ -70,7 +70,7 @@ class UserChecklistNode(MPTTModel):
     related_name='+'
   )
   selected_course = models.ForeignKey( 
-    'courses.Course',
+    'progress.UserCourse',
     blank=True,
     null=True,
     on_delete=models.SET_NULL,
@@ -147,8 +147,8 @@ def update_parent_on_child_update(sender, instance, created, **kwargs):
     
 def update_all_parent_groups(old_selected_course, checkbox_instance):
   """Update units_gathered for all parent groups (not just immediate parent)"""
-  old_units = old_selected_course.units if old_selected_course else 0
-  new_units = checkbox_instance.selected_course.units \
+  old_units = old_selected_course.course.units if old_selected_course else 0
+  new_units = checkbox_instance.selected_course.course.units \
     if checkbox_instance.selected_course else 0
   units_delta = new_units - old_units
   

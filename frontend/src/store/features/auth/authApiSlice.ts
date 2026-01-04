@@ -116,35 +116,29 @@ const authApiSlice = apiSlice.injectEndpoints({
 				body: { specialization, year },
 			}),
 		}),
-		createUserCourse: builder.mutation<void, { courseId: string }>({ 
+		createUserCourse: builder.mutation<{ id: number }, { courseId: string }>({ 
 			query: ({ courseId }) => ({
 				url: '/user-courses/',
 				method: 'POST',
 				body: { course: courseId, course_list: 'taken' },
 			}),
+			async onQueryStarted({ courseId }, { dispatch, queryFulfilled }) {
+				try {
+					await queryFulfilled;
+					// Invalidate user courses cache to update the courses list
+					dispatch(authApiSlice.util.invalidateTags(['UserCourses']));
+				} catch (err) {
+					console.error('Failed to create user course:', err);
+				}
+			},
 		}),
-		updateCheckboxNode: builder.mutation<void, { nodeId: string; selectedCourseId: string | null }>({ 
-			query: ({ nodeId, selectedCourseId }) => ({
+		updateCheckboxNode: builder.mutation<void, { nodeId: string; userCourseId: number | null }>({ 
+			query: ({ nodeId, userCourseId }) => ({
 					url: `/user-checklist-nodes/${nodeId}/`,
 					method: 'PATCH',
-					body: { selected_course: selectedCourseId ? parseInt(selectedCourseId) : null },
+					body: { selected_course: userCourseId },
 			}),
-			async onQueryStarted({ nodeId, selectedCourseId }, { dispatch, queryFulfilled }) {
-				// First, create the user course if we're setting a course
-				if (selectedCourseId) {
-					try {
-						await dispatch(
-							authApiSlice.endpoints.createUserCourse.initiate({ courseId: selectedCourseId })
-						).unwrap();
-					} catch (err: unknown) {
-						// Ignore error if course already exists (likely a 400 Bad Request for duplicate)
-						if ((err as { status?: number })?.status !== 400) {
-							console.error('Failed to create user course:', err);
-							throw err;
-						}
-					}
-				}
-
+			async onQueryStarted({ nodeId, userCourseId }, { dispatch, queryFulfilled }) {
 				try {
 					await queryFulfilled;
 					// Invalidate the user checklists cache to force a refetch of the updated checklist
