@@ -47,6 +47,18 @@ export default function CoursePathModal({
   const [selectedNodeIds, setSelectedNodeIds] = useState<Set<string>>(new Set());
   const [selectedPathTree, setSelectedPathTree] = useState<SelectedPathNode | null>(null);
 
+  // Reset state when modal closes or courseId changes
+  useEffect(() => {
+    if (!isOpen) {
+      setRootNode(null);
+      setLoading(false);
+      setError(null);
+      setExpandedNodeIds(new Set());
+      setSelectedNodeIds(new Set());
+      setSelectedPathTree(null);
+    }
+  }, [isOpen, courseId]);
+
   // Fetch prerequisite tree when modal opens
   useEffect(() => {
     if (!isOpen || !courseId) return;
@@ -276,7 +288,7 @@ export default function CoursePathModal({
     const disabledClass = !isSelectable && !isSelected ? 'opacity-30' : '';
     
     // Color classes for selected vs unselected
-    const branchColor = isSelected ? 'text-blue-600' : 'text-gray-700 hover:text-gray-900';
+    const branchColor = isSelected ? 'text-blue-600 font-bold' : 'text-gray-700 hover:text-gray-900';
     const courseColor = isSelected ? 'text-blue-600' : 'text-gray-800 hover:text-gray-950';
     const groupColor = isSelected ? 'text-blue-600' : 'text-blue-800 hover:text-blue-950';
 
