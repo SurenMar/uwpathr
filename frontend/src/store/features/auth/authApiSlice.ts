@@ -116,12 +116,17 @@ const authApiSlice = apiSlice.injectEndpoints({
 				body: { specialization, year },
 			}),
 		}),
-		createUserCourse: builder.mutation<{ id: number }, { courseId: string }>({ 
-			query: ({ courseId }) => ({
-				url: '/user-courses/',
-				method: 'POST',
-				body: { course: courseId, course_list: 'taken' },
-			}),
+		createUserCourse: builder.mutation<{ id: number }, { courseId: string; courseList?: 'taken' | 'planned' | 'wishlist' }>({ 
+			query: ({ courseId, courseList = 'taken' }) => {
+				console.log('createUserCourse mutation query called with:', { courseId, courseList });
+				const body = { course: courseId, course_list: courseList };
+				console.log('Request body:', body);
+				return {
+					url: '/user-courses/',
+					method: 'POST',
+					body,
+				};
+			},
 			async onQueryStarted({ courseId }, { dispatch, queryFulfilled }) {
 				try {
 					await queryFulfilled;

@@ -31,8 +31,13 @@ const COURSE_SECTIONS: CourseSection[] = [
 ];
 
 export default function CoursesPage() {
-    const { data: courses, isLoading, error, refetch } = useGetUserCoursesQuery({ course_list: 'taken' });
+    const { data: courses, isLoading, error, refetch } = useGetUserCoursesQuery();
     const [expandedCodes, setExpandedCodes] = useState<Record<string, boolean>>({});
+    const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
+        taken: true,
+        planned: true,
+        wishlist: true,
+    });
     const [deleteUserCourse] = useDeleteUserCourseMutation();
     const [deletingIds, setDeletingIds] = useState<Set<number>>(new Set());
 
@@ -173,18 +178,36 @@ export default function CoursesPage() {
                                          'text-red-900';
                         return (
                             <section key={section.type}>
-                                <div className={`${bgColor} px-6 py-5 rounded-t-lg border-b-4 ${section.type === 'taken' ? 'border-green-400' : section.type === 'planned' ? 'border-blue-400' : 'border-red-400'}`}>
-                                    <h2 className={`text-2xl font-bold ${textColor}`}>
-                                        {section.title}
-                                    </h2>
-                                    <p className={`mt-1 text-sm ${section.type === 'taken' ? 'text-green-700' : section.type === 'planned' ? 'text-blue-700' : 'text-red-700'}`}>
-                                        {section.description}
-                                    </p>
-                                    <p className='mt-2 text-sm font-medium text-gray-700'>
+                                <div className={`${bgColor} px-6 py-5 rounded-t-lg border-b-4 ${section.type === 'taken' ? 'border-green-400' : section.type === 'planned' ? 'border-blue-400' : 'border-red-400'} flex items-center justify-between cursor-pointer`}
+                                     onClick={() => setExpandedSections(prev => ({
+                                         ...prev,
+                                         [section.type]: !prev[section.type]
+                                     }))}
+                                >
+                                    <div>
+                                        <div className="flex items-center gap-3">
+                                            <svg
+                                                className={`w-5 h-5 transition-transform ${expandedSections[section.type] ? 'rotate-90' : ''}`}
+                                                fill='none'
+                                                stroke='currentColor'
+                                                viewBox='0 0 24 24'
+                                            >
+                                                <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
+                                            </svg>
+                                            <h2 className={`text-2xl font-bold ${textColor}`}>
+                                                {section.title}
+                                            </h2>
+                                        </div>
+                                        <p className={`mt-1 text-sm ${section.type === 'taken' ? 'text-green-700' : section.type === 'planned' ? 'text-blue-700' : 'text-red-700'}`}>
+                                            {section.description}
+                                        </p>
+                                    </div>
+                                    <p className='text-sm font-medium text-gray-700'>
                                         {sectionCourses.length} course{sectionCourses.length !== 1 ? 's' : ''}
                                     </p>
                                 </div>
 
+                                {expandedSections[section.type] && (
                                 <div className='overflow-hidden rounded-b-lg bg-white shadow'>
                                     {sectionCourses.length === 0 ? (
                                         <div className='px-6 py-8 text-center'>
@@ -310,6 +333,7 @@ export default function CoursesPage() {
                                     </div>
                                 )}
                                 </div>
+                                )}
                             </section>
                         );
                     })}

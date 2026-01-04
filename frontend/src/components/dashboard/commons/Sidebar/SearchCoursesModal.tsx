@@ -1,6 +1,8 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import { useCreateUserCourseMutation } from '@/store/features/auth/authApiSlice';
+import { toast } from 'react-toastify';
 
 interface Course {
   id: string;
@@ -23,6 +25,27 @@ export default function SearchCoursesModal({ isOpen, onClose }: SearchCoursesMod
     loading: false,
   });
   const modalRef = useRef<HTMLDivElement>(null);
+  const [createUserCourse] = useCreateUserCourseMutation();
+
+  const handleAddCourse = async (courseId: string, courseList: 'taken' | 'planned' | 'wishlist', courseName: string) => {
+    console.log('Adding course:', { courseId, courseList, courseName });
+    try {
+      await createUserCourse({ courseId, courseList }).unwrap();
+      toast.success(`Added ${courseName} to ${courseList} list`);
+    } catch (error: any) {
+      let errorMessage = 'Failed to add course';
+      
+      if (error?.data?.non_field_errors?.[0]) {
+        errorMessage = error.data.non_field_errors[0];
+      } else if (error?.data?.detail) {
+        errorMessage = error.data.detail;
+      } else if (error?.data?.prereqs_met?.[0]) {
+        errorMessage = error.data.prereqs_met[0];
+      }
+      
+      toast.error(errorMessage);
+    }
+  };
 
   // Fetch all courses (not just taken) to show available courses
   useEffect(() => {
@@ -140,15 +163,33 @@ export default function SearchCoursesModal({ isOpen, onClose }: SearchCoursesMod
               {courses.filtered.map((course) => (
                 <div
                   key={course.id}
-                  className="p-3 rounded-lg hover:bg-gray-50 transition-colors cursor-pointer"
+                  className="p-3 rounded-lg hover:bg-gray-50 transition-colors flex items-start gap-3"
                 >
-                  <div className="font-medium text-gray-900 text-sm">
-                    {course.code} {course.number}
+                  <select
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      if (value) {
+                        handleAddCourse(course.id, value as 'taken' | 'planned' | 'wishlist', `${course.code} ${course.number}`);
+                        e.target.value = ''; // Reset select
+                      }
+                    }}
+                    className="w-24 px-2 py-1 text-xs border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 flex-shrink-0"
+                    defaultValue=""
+                  >
+                    <option value="" disabled>Add to...</option>
+                    <option value="taken">Taken</option>
+                    <option value="planned">Planned</option>
+                    <option value="wishlist">Wishlist</option>
+                  </select>
+                  <div className="flex-1">
+                    <div className="font-medium text-gray-900 text-sm">
+                      {course.code} {course.number}
+                    </div>
+                    <div className="text-xs text-gray-600 mt-0.5">{course.title}</div>
+                    {course.units && (
+                      <div className="text-xs text-gray-500 mt-1">{course.units} units</div>
+                    )}
                   </div>
-                  <div className="text-xs text-gray-600 mt-0.5">{course.title}</div>
-                  {course.units && (
-                    <div className="text-xs text-gray-500 mt-1">{course.units} units</div>
-                  )}
                 </div>
               ))}
             </div>

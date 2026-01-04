@@ -17,6 +17,7 @@ class UserChecklist(models.Model):
   units_required = models.PositiveSmallIntegerField()
   taken_course_units = models.PositiveSmallIntegerField(blank=True, default=0)
   planned_course_units = models.PositiveSmallIntegerField(blank=True, default=0)
+  completed = models.BooleanField(default=False)
   specialization = models.ForeignKey(
     'checklists.Specialization',
     on_delete=models.PROTECT,
