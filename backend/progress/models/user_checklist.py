@@ -185,7 +185,14 @@ def update_all_parent_groups(old_selected_course, checkbox_instance):
       parent = parent.parent
     
     # Update the UserChecklist taken_course_units if this is a "taken" course
+    # Check both old and new selected courses (for additions or removals)
+    is_taken_course = False
     if checkbox_instance.selected_course and checkbox_instance.selected_course.course_list == 'taken':
+      is_taken_course = True
+    elif old_selected_course and old_selected_course.course_list == 'taken':
+      is_taken_course = True
+    
+    if is_taken_course:
       checklist = checkbox_instance.target_checklist
       checklist.taken_course_units += units_delta
       checklist.save(update_fields=['taken_course_units'])
