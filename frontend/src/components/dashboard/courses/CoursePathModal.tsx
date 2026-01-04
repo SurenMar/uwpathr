@@ -582,6 +582,12 @@ export default function CoursePathModal({
             </div>
           )}
 
+          {!loading && !rootNode && (
+            <div className="py-8 text-center text-gray-500">
+              This course has no prerequisites.
+            </div>
+          )}
+
           {rootNode && !loading && (
             <div className="flex flex-col items-center py-6 relative">
               {/* Root course at top */}
