@@ -56,6 +56,28 @@ export default function CoursesPage() {
         );
     }, [courses]);
 
+    const coursesByCodeBySectionType = useMemo(() => {
+        const result: Record<CourseList, Array<[string, typeof courses]>> = {
+            taken: [],
+            planned: [],
+            wishlist: [],
+        };
+
+        Object.entries(groupedCourses).forEach(([sectionType, sectionCourses]) => {
+            const grouped: Record<string, typeof sectionCourses> = {};
+            sectionCourses.forEach(course => {
+                if (!grouped[course.course.code]) {
+                    grouped[course.course.code] = [];
+                }
+                grouped[course.course.code].push(course);
+            });
+            // Sort by code alphabetically
+            result[sectionType as CourseList] = Object.entries(grouped).sort((a, b) => a[0].localeCompare(b[0]));
+        });
+
+        return result;
+    }, [groupedCourses]);
+
     if (isLoading) {
         return (
             <main className='min-h-screen bg-gray-50'>
@@ -125,33 +147,21 @@ export default function CoursesPage() {
                 <div className='grid gap-8'>
                     {COURSE_SECTIONS.map(section => {
                         const sectionCourses = groupedCourses[section.type] || [];
-                        
-                        // Group courses by code
-                        const coursesByCode = useMemo(() => {
-                            const grouped: Record<string, typeof sectionCourses> = {};
-                            sectionCourses.forEach(course => {
-                                if (!grouped[course.course.code]) {
-                                    grouped[course.course.code] = [];
-                                }
-                                grouped[course.course.code].push(course);
-                            });
-                            // Sort by code alphabetically
-                            return Object.entries(grouped).sort((a, b) => a[0].localeCompare(b[0]));
-                        }, [sectionCourses]);
+                        const coursesByCode = coursesByCodeBySectionType[section.type];
                         
                         const bgColor = section.type === 'taken' ? 'bg-green-50' : 
                                        section.type === 'planned' ? 'bg-blue-50' : 
-                                       'bg-purple-50';
+                                       'bg-red-50';
                         const textColor = section.type === 'taken' ? 'text-green-900' : 
                                          section.type === 'planned' ? 'text-blue-900' : 
-                                         'text-purple-900';
+                                         'text-red-900';
                         return (
                             <section key={section.type}>
-                                <div className={`${bgColor} px-6 py-5 rounded-t-lg border-b-4 ${section.type === 'taken' ? 'border-green-400' : section.type === 'planned' ? 'border-blue-400' : 'border-purple-400'}`}>
+                                <div className={`${bgColor} px-6 py-5 rounded-t-lg border-b-4 ${section.type === 'taken' ? 'border-green-400' : section.type === 'planned' ? 'border-blue-400' : 'border-red-400'}`}>
                                     <h2 className={`text-2xl font-bold ${textColor}`}>
                                         {section.title}
                                     </h2>
-                                    <p className={`mt-1 text-sm ${section.type === 'taken' ? 'text-green-700' : section.type === 'planned' ? 'text-blue-700' : 'text-purple-700'}`}>
+                                    <p className={`mt-1 text-sm ${section.type === 'taken' ? 'text-green-700' : section.type === 'planned' ? 'text-blue-700' : 'text-red-700'}`}>
                                         {section.description}
                                     </p>
                                     <p className='mt-2 text-sm font-medium text-gray-700'>
@@ -210,26 +220,62 @@ export default function CoursesPage() {
                                                             {userCourse.course.title}
                                                         </p>
                                                         {userCourse.course.units && (
-                                                            <p className='mt-1 text-xs text-gray-500'>
+                                                            <p className='mt-2 text-xs text-gray-500'>
                                                                 {userCourse.course.units} units
                                                             </p>
                                                         )}
                                                     </div>
-                                                    {userCourse.course_list === 'taken' && (
-                                                        <span className='ml-4 inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800'>
-                                                            Completed
-                                                        </span>
-                                                    )}
-                                                    {userCourse.course_list === 'planned' && (
-                                                        <span className='ml-4 inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800'>
-                                                            Planned
-                                                        </span>
-                                                    )}
-                                                    {userCourse.course_list === 'wishlist' && (
-                                                        <span className='ml-4 inline-flex items-center rounded-full bg-purple-100 px-3 py-1 text-sm font-medium text-purple-800'>
-                                                            Wishlist
-                                                        </span>
-                                                    )}
+                                                    <div className='flex items-center gap-6'>
+                                                        <div className='flex items-center gap-6 text-xs text-gray-600'>
+                                                            {userCourse.course.num_uwflow_ratings && userCourse.course.num_uwflow_ratings > 0 ? (
+                                                                <>
+                                                                    <div className='text-center'>
+                                                                        <div className='font-semibold text-gray-900'>{userCourse.course.num_uwflow_ratings}</div>
+                                                                        <div className='text-gray-500'>ratings</div>
+                                                                    </div>
+                                                                    {userCourse.course.uwflow_liked_rating !== null && (
+                                                                        <div className='text-center'>
+                                                                            <div className='font-semibold text-gray-900'>{userCourse.course.uwflow_liked_rating}%</div>
+                                                                            <div className='text-gray-500'>liked</div>
+                                                                        </div>
+                                                                    )}
+                                                                    {userCourse.course.uwflow_easy_ratings !== null && (
+                                                                        <div className='text-center'>
+                                                                            <div className='font-semibold text-gray-900'>{userCourse.course.uwflow_easy_ratings}%</div>
+                                                                            <div className='text-gray-500'>easy</div>
+                                                                        </div>
+                                                                    )}
+                                                                    {userCourse.course.uwflow_useful_ratings !== null && (
+                                                                        <div className='text-center'>
+                                                                            <div className='font-semibold text-gray-900'>{userCourse.course.uwflow_useful_ratings}%</div>
+                                                                            <div className='text-gray-500'>useful</div>
+                                                                        </div>
+                                                                    )}
+                                                                </>
+                                                            ) : (
+                                                                <div className='text-gray-400 text-center'>
+                                                                    <div className='text-xs'>No ratings</div>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                        <div className='ml-auto'>
+                                                            {userCourse.course_list === 'taken' && (
+                                                                <span className='inline-flex items-center rounded-full bg-green-100 px-3 py-1 text-sm font-medium text-green-800'>
+                                                                    Completed
+                                                                </span>
+                                                            )}
+                                                            {userCourse.course_list === 'planned' && (
+                                                                <span className='inline-flex items-center rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-800'>
+                                                                    Planned
+                                                                </span>
+                                                            )}
+                                                            {userCourse.course_list === 'wishlist' && (
+                                                                <span className='inline-flex items-center rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-800'>
+                                                                    Wishlist
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </li>
                                         ))}

@@ -42,17 +42,6 @@ const progressApiSlice = apiSlice.injectEndpoints({
             },
             providesTags: [{ type: 'UserCourses' as const }],
         }),
-        createUserCourse: builder.mutation<
-            UserCourse,
-            { course_id: number; course_list: 'taken' | 'planned' | 'wishlist' }
-        >({
-            query: ({ course_id, course_list }) => ({
-                url: '/progress/user-courses/',
-                method: 'POST',
-                body: { course: course_id, course_list },
-            }),
-            invalidatesTags: [{ type: 'UserCourses' as const }],
-        }),
         deleteUserCourse: builder.mutation<void, number>({
             query: (userCourseId) => ({
                 url: `/progress/user-courses/${userCourseId}/`,
@@ -65,6 +54,5 @@ const progressApiSlice = apiSlice.injectEndpoints({
 
 export const {
     useGetUserCoursesQuery,
-    useCreateUserCourseMutation,
     useDeleteUserCourseMutation,
 } = progressApiSlice;
