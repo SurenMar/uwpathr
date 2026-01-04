@@ -89,7 +89,7 @@ export default function LandingPage() {
             UWPathr is your personal guide to completing your Bachelor of Computer Science degree at the University of Waterloo. Discover courses and stay on top of your progress without worrying about missing requirements.
           </p>
           <Link
-            href="/dashboard"
+            href="/auth/register"
             className="inline-block px-8 py-3 bg-blue-600 text-white text-lg font-medium rounded-lg hover:bg-blue-700 transition-colors"
           >
             Get Started
@@ -235,6 +235,17 @@ export default function LandingPage() {
           >
             Open Dashboard
           </Link>
+        </div>
+      </section>
+
+      {/* Disclaimer Section */}
+      <section className="bg-amber-50 border-t border-amber-200 py-8 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="bg-white border border-amber-200 rounded-lg p-6">
+            <p className="text-sm text-amber-900">
+              <strong>Disclaimer:</strong> UWPathr is an unofficial planning tool and is not a substitute for official degree regulations. Students are responsible for discussing their academic plans with their academic advisors and ensuring they officially meet all degree requirements. Always refer to the official University of Waterloo academic calendar and degree requirements.
+            </p>
+          </div>
         </div>
       </section>
 

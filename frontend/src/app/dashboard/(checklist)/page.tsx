@@ -330,6 +330,13 @@ export default function Checklist() {
           </div>
         )}
       </div>
+
+      {/* Disclaimer */}
+      <div className="mt-8 p-6 bg-amber-50 border border-amber-200 rounded-lg">
+        <p className="text-sm text-amber-900">
+          <strong>Disclaimer:</strong> This checklist is an unofficial planning tool and is not a substitute for official degree regulations. You are responsible for discussing your academic plans with your academic advisor and ensuring you officially meet all degree requirements. Always refer to the official University of Waterloo academic calendar and degree requirements.
+        </p>
+      </div>
     </main>
   );
 }

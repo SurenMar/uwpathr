@@ -23,7 +23,7 @@ export default function SidebarResourcesDropdown() {
   }, [open]);
 
   return (
-    <div className="relative" ref={dropdownRef}>
+    <div className="relative" ref={dropdownRef} onMouseLeave={() => setOpen(false)}>
       <button
         onClick={() => setOpen(!open)}
         className="w-full px-4 py-2 rounded-lg text-gray-700 hover:bg-gray-100 transition-colors flex items-center justify-between"
