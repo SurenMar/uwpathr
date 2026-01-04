@@ -1,2 +1,5 @@
 1. Create a get request for user-checklist-node so the frontend 
    doesnt have to retreive the entire checklist each update.
+
+2. Allow the user to add planned courses to checklist too and 
+   account for this via yellow progress in the progress bar.

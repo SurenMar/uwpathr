@@ -284,12 +284,34 @@ export default function Checklist() {
   return (
     <main className="p-6">
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <h1 className="text-3xl font-bold text-gray-900 mb-4">
           {checklist.specialization?.name 
             ? `BCS Checklist: ${checklist.specialization.name} Specialization`
             : 'BCS Checklist'
           }
         </h1>
+        
+        <div className="mb-4">
+          <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-gray-700">
+                Progress: {checklist.taken_course_units}/{checklist.units_required} units
+              </span>
+              {checklist.completed && (
+                <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              )}
+            </div>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2.5">
+            <div
+              className="bg-green-500 h-2.5 rounded-full transition-all duration-300"
+              style={{ width: `${Math.min((checklist.taken_course_units / checklist.units_required) * 100, 100)}%` }}
+            ></div>
+          </div>
+        </div>
+        
         <div className="text-sm text-gray-600">
           <span>Year: {checklist.year}</span>
         </div>
