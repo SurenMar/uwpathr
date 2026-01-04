@@ -28,7 +28,15 @@ export default function Sidebar() {
       <Link href="/">
         <h1 className="text-2xl font-bold text-gray-800 hover:text-gray-600 cursor-pointer mb-8">UWPathr</h1>
       </Link>
-      <div className="flex flex-col gap-2">
+      
+      <div className="flex flex-col gap-1">
+        <button
+          onClick={() => setIsSearchModalOpen(true)}
+          className="px-4 py-2 bg-blue-600 text-white font-semibold hover:bg-blue-700 rounded-lg transition-colors text-left"
+        >
+          Search Courses
+        </button>
+        
         {navItems.map((item) => (
           <Link
             key={item.href}
@@ -42,18 +50,12 @@ export default function Sidebar() {
             {item.name}
           </Link>
         ))}
-        <div className="mt-4">
+        
+        <div className="mt-6">
           <SidebarResourcesDropdown />
         </div>
       </div>
-      <div className="mt-auto pt-4 border-t border-gray-200">
-        <button
-          onClick={() => setIsSearchModalOpen(true)}
-          className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
-        >
-          Search Courses
-        </button>
-      </div>
+      
       <SearchCoursesModal 
         isOpen={isSearchModalOpen} 
         onClose={() => setIsSearchModalOpen(false)} 

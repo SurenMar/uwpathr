@@ -136,7 +136,7 @@ function CourseSearchInput({ checkboxId, onCourseSelect, onClearSelection, selec
 }
 
 function ChecklistNodeComponent({ node, level = 0 }: { node: ChecklistNode; level?: number }) {
-  const [isExpanded, setIsExpanded] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(node.requirement_type === 'group' && node.completed ? false : true);
   const [isChecked, setIsChecked] = useState(node.completed);
   const [updateCheckboxNode] = useUpdateCheckboxNodeMutation();
   const [createUserCourse] = useCreateUserCourseMutation();
@@ -224,7 +224,14 @@ function ChecklistNodeComponent({ node, level = 0 }: { node: ChecklistNode; leve
         {!hasChildren && node.requirement_type !== 'checkbox' && (
           <div className="w-5" />
         )}
-        <span className="font-medium text-gray-800">{node.title}</span>
+        <span className={`font-medium ${node.completed && node.requirement_type === 'group' ? 'text-green-600' : 'text-gray-800'}`}>
+          {node.title}
+        </span>
+        {node.completed && node.requirement_type === 'group' && (
+          <svg className="w-5 h-5 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+          </svg>
+        )}
         {node.requirement_type === 'group' && node.units_required !== null && (
           <span className="text-sm text-gray-600">
             {node.units_gathered ?? 0}/{node.units_required} Total Units
