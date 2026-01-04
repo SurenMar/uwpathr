@@ -19,9 +19,9 @@ export default function NotFound() {
 					>
 						Go back home
 					</Link>
-					<Link href='/' className='text-sm font-semibold text-gray-900'>
+					<a href='mailto:info@uwpathr.rocks' className='text-sm font-semibold text-gray-900'>
 						Contact support <span aria-hidden='true'>&rarr;</span>
-					</Link>
+					</a>
 				</div>
 			</div>
 		</main>

@@ -45,23 +45,32 @@ export default function LandingPage() {
           <h1 className="text-2xl font-bold text-gray-900">UWPathr</h1>
           <div className="flex items-center gap-6">
             <div className="relative group">
-              <button className="text-gray-700 hover:text-gray-900 font-medium">
+              <button className="text-gray-700 hover:text-gray-900 font-medium flex items-center gap-2">
                 Resources
+                <svg
+                  className="w-4 h-4 transition-transform group-hover:rotate-180"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
               </button>
-              <div className="absolute left-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-                <a href="#" className="block px-4 py-2 text-gray-700 hover:bg-gray-50">Documentation</a>
-                <a href="#" className="block px-4 py-2 text-gray-700 hover:bg-gray-50">FAQ</a>
-                <a href="#" className="block px-4 py-2 text-gray-700 hover:bg-gray-50">Support</a>
+              <div className="absolute left-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
+                <a href="https://cs.uwaterloo.ca" target="_blank" rel="noopener noreferrer" className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors">UW CS Home Page</a>
+                <a href="https://uwaterloo.ca/computer-science/advising" target="_blank" rel="noopener noreferrer" className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors border-t border-gray-100">Academic Advising</a>
+                <a href="https://uwaterloo.ca/academic-calendar/undergraduate-studies/catalog#/home" target="_blank" rel="noopener noreferrer" className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors border-t border-gray-100">Academic Calendar</a>
+                <a href="mailto:info@uwpathr.rocks" className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors border-t border-gray-100">Support</a>
               </div>
             </div>
             <Link
-              href="/login"
+              href="/auth/login"
               className="text-gray-700 hover:text-gray-900 font-medium"
             >
               Login
             </Link>
             <Link
-              href="/register"
+              href="/auth/register"
               className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               Register
@@ -232,7 +241,7 @@ export default function LandingPage() {
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-400 py-8 px-6">
         <div className="max-w-6xl mx-auto text-center">
-          <p>&copy; 2024 UWPathr. Plan your path to a CS degree.</p>
+          <p>&copy; 2026 UWPathr. All rights reserved.</p>
         </div>
       </footer>
     </div>

@@ -55,7 +55,21 @@ export default function SidebarResourcesDropdown() {
             rel="noopener noreferrer"
             className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors border-t border-gray-100"
           >
-            UW CS Advising
+            Academic Advising
+          </a>
+          <a
+            href="https://uwaterloo.ca/academic-calendar/undergraduate-studies/catalog#/home"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors border-t border-gray-100"
+          >
+            Academic Calendar
+          </a>
+          <a
+            href="mailto:info@uwpathr.rocks"
+            className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors border-t border-gray-100"
+          >
+            Support
           </a>
         </div>
       )}
