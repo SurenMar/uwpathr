@@ -183,6 +183,19 @@ def update_all_parent_groups(old_selected_course, checkbox_instance):
       
       # Move to next parent
       parent = parent.parent
+    
+    # Update the UserChecklist taken_course_units if this is a "taken" course
+    if checkbox_instance.selected_course and checkbox_instance.selected_course.course_list == 'taken':
+      checklist = checkbox_instance.target_checklist
+      checklist.taken_course_units += units_delta
+      checklist.save(update_fields=['taken_course_units'])
+    
+    # Update the UserChecklist.completed: only True if ALL head nodes are completed
+    checklist = checkbox_instance.target_checklist
+    head_nodes = checklist.nodes.filter(requirement_type='head')
+    all_heads_completed = not head_nodes.filter(completed=False).exists()
+    checklist.completed = all_heads_completed
+    checklist.save(update_fields=['completed'])
 
 def update_head_on_group_change(group_instance):
   """Update completion status starting from the given node and propagating up the tree"""
