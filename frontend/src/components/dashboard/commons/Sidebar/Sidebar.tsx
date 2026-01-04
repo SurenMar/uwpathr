@@ -1,11 +1,14 @@
 'use client';
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 import SidebarResourcesDropdown from "./SidebarResourcesDropdown";
+import SearchCoursesModal from "./SearchCoursesModal";
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
   const navItems = [
     {
@@ -43,6 +46,18 @@ export default function Sidebar() {
           <SidebarResourcesDropdown />
         </div>
       </div>
+      <div className="mt-auto pt-4 border-t border-gray-200">
+        <button
+          onClick={() => setIsSearchModalOpen(true)}
+          className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors font-medium"
+        >
+          Search Courses
+        </button>
+      </div>
+      <SearchCoursesModal 
+        isOpen={isSearchModalOpen} 
+        onClose={() => setIsSearchModalOpen(false)} 
+      />
     </nav>
   );
 }

@@ -1,4 +1,5 @@
 from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.permissions import AllowAny
 from django.db.models import Prefetch
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet, filters
@@ -31,6 +32,7 @@ class CourseFilter(FilterSet):
 
 
 class CourseViewSet(ReadOnlyModelViewSet):
+  permission_classes = [AllowAny]
   queryset = Course.objects.all().order_by('code', 'number')
 
   # Flexible filtering, searching, and ordering
