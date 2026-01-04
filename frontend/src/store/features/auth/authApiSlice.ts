@@ -57,6 +57,7 @@ const authApiSlice = apiSlice.injectEndpoints({
 		}),
 		retrieveUserChecklists: builder.query<UserChecklist[], void>({
 			query: () => '/user-checklists/',
+			providesTags: ['UserChecklists'],
 		}),
 		retrieveCheckboxAllowedCourses: builder.query<CheckboxAllowedCoursesResponse[], string>({
 			query: (checkboxId) => `/checkbox-allowed-courses/?target_checkbox=${checkboxId}`,
@@ -124,9 +125,9 @@ const authApiSlice = apiSlice.injectEndpoints({
 		}),
 		updateCheckboxNode: builder.mutation<void, { nodeId: string; selectedCourseId: string | null }>({ 
 			query: ({ nodeId, selectedCourseId }) => ({
-				url: `/user-checklist-nodes/${nodeId}/`,
-				method: 'PATCH',
-				body: { selected_course: selectedCourseId },
+					url: `/user-checklist-nodes/${nodeId}/`,
+					method: 'PATCH',
+					body: { selected_course: selectedCourseId ? parseInt(selectedCourseId) : null },
 			}),
 			async onQueryStarted({ nodeId, selectedCourseId }, { dispatch, queryFulfilled }) {
 				// First, create the user course if we're setting a course
@@ -135,16 +136,19 @@ const authApiSlice = apiSlice.injectEndpoints({
 						await dispatch(
 							authApiSlice.endpoints.createUserCourse.initiate({ courseId: selectedCourseId })
 						).unwrap();
-					} catch (err) {
-						console.error('Failed to create user course:', err);
-						throw err;
+					} catch (err: unknown) {
+						// Ignore error if course already exists (likely a 400 Bad Request for duplicate)
+						if ((err as { status?: number })?.status !== 400) {
+							console.error('Failed to create user course:', err);
+							throw err;
+						}
 					}
 				}
 
 				try {
 					await queryFulfilled;
-					// Refetch the user checklists after updating
-					dispatch(authApiSlice.endpoints.retrieveUserChecklists.initiate());
+					// Invalidate the user checklists cache to force a refetch of the updated checklist
+					dispatch(authApiSlice.util.invalidateTags(['UserChecklists']));
 				} catch (err) {
 					console.error('Failed to update checkbox node:', err);
 				}

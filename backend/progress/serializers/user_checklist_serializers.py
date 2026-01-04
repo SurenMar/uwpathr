@@ -7,8 +7,16 @@ from checklists.models.checklist import Checklist, ChecklistNode
 from checklists.models.requirements import AdditionalConstraint
 
 
+class CourseDetailSerializer(serializers.Serializer):
+  """Serializer for course details in nested context"""
+  id = serializers.IntegerField()
+  code = serializers.CharField()
+  number = serializers.CharField()
+
+
 class UserChecklistNodeListSerializer(serializers.ModelSerializer):
   children = serializers.SerializerMethodField()
+  selected_course = CourseDetailSerializer(read_only=True, allow_null=True)
 
   class Meta:
     model = UserChecklistNode

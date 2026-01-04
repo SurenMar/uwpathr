@@ -69,7 +69,7 @@ class UserChecklistNode(MPTTModel):
     on_delete=models.PROTECT,
     related_name='+'
   )
-  selected_course = models.OneToOneField( # A course can only be selected once
+  selected_course = models.ForeignKey( 
     'courses.Course',
     blank=True,
     null=True,

@@ -1,8 +1,9 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { useRetrieveUserChecklistsQuery, useRetrieveCheckboxAllowedCoursesQuery, useUpdateCheckboxNodeMutation } from '@/store/features/auth/authApiSlice';
+import { useRetrieveUserChecklistsQuery, useRetrieveCheckboxAllowedCoursesQuery, useUpdateCheckboxNodeMutation, useCreateUserCourseMutation } from '@/store/features/auth/authApiSlice';
 import { Spinner } from '@/components/common';
+import { toast } from 'react-toastify';
 
 interface ChecklistNode {
   id: string;
@@ -13,6 +14,11 @@ interface ChecklistNode {
   children: ChecklistNode[];
   completed: boolean;
   original_checkbox: string;
+  selected_course: {
+    id: string;
+    code: string;
+    number: string;
+  } | null;
 }
 
 interface Course {
@@ -21,7 +27,7 @@ interface Course {
   number: string;
 }
 
-function CourseSearchInput({ checkboxId, onCourseSelect, onClearSelection }: { checkboxId: string; onCourseSelect: (course: Course) => void; onClearSelection: () => void }) {
+function CourseSearchInput({ checkboxId, onCourseSelect, onClearSelection, selectedCourse }: { checkboxId: string; onCourseSelect: (course: Course) => void; onClearSelection: () => void; selectedCourse?: { code: string; number: string } | null }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -32,6 +38,15 @@ function CourseSearchInput({ checkboxId, onCourseSelect, onClearSelection }: { c
 
   // Extract courses from the response
   const courses = allowedCoursesData && allowedCoursesData.length > 0 ? allowedCoursesData[0].courses : [];
+
+  // Update search term when selectedCourse changes from parent (after backend success)
+  useEffect(() => {
+    if (selectedCourse) {
+      setSearchTerm(`${selectedCourse.code} ${selectedCourse.number}`);
+    } else {
+      setSearchTerm('');
+    }
+  }, [selectedCourse]);
 
   const filteredCourses = courses.filter(course => {
     if (searchTerm === '') return true;
@@ -105,7 +120,6 @@ function CourseSearchInput({ checkboxId, onCourseSelect, onClearSelection }: { c
               <button
                 key={course.id}
                 onClick={() => {
-                  setSearchTerm(`${course.code} ${course.number}`);
                   setShowDropdown(false);
                   onCourseSelect(course);
                 }}
@@ -125,20 +139,48 @@ function ChecklistNodeComponent({ node, level = 0 }: { node: ChecklistNode; leve
   const [isExpanded, setIsExpanded] = useState(true);
   const [isChecked, setIsChecked] = useState(node.completed);
   const [updateCheckboxNode] = useUpdateCheckboxNodeMutation();
+  const [createUserCourse] = useCreateUserCourseMutation();
   const hasChildren = node.children && node.children.length > 0;
   
   const bgColor = node.requirement_type === 'head' ? 'bg-blue-50' : 
                   node.requirement_type === 'group' ? 'bg-gray-50' : 
                   'bg-white';
   
-  const handleCourseSelect = (course: Course) => {
-    setIsChecked(true);
-    updateCheckboxNode({ nodeId: node.id, selectedCourseId: course.id });
+  const handleCourseSelect = async (course: Course) => {
+    try {
+      // First, add the course to user's taken courses
+      await createUserCourse({ courseId: course.id }).unwrap();
+      
+      // Then, update the checkbox node with the selected course
+      await updateCheckboxNode({ nodeId: node.id, selectedCourseId: course.id }).unwrap();
+      setIsChecked(true);
+    } catch (error: any) {
+      console.error('Failed to select course:', error);
+      
+      // Extract error message from the response
+      let errorMessage = 'Failed to select course';
+      
+      // Check various possible error locations
+      if (error?.data?.non_field_errors?.[0]) {
+        errorMessage = error.data.non_field_errors[0];
+      } else if (error?.data?.detail) {
+        errorMessage = error.data.detail;
+      } else if (error?.data?.course?.[0]) {
+        errorMessage = error.data.course[0];
+      }
+      
+      toast.error(errorMessage);
+    }
   };
 
-  const handleClearSelection = () => {
-    setIsChecked(false);
-    updateCheckboxNode({ nodeId: node.id, selectedCourseId: null });
+  const handleClearSelection = async () => {
+    try {
+      await updateCheckboxNode({ nodeId: node.id, selectedCourseId: null }).unwrap();
+      setIsChecked(false);
+    } catch (error) {
+      console.error('Failed to clear selection:', error);
+      toast.error('Failed to clear selection');
+    }
   };
   
   return (
@@ -167,7 +209,7 @@ function ChecklistNodeComponent({ node, level = 0 }: { node: ChecklistNode; leve
               disabled
               className="w-4 h-4 rounded border-gray-300 flex-shrink-0 cursor-not-allowed"
             />
-            <CourseSearchInput checkboxId={node.original_checkbox || ''} onCourseSelect={handleCourseSelect} onClearSelection={handleClearSelection} />
+            <CourseSearchInput checkboxId={node.original_checkbox || ''} onCourseSelect={handleCourseSelect} onClearSelection={handleClearSelection} selectedCourse={node.selected_course} />
           </>
         )}
         {!hasChildren && node.requirement_type !== 'checkbox' && (

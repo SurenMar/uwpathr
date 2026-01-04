@@ -82,7 +82,7 @@ class UserCourseCreateSerializer(serializers.ModelSerializer):
 				return attrs
 			else:
 				raise serializers.ValidationError(
-					"Prerequisites for this course have not been met"
+					"Prerequisites for this course have not been met."
 				)
 
 		return attrs
