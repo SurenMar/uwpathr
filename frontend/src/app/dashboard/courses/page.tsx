@@ -43,7 +43,8 @@ export default function CoursesPage() {
     const [deletingIds, setDeletingIds] = useState<Set<number>>(new Set());
     const [pathModalOpen, setPathModalOpen] = useState(false);
     const [selectedCourseForPath, setSelectedCourseForPath] = useState<{
-        id: number;
+        userCourseId: number;
+        courseId: number;
         name: string;
     } | null>(null);
 
@@ -61,9 +62,14 @@ export default function CoursesPage() {
         }
     };
 
-    const handleOpenPathModal = (courseId: number, courseName: string) => {
-        setSelectedCourseForPath({ id: courseId, name: courseName });
+    const handleOpenPathModal = (userCourseId: number, courseId: number, courseName: string) => {
+        setSelectedCourseForPath({ userCourseId, courseId, name: courseName });
         setPathModalOpen(true);
+    };
+
+    const handlePathSaved = () => {
+        // Refresh the course list to update has_course_path
+        refetch();
     };
 
     const groupedCourses = useMemo(() => {
@@ -311,7 +317,7 @@ export default function CoursesPage() {
                                                         <div className='ml-auto flex items-center gap-2'>
                                                             {(section.type === 'planned' || section.type === 'wishlist') && (
                                                                 <button
-                                                                    onClick={() => handleOpenPathModal(userCourse.course.id, `${userCourse.course.code} ${userCourse.course.number}`)}
+                                                                    onClick={() => handleOpenPathModal(userCourse.id, userCourse.course.id, `${userCourse.course.code} ${userCourse.course.number}`)}
                                                                     className='inline-flex items-center gap-2 px-3 py-1 text-sm font-medium rounded-md bg-blue-100 text-blue-800 hover:bg-blue-200 transition-colors'
                                                                 >
                                                                     {userCourse.has_course_path ? 'View Path' : 'Create Path'}
@@ -365,8 +371,10 @@ export default function CoursesPage() {
                     setPathModalOpen(false);
                     setSelectedCourseForPath(null);
                 }}
-                courseId={selectedCourseForPath?.id || 0}
+                userCourseId={selectedCourseForPath?.userCourseId || 0}
+                courseId={selectedCourseForPath?.courseId || 0}
                 courseName={selectedCourseForPath?.name || ''}
+                onPathSaved={handlePathSaved}
             />
         </main>
     );

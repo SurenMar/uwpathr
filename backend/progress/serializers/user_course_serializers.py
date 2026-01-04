@@ -102,12 +102,21 @@ class UserPathNodeListSerializer(serializers.ModelSerializer):
 	prerequisite_node = serializers.PrimaryKeyRelatedField(
 		queryset=CoursePrerequisiteNode.objects.all()
 	)
+	parent = serializers.SerializerMethodField()
+	
+	def get_parent(self, obj):
+		"""Return parent node ID or null if no parent"""
+		if obj.parent:
+			return {
+				'id': obj.parent.id
+			}
+		return None
 	
 	class Meta:
 		model = UserCoursePathNode
 		fields = [
 			'id', 'created_at', 'updated_at', 'prerequisite_node', 'target_course',
-			'branch_completed'
+			'branch_completed', 'parent'
 		]
 		
 

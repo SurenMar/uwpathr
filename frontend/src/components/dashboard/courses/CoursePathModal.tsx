@@ -30,15 +30,19 @@ interface SelectedPathNode {
 interface CoursePathModalProps {
   isOpen: boolean;
   onClose: () => void;
-  courseId: number;
+  userCourseId: number; // UserCourse ID for saving path
+  courseId: number; // Course ID for fetching prerequisites
   courseName: string;
+  onPathSaved?: () => void;
 }
 
 export default function CoursePathModal({
   isOpen,
+  userCourseId,
   onClose,
   courseId,
   courseName,
+  onPathSaved,
 }: CoursePathModalProps) {
   const [rootNode, setRootNode] = useState<CoursePathNode | null>(null);
   const [loading, setLoading] = useState(false);
@@ -46,6 +50,7 @@ export default function CoursePathModal({
   const [expandedNodeIds, setExpandedNodeIds] = useState<Set<string>>(new Set());
   const [selectedNodeIds, setSelectedNodeIds] = useState<Set<string>>(new Set());
   const [selectedPathTree, setSelectedPathTree] = useState<SelectedPathNode | null>(null);
+  const [saving, setSaving] = useState(false);
 
   // Reset state when modal closes or courseId changes
   useEffect(() => {
@@ -57,7 +62,7 @@ export default function CoursePathModal({
       setSelectedNodeIds(new Set());
       setSelectedPathTree(null);
     }
-  }, [isOpen, courseId]);
+  }, [isOpen, userCourseId]);
 
   // Fetch prerequisite tree when modal opens
   useEffect(() => {
@@ -80,8 +85,18 @@ export default function CoursePathModal({
         
         // The API returns an array directly (not paginated)
         if (Array.isArray(data) && data.length > 0) {
-          console.log('Root node:', data[0]);
-          setRootNode(data[0]);
+          // Normalize IDs to strings to ensure consistency
+          const normalizeNodeIds = (node: any): CoursePathNode => {
+            return {
+              ...node,
+              id: String(node.id),
+              children: node.children ? node.children.map(normalizeNodeIds) : [],
+            };
+          };
+          
+          const normalizedRoot = normalizeNodeIds(data[0]);
+          console.log('Root node:', normalizedRoot);
+          setRootNode(normalizedRoot);
           // Expand all nodes by default to show full tree
           const getAllNodeIds = (node: CoursePathNode): string[] => {
             const ids = [node.id];
@@ -92,15 +107,119 @@ export default function CoursePathModal({
             }
             return ids;
           };
-          setExpandedNodeIds(new Set(getAllNodeIds(data[0])));
+          setExpandedNodeIds(new Set(getAllNodeIds(normalizedRoot)));
           
-          // Initialize root node as selected
-          setSelectedNodeIds(new Set([data[0].id]));
-          setSelectedPathTree({
-            prerequisite_node: data[0].id,
-            target_course: courseId,
-            children: []
-          });
+          // Try to fetch existing path
+          try {
+            const pathUrl = `${process.env.NEXT_PUBLIC_HOST}/api/user-path-nodes/?target_course=${userCourseId}`;
+            const pathResponse = await fetch(pathUrl, {
+              credentials: 'include',
+            });
+            
+            if (pathResponse.ok) {
+              const pathDataArray = await pathResponse.json();
+              console.log('Existing path data:', pathDataArray);
+              console.log('Path data array length:', pathDataArray?.length);
+              if (pathDataArray && pathDataArray.length > 0) {
+                console.log('First path node:', pathDataArray[0]);
+                console.log('First node prerequisite_node type and value:', typeof pathDataArray[0].prerequisite_node, pathDataArray[0].prerequisite_node);
+              }
+              
+              // API returns array of nodes, find the root (parent__isnull=True)
+              if (pathDataArray && Array.isArray(pathDataArray) && pathDataArray.length > 0) {
+                // Reconstruct the tree structure from flat list
+                const buildTreeFromPathNodes = (nodes: any[]): SelectedPathNode | null => {
+                  // Find root node (the one with no parent)
+                  const rootNode = nodes.find(node => !node.parent);
+                  if (!rootNode) return null;
+                  
+                  // Helper to build tree recursively
+                  const buildNode = (nodeData: any): SelectedPathNode => {
+                    const children = nodes
+                      .filter(node => node.parent && node.parent.id === nodeData.id)
+                      .map(child => buildNode(child));
+                    
+                    // Handle prerequisite_node as either an object or a number
+                    const prerequisiteNodeId = typeof nodeData.prerequisite_node === 'object' 
+                      ? nodeData.prerequisite_node.id 
+                      : nodeData.prerequisite_node;
+                    
+                    return {
+                      prerequisite_node: String(prerequisiteNodeId),
+                      target_course: nodeData.target_course.id,
+                      children
+                    };
+                  };
+                  
+                  return buildNode(rootNode);
+                };
+                
+                const tree = buildTreeFromPathNodes(pathDataArray);
+                
+                if (tree) {
+                  // Extract all selected node IDs from the tree
+                  const getSelectedNodeIds = (node: SelectedPathNode): string[] => {
+                    const ids = [node.prerequisite_node];
+                    if (node.children) {
+                      node.children.forEach(child => {
+                        ids.push(...getSelectedNodeIds(child));
+                      });
+                    }
+                    return ids;
+                  };
+                  
+                  const selectedIds = getSelectedNodeIds(tree);
+                  const allTreeNodeIds = getAllNodeIds(normalizedRoot);
+                  console.log('Tree structure:', JSON.stringify(tree, null, 2));
+                  console.log('Extracted selectedIds:', selectedIds);
+                  console.log('All prerequisite tree node IDs:', allTreeNodeIds);
+                  
+                  // Check if all selectedIds are in the tree
+                  const missingIds = selectedIds.filter(id => !allTreeNodeIds.includes(id));
+                  if (missingIds.length > 0) {
+                    console.warn('WARNING: The following selected node IDs are NOT in the prerequisite tree:', missingIds);
+                  }
+                  
+                  setSelectedNodeIds(new Set(selectedIds));
+                  setSelectedPathTree(tree);
+                  console.log('Loaded existing path with selected nodes:', selectedIds);
+                } else {
+                  // Empty path array, initialize root as selected
+                  setSelectedNodeIds(new Set([normalizedRoot.id]));
+                  setSelectedPathTree({
+                    prerequisite_node: normalizedRoot.id,
+                    target_course: userCourseId,
+                    children: []
+                  });
+                }
+              } else {
+                // No existing path, initialize root as selected
+                setSelectedNodeIds(new Set([normalizedRoot.id]));
+                setSelectedPathTree({
+                  prerequisite_node: normalizedRoot.id,
+                  target_course: userCourseId,
+                  children: []
+                });
+              }
+            } else {
+              // No path found or error, initialize root as selected
+              setSelectedNodeIds(new Set([normalizedRoot.id]));
+              setSelectedPathTree({
+                prerequisite_node: normalizedRoot.id,
+                target_course: userCourseId,
+                children: []
+              });
+            }
+          } catch (pathErr) {
+            console.log('Error fetching path, using default:', pathErr);
+            // Initialize root node as selected
+            setSelectedNodeIds(new Set([normalizedRoot.id]));
+            setSelectedPathTree({
+              prerequisite_node: normalizedRoot.id,
+              target_course: userCourseId,
+              children: []
+            });
+          }
         }
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
@@ -110,7 +229,77 @@ export default function CoursePathModal({
     };
 
     fetchPrerequisiteTree();
-  }, [isOpen, courseId]);
+  }, [isOpen, courseId, userCourseId]);
+
+  // Save path handler
+  const handleSavePath = async () => {
+    if (!selectedPathTree) return;
+    
+    setSaving(true);
+    try {
+      // Helper function to convert children - must be defined before use
+      const convertChildrenToPayload = (children: SelectedPathNode[]): any[] => {
+        return children.map(child => {
+          const nodeId = parseInt(child.prerequisite_node);
+          if (isNaN(nodeId)) {
+            console.error('Invalid prerequisite_node:', child.prerequisite_node, 'for child:', child);
+          }
+          return {
+            prerequisite_node: nodeId,
+            target_course: userCourseId,
+            children: convertChildrenToPayload(child.children)
+          };
+        });
+      };
+      
+      // Build the final payload with target_course at root level
+      const rootNodeId = parseInt(selectedPathTree.prerequisite_node);
+      if (isNaN(rootNodeId)) {
+        console.error('Invalid root prerequisite_node:', selectedPathTree.prerequisite_node);
+        setError('Invalid path data - root node ID is missing');
+        setSaving(false);
+        return;
+      }
+      
+      const finalPayload = {
+        prerequisite_node: rootNodeId,
+        target_course: userCourseId,
+        children: convertChildrenToPayload(selectedPathTree.children)
+      };
+      
+      console.log('Saving path tree payload:', JSON.stringify(finalPayload, null, 2));
+      
+      const url = `${process.env.NEXT_PUBLIC_HOST}/api/user-path-nodes/`;
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify(finalPayload),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Backend error response:', errorData);
+        throw new Error(JSON.stringify(errorData));
+      }
+      
+      console.log('Path saved successfully');
+      
+      // Call the callback to refresh the course list
+      if (onPathSaved) {
+        onPathSaved();
+      }
+      
+      onClose();
+    } catch (err) {
+      console.error('Error saving path:', err);
+      setError(err instanceof Error ? err.message : 'Failed to save path');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const toggleNodeExpanded = (nodeId: string) => {
     setExpandedNodeIds(prev => {
@@ -217,7 +406,7 @@ export default function CoursePathModal({
           ...tree.children,
           {
             prerequisite_node: nodeId,
-            target_course: courseId,
+            target_course: userCourseId,
             children: []
           }
         ]
@@ -276,6 +465,11 @@ export default function CoursePathModal({
     const hasChildren = node.children && node.children.length > 0;
     const isSelected = selectedNodeIds.has(node.id);
     const isSelectable = canSelectNode(node.id);
+    
+    // Debug logging for root node
+    if (depth === 0) {
+      console.log('Rendering root node:', node.id, 'isSelected:', isSelected, 'selectedNodeIds:', Array.from(selectedNodeIds));
+    }
     
     // Tree line characters
     const connector = isLast ? '└── ' : '├── ';
@@ -484,9 +678,11 @@ export default function CoursePathModal({
             Close
           </button>
           <button
-            className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors"
+            onClick={handleSavePath}
+            disabled={saving || !selectedPathTree}
+            className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Save Path
+            {saving ? 'Saving...' : 'Save Path'}
           </button>
         </div>
       </div>
