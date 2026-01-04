@@ -8,12 +8,20 @@ from progress.serializers.user_requirements_serializers import UserCourseMinimal
 
 class UserCourseListSerializer(serializers.ModelSerializer):
 	course = CourseListSerializer(read_only=True)
+	has_course_path = serializers.SerializerMethodField()
 
 	class Meta:
 		model = UserCourse
 		fields = [
-			'id', 'created_at', 'updated_at', 'course', 'course_list',
+			'id', 'created_at', 'updated_at', 'course', 'course_list', 'has_course_path',
 		]
+
+	def get_has_course_path(self, obj):
+		"""Check if a course path exists for this user course"""
+		return UserCoursePathNode.objects.filter(
+			target_course=obj,
+			parent__isnull=True
+		).exists()
 
 
 class UserCourseDetailSerializer(serializers.ModelSerializer):

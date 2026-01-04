@@ -27,6 +27,8 @@ class CourseDetailSerializer(serializers.ModelSerializer):
 class CoursePrerequisiteNodeListSerializer(serializers.ModelSerializer):
 	# Read-only method field that calls get_children on access
 	children = serializers.SerializerMethodField()
+	leaf_course = CourseListSerializer(read_only=True)
+	target_course = CourseListSerializer(read_only=True)
 	
 	class Meta:
 		model = CoursePrerequisiteNode

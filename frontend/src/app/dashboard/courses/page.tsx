@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import { useGetUserCoursesQuery, useDeleteUserCourseMutation } from '@/store/features/progress/progressApiSlice';
 import Spinner from '@/components/common/Spinner';
+import CoursePathModal from '@/components/dashboard/courses/CoursePathModal';
 
 type CourseList = 'taken' | 'planned' | 'wishlist';
 
@@ -40,6 +41,11 @@ export default function CoursesPage() {
     });
     const [deleteUserCourse] = useDeleteUserCourseMutation();
     const [deletingIds, setDeletingIds] = useState<Set<number>>(new Set());
+    const [pathModalOpen, setPathModalOpen] = useState(false);
+    const [selectedCourseForPath, setSelectedCourseForPath] = useState<{
+        id: number;
+        name: string;
+    } | null>(null);
 
     const handleRemoveCourse = async (userCourseId: number) => {
         setDeletingIds(prev => new Set([...prev, userCourseId]));
@@ -53,6 +59,11 @@ export default function CoursesPage() {
                 return newSet;
             });
         }
+    };
+
+    const handleOpenPathModal = (courseId: number, courseName: string) => {
+        setSelectedCourseForPath({ id: courseId, name: courseName });
+        setPathModalOpen(true);
     };
 
     const groupedCourses = useMemo(() => {
@@ -297,7 +308,15 @@ export default function CoursesPage() {
                                                                 </div>
                                                             )}
                                                         </div>
-                                                        <div className='ml-auto'>
+                                                        <div className='ml-auto flex items-center gap-2'>
+                                                            {(section.type === 'planned' || section.type === 'wishlist') && (
+                                                                <button
+                                                                    onClick={() => handleOpenPathModal(userCourse.course.id, `${userCourse.course.code} ${userCourse.course.number}`)}
+                                                                    className='inline-flex items-center gap-2 px-3 py-1 text-sm font-medium rounded-md bg-blue-100 text-blue-800 hover:bg-blue-200 transition-colors'
+                                                                >
+                                                                    {userCourse.has_course_path ? 'View Path' : 'Create Path'}
+                                                                </button>
+                                                            )}
                                                             <button
                                                                 onClick={() => handleRemoveCourse(userCourse.id)}
                                                                 disabled={deletingIds.has(userCourse.id)}
@@ -339,6 +358,16 @@ export default function CoursesPage() {
                     })}
                 </div>
             </div>
+
+            <CoursePathModal
+                isOpen={pathModalOpen}
+                onClose={() => {
+                    setPathModalOpen(false);
+                    setSelectedCourseForPath(null);
+                }}
+                courseId={selectedCourseForPath?.id || 0}
+                courseName={selectedCourseForPath?.name || ''}
+            />
         </main>
     );
 }

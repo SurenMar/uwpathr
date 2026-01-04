@@ -56,6 +56,7 @@ class CoursePrerequisiteNodeViewSet(ReadOnlyModelViewSet):
   """
   ViewSet for MPTT model
   """
+  permission_classes = [AllowAny]
   # Prefetch queryset
   queryset = CoursePrerequisiteNode.objects.filter(
     parent__isnull=True  # Only return root nodes
