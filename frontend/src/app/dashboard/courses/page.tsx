@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { useGetUserCoursesQuery } from '@/store/features/progress/progressApiSlice';
 import Spinner from '@/components/common/Spinner';
 
@@ -32,6 +32,7 @@ const COURSE_SECTIONS: CourseSection[] = [
 
 export default function CoursesPage() {
     const { data: courses, isLoading, error } = useGetUserCoursesQuery();
+    const [expandedCodes, setExpandedCodes] = useState<Record<string, boolean>>({});
 
     const groupedCourses = useMemo(() => {
         const initial: Record<CourseList, typeof courses> = {
@@ -124,40 +125,86 @@ export default function CoursesPage() {
                 <div className='grid gap-8'>
                     {COURSE_SECTIONS.map(section => {
                         const sectionCourses = groupedCourses[section.type] || [];
+                        
+                        // Group courses by code
+                        const coursesByCode = useMemo(() => {
+                            const grouped: Record<string, typeof sectionCourses> = {};
+                            sectionCourses.forEach(course => {
+                                if (!grouped[course.course.code]) {
+                                    grouped[course.course.code] = [];
+                                }
+                                grouped[course.course.code].push(course);
+                            });
+                            // Sort by code alphabetically
+                            return Object.entries(grouped).sort((a, b) => a[0].localeCompare(b[0]));
+                        }, [sectionCourses]);
+                        
+                        const bgColor = section.type === 'taken' ? 'bg-green-50' : 
+                                       section.type === 'planned' ? 'bg-blue-50' : 
+                                       'bg-purple-50';
+                        const textColor = section.type === 'taken' ? 'text-green-900' : 
+                                         section.type === 'planned' ? 'text-blue-900' : 
+                                         'text-purple-900';
                         return (
-                            <section
-                                key={section.type}
-                                className='overflow-hidden rounded-lg bg-white shadow'
-                            >
-                                <div className='border-b border-gray-200 px-6 py-4'>
-                                    <h2 className='text-xl font-semibold text-gray-900'>
-                                        {section.title}{' '}
-                                        <span className='text-sm font-normal text-gray-600'>
-                                            ({sectionCourses.length})
-                                        </span>
+                            <section key={section.type}>
+                                <div className={`${bgColor} px-6 py-5 rounded-t-lg border-b-4 ${section.type === 'taken' ? 'border-green-400' : section.type === 'planned' ? 'border-blue-400' : 'border-purple-400'}`}>
+                                    <h2 className={`text-2xl font-bold ${textColor}`}>
+                                        {section.title}
                                     </h2>
-                                    <p className='mt-1 text-sm text-gray-600'>
+                                    <p className={`mt-1 text-sm ${section.type === 'taken' ? 'text-green-700' : section.type === 'planned' ? 'text-blue-700' : 'text-purple-700'}`}>
                                         {section.description}
+                                    </p>
+                                    <p className='mt-2 text-sm font-medium text-gray-700'>
+                                        {sectionCourses.length} course{sectionCourses.length !== 1 ? 's' : ''}
                                     </p>
                                 </div>
 
-                                {sectionCourses.length === 0 ? (
-                                    <div className='px-6 py-8 text-center'>
-                                        <p className='text-gray-500'>
-                                            No {section.title.toLowerCase()} courses yet.
-                                        </p>
-                                    </div>
-                                ) : (
-                                    <ul className='divide-y divide-gray-200'>
-                                        {sectionCourses.map(userCourse => (
-                                            <li
-                                                key={userCourse.id}
-                                                className='px-6 py-4 hover:bg-gray-50 transition-colors'
-                                            >
+                                <div className='overflow-hidden rounded-b-lg bg-white shadow'>
+                                    {sectionCourses.length === 0 ? (
+                                        <div className='px-6 py-8 text-center'>
+                                            <p className='text-gray-500'>
+                                                No {section.title.toLowerCase()} courses yet.
+                                            </p>
+                                        </div>
+                                    ) : (
+                                    <div className='p-4 space-y-6'>
+                                        {coursesByCode.map(([code, coursesInCode]) => {
+                                            const isExpanded = expandedCodes[code] !== false; // Default to expanded
+                                            const toggleExpanded = () => {
+                                                setExpandedCodes(prev => ({
+                                                    ...prev,
+                                                    [code]: !prev[code]
+                                                }));
+                                            };
+                                            return (
+                                            <div key={code}>
+                                                <button
+                                                    onClick={toggleExpanded}
+                                                    className='w-full text-left flex items-center gap-2 px-2 py-2 mb-3 border-l-4 border-gray-400 hover:bg-gray-100 rounded transition-colors'
+                                                >
+                                                    <svg
+                                                        className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-90' : ''}`}
+                                                        fill='none'
+                                                        stroke='currentColor'
+                                                        viewBox='0 0 24 24'
+                                                    >
+                                                        <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
+                                                    </svg>
+                                                    <h3 className='text-lg font-semibold text-gray-700'>
+                                                        {code}
+                                                    </h3>
+                                                </button>
+                                                {isExpanded && (
+                                                <ul className='space-y-3'>
+                                                    {coursesInCode.map(userCourse => (
+                                                        <li
+                                                            key={userCourse.id}
+                                                            className='px-6 py-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors ml-4'
+                                                        >
                                                 <div className='flex items-start justify-between'>
                                                     <div className='flex-1'>
                                                         <h3 className='font-semibold text-gray-900'>
-                                                            {userCourse.course.code}
+                                                            {userCourse.course.code} {userCourse.course.number}
                                                         </h3>
                                                         <p className='mt-1 text-sm text-gray-600'>
                                                             {userCourse.course.title}
@@ -186,8 +233,14 @@ export default function CoursesPage() {
                                                 </div>
                                             </li>
                                         ))}
-                                    </ul>
+                                                </ul>
+                                                )}
+                                            </div>
+                                            );
+                                        })}
+                                    </div>
                                 )}
+                                </div>
                             </section>
                         );
                     })}
