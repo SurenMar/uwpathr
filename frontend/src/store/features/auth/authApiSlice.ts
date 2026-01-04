@@ -25,6 +25,7 @@ interface UserChecklistNode {
 	units_gathered: number | null;
 	children: UserChecklistNode[];
 	completed: boolean;
+	original_checkbox: string;
 }
 
 interface UserChecklist {
@@ -114,6 +115,41 @@ const authApiSlice = apiSlice.injectEndpoints({
 				body: { specialization, year },
 			}),
 		}),
+		createUserCourse: builder.mutation<void, { courseId: string }>({ 
+			query: ({ courseId }) => ({
+				url: '/user-courses/',
+				method: 'POST',
+				body: { course: courseId, course_list: 'taken' },
+			}),
+		}),
+		updateCheckboxNode: builder.mutation<void, { nodeId: string; selectedCourseId: string | null }>({ 
+			query: ({ nodeId, selectedCourseId }) => ({
+				url: `/user-checklist-nodes/${nodeId}/`,
+				method: 'PATCH',
+				body: { selected_course: selectedCourseId },
+			}),
+			async onQueryStarted({ nodeId, selectedCourseId }, { dispatch, queryFulfilled }) {
+				// First, create the user course if we're setting a course
+				if (selectedCourseId) {
+					try {
+						await dispatch(
+							authApiSlice.endpoints.createUserCourse.initiate({ courseId: selectedCourseId })
+						).unwrap();
+					} catch (err) {
+						console.error('Failed to create user course:', err);
+						throw err;
+					}
+				}
+
+				try {
+					await queryFulfilled;
+					// Refetch the user checklists after updating
+					dispatch(authApiSlice.endpoints.retrieveUserChecklists.initiate());
+				} catch (err) {
+					console.error('Failed to update checkbox node:', err);
+				}
+			},
+		}),
 	})
 });
 
@@ -127,4 +163,6 @@ export const {
 	useVerifyMutation,
 	useLogoutMutation,
 	useCreateChecklistMutation,
+	useCreateUserCourseMutation,
+	useUpdateCheckboxNodeMutation,
 } = authApiSlice;

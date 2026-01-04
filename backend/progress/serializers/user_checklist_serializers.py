@@ -15,7 +15,7 @@ class UserChecklistNodeListSerializer(serializers.ModelSerializer):
     fields = [
       'id', 'created_at', 'updated_at', 'requirement_type', 'title', 
       'units_required', 'units_gathered', 'completed', 'selected_course',
-      'children',
+      'original_checkbox', 'children',
     ]
 
   def get_children(self, obj):

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { useRetrieveUserChecklistsQuery, useRetrieveCheckboxAllowedCoursesQuery } from '@/store/features/auth/authApiSlice';
+import { useRetrieveUserChecklistsQuery, useRetrieveCheckboxAllowedCoursesQuery, useUpdateCheckboxNodeMutation } from '@/store/features/auth/authApiSlice';
 import { Spinner } from '@/components/common';
 
 interface ChecklistNode {
@@ -12,6 +12,7 @@ interface ChecklistNode {
   units_gathered: number | null;
   children: ChecklistNode[];
   completed: boolean;
+  original_checkbox: string;
 }
 
 interface Course {
@@ -20,21 +21,36 @@ interface Course {
   number: string;
 }
 
-function CourseSearchInput({ checkboxId }: { checkboxId: string }) {
+function CourseSearchInput({ checkboxId, onCourseSelect, onClearSelection }: { checkboxId: string; onCourseSelect: (course: Course) => void; onClearSelection: () => void }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   
-  const { data: allowedCoursesData, isLoading, error } = useRetrieveCheckboxAllowedCoursesQuery(checkboxId);
+  const { data: allowedCoursesData, isLoading, error } = useRetrieveCheckboxAllowedCoursesQuery(checkboxId, {
+    skip: !checkboxId,
+  });
 
   // Extract courses from the response
   const courses = allowedCoursesData && allowedCoursesData.length > 0 ? allowedCoursesData[0].courses : [];
 
-  const filteredCourses = courses.filter(course => 
-    searchTerm === '' || 
-    course.code.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    course.number.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredCourses = courses.filter(course => {
+    if (searchTerm === '') return true;
+    
+    const trimmedSearch = searchTerm.trim();
+    const spaceIndex = trimmedSearch.indexOf(' ');
+    
+    if (spaceIndex === -1) {
+      // No space typed, only filter by code
+      return course.code.toLowerCase().includes(trimmedSearch.toLowerCase());
+    } else {
+      // Space typed, filter by both code and number
+      const codePart = trimmedSearch.substring(0, spaceIndex).toLowerCase();
+      const numberPart = trimmedSearch.substring(spaceIndex + 1).toLowerCase();
+      
+      return course.code.toLowerCase().includes(codePart) && 
+             String(course.number).toLowerCase().includes(numberPart);
+    }
+  });
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -58,6 +74,14 @@ function CourseSearchInput({ checkboxId }: { checkboxId: string }) {
         type="text"
         value={searchTerm}
         onChange={(e) => setSearchTerm(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            if (searchTerm.trim() === '') {
+              onClearSelection();
+            }
+            setShowDropdown(false);
+          }
+        }}
         onFocus={() => setShowDropdown(true)}
         placeholder="Search courses..."
         className="w-48 px-2 py-1 text-sm border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -81,13 +105,13 @@ function CourseSearchInput({ checkboxId }: { checkboxId: string }) {
               <button
                 key={course.id}
                 onClick={() => {
-                  setSearchTerm(course.code);
+                  setSearchTerm(`${course.code} ${course.number}`);
                   setShowDropdown(false);
+                  onCourseSelect(course);
                 }}
                 className="w-full text-left px-3 py-2 hover:bg-gray-100 transition-colors"
               >
-                <div className="font-medium text-sm">{course.code}</div>
-                <div className="text-xs text-gray-600">{course.number}</div>
+                <div className="font-medium text-sm">{course.code} {course.number}</div>
               </button>
             ))
           )}
@@ -99,11 +123,23 @@ function CourseSearchInput({ checkboxId }: { checkboxId: string }) {
 
 function ChecklistNodeComponent({ node, level = 0 }: { node: ChecklistNode; level?: number }) {
   const [isExpanded, setIsExpanded] = useState(true);
+  const [isChecked, setIsChecked] = useState(node.completed);
+  const [updateCheckboxNode] = useUpdateCheckboxNodeMutation();
   const hasChildren = node.children && node.children.length > 0;
   
   const bgColor = node.requirement_type === 'head' ? 'bg-blue-50' : 
                   node.requirement_type === 'group' ? 'bg-gray-50' : 
                   'bg-white';
+  
+  const handleCourseSelect = (course: Course) => {
+    setIsChecked(true);
+    updateCheckboxNode({ nodeId: node.id, selectedCourseId: course.id });
+  };
+
+  const handleClearSelection = () => {
+    setIsChecked(false);
+    updateCheckboxNode({ nodeId: node.id, selectedCourseId: null });
+  };
   
   return (
     <div className={`${bgColor} border-b border-gray-200`}>
@@ -127,11 +163,11 @@ function ChecklistNodeComponent({ node, level = 0 }: { node: ChecklistNode; leve
           <>
             <input
               type="checkbox"
-              checked={node.completed}
-              readOnly
-              className="w-4 h-4 rounded border-gray-300 flex-shrink-0"
+              checked={isChecked}
+              disabled
+              className="w-4 h-4 rounded border-gray-300 flex-shrink-0 cursor-not-allowed"
             />
-            <CourseSearchInput checkboxId={node.id} />
+            <CourseSearchInput checkboxId={node.original_checkbox || ''} onCourseSelect={handleCourseSelect} onClearSelection={handleClearSelection} />
           </>
         )}
         {!hasChildren && node.requirement_type !== 'checkbox' && (
