@@ -1,4 +1,4 @@
-import { ChangeEvent, FormEvent } from 'react';
+import { ChangeEvent, FormEvent, ReactNode } from 'react';
 import { Input } from '@/components/forms/auth';
 import Spinner from '@/components/common/Spinner';
 
@@ -21,6 +21,7 @@ interface Props {
 	btnText: string;
 	onChange: (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void;
 	onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+	extraContent?: ReactNode;
 }
 
 export default function Form({
@@ -29,6 +30,7 @@ export default function Form({
 	btnText,
 	onChange,
 	onSubmit,
+	extraContent,
 }: Props) {
 	return (
 		<form className='space-y-6' onSubmit={onSubmit}>
@@ -46,6 +48,8 @@ export default function Form({
 					{input.labelText}
 				</Input>
 			))}
+
+			{extraContent}
 
 			<div>
 				<button

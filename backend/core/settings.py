@@ -115,6 +115,12 @@ elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
 DOMAIN = getenv('DOMAIN')
 SITE_NAME = 'UWPathr'
 
+TURNSTILE_SECRET_KEY = getenv('TURNSTILE_SECRET_KEY')
+TURNSTILE_VERIFY_TIMEOUT = int(getenv('TURNSTILE_VERIFY_TIMEOUT', '5'))
+TURNSTILE_REPLAY_CACHE_SECONDS = int(
+  getenv('TURNSTILE_REPLAY_CACHE_SECONDS', '600')
+)
+
 
 # Password
 
@@ -205,6 +211,9 @@ DJOSER = {
   'USER_CREATE_PASSWORD_RETYPE': True,
   'TOKEN_MODEL': None,
   'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': getenv('REDIRECT_URLS').split(','),
+  'SERIALIZERS': {
+    'user_create': 'users.serializers.CaptchaUserCreateSerializer',
+  },
 }
 
 AUTH_COOKIE = 'access'

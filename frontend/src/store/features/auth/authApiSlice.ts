@@ -17,6 +17,15 @@ interface CreateUserResponse {
 	user: User;
 }
 
+interface RegisterArgs {
+	first_name: string;
+	start_year: number;
+	email: string;
+	password: string;
+	re_password: string;
+	captcha_token: string;
+}
+
 interface UserChecklistNode {
 	id: string;
 	title: string;
@@ -84,17 +93,25 @@ const authApiSlice = apiSlice.injectEndpoints({
 				body: { email, password },
 			}),
 		}),
-		register: builder.mutation({
+		register: builder.mutation<void, RegisterArgs>({
 			query: ({
 				first_name,
         start_year,
 				email,
 				password,
 				re_password,
+				captcha_token,
 			}) => ({
 				url: '/users/',
 				method: 'POST',
-				body: { first_name, start_year, email, password, re_password },
+				body: {
+					first_name,
+          start_year,
+					email,
+					password,
+					re_password,
+					captcha_token,
+				},
 			}),
 		}),
 		verify: builder.mutation({
