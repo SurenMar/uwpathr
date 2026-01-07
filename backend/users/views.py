@@ -2,6 +2,8 @@ from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from users.rate_limits import *
+from djoser.views import UserViewSet
 from djoser.social.views import ProviderAuthView
 from rest_framework_simplejwt.views import (
   TokenObtainPairView,
@@ -10,7 +12,16 @@ from rest_framework_simplejwt.views import (
 )
 
 
+class CustomUserViewSet(UserViewSet):
+  def get_throttles(self):
+    if self.action == 'create':  # POST /users/
+      return [SignUpThrottle()]
+    return super().get_throttles()
+
+
+# OAuth endpoint
 class CustomProviderAuthView(ProviderAuthView):
+  throttle_classes = [OAuthThrottle]
   def post(self, request, *args, **kwargs):
     response = super().post(request, *args, **kwargs)
 
@@ -46,6 +57,7 @@ class CustomProviderAuthView(ProviderAuthView):
 
 # Grab tokens from request body and place them in cookies
 class CustomTokenObtainPairView(TokenObtainPairView):
+  throttle_classes = [LoginThrottle]
   def post(self, request, *args, **kwargs):
     response = super().post(request, *args, **kwargs)
 
@@ -82,6 +94,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 # Grab refresh token from cookies, place in request body, and place the
 #   newly generated access token inside cookies
 class CustomTokenRefreshView(TokenRefreshView):
+  throttle_classes = [TokenRefreshThrottle]
   def post(self, request, *args, **kwargs):
     refresh_token = request.COOKIES.get('refresh')
 
@@ -110,6 +123,7 @@ class CustomTokenRefreshView(TokenRefreshView):
 
 # Grab access token from cookies and place in request body
 class CustomTokenVerifyView(TokenVerifyView):
+  throttle_classes = [TokenVerifyThrottle]
   def post(self, request, *args, **kwargs):
     access_token = request.COOKIES.get('access')
 
@@ -119,6 +133,7 @@ class CustomTokenVerifyView(TokenVerifyView):
     return super().post(request, *args, **kwargs)
   
 class LogoutView(APIView):
+  throttle_classes = [LogoutThrottle]
   def post(self, request, *args, **kwargs):
     response = Response(status=status.HTTP_204_NO_CONTENT)
     response.delete_cookie('access')
@@ -128,6 +143,7 @@ class LogoutView(APIView):
 
 
 class DeleteAccountView(APIView):
+  throttle_classes = [DeleteAccountThrottle]
   def delete(self, request, *args, **kwargs):
     user = request.user
     user.delete()
