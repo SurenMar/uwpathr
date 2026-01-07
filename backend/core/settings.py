@@ -1,5 +1,3 @@
-import sys
-import dj_database_url
 from os import getenv, path
 from pathlib import Path
 from datetime import timedelta
@@ -92,12 +90,6 @@ if DEVELOPMENT_MODE is True:
           'PORT': getenv('DB_PORT'),
       }
   }
-elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
-  if getenv('DATABASE_URL', None) is None:
-    raise Exception('DATABASE_URL environment variable not defined')
-  DATABASES = {
-    'default': dj_database_url.parse(getenv('DATABASE_URL')),
-  }
 
 
 # Email settings
@@ -155,30 +147,13 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
+# Static files (admin)
 
 if DEVELOPMENT_MODE is True:
   STATIC_URL = 'static/'
   STATIC_ROOT = BASE_DIR / 'static'
   MEDIA_URL = 'media/'
   MEDIA_ROOT = BASE_DIR / 'media'
-else:
-  AWS_S3_ACCESS_KEY_ID = getenv('AWS_S3_ACCESS_KEY_ID')
-  AWS_S3_SECRET_ACCESS_KEY = getenv('AWS_S3_SECRET_ACCESS_KEY')
-  AWS_STORAGE_BUCKET_NAME = getenv('AWS_STORAGE_BUCKET_NAME')
-  AWS_S3_REGION_NAME = getenv('AWS_S3_REGION_NAME')
-  AWS_S3_ENDPOINT_URL = f'https://{AWS_S3_REGION_NAME}.digitaloceanspaces.com'
-  AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400'
-  }
-  AWS_DEFAULT_ACL = 'public-read'
-  AWS_LOCATION = 'static'
-  AWS_MEDIA_LOCATION = 'media'
-  AWS_S3_CUSTOM_DOMAIN = getenv('AWS_S3_CUSTOM_DOMAIN')
-  STORAGES = {
-    'default': {'BACKEND': 'custom_storages.CustomS3Boto3Storage'},
-    'staticfiles': {'BACKEND': 'storages.backends.s3boto3.S3StaticStorage'}
-  }
 
 
 AUTHENTICATION_BACKENDS = {
