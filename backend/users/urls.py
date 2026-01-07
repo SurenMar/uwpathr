@@ -1,8 +1,8 @@
-from djoser.urls import router
+from rest_framework.routers import DefaultRouter
 from django.urls import path, re_path
 from users.views import *
 
-router.registry.clear()
+router = DefaultRouter()
 router.register('users', CustomUserViewSet, basename='users')
 
 urlpatterns = [
@@ -11,7 +11,6 @@ urlpatterns = [
     CustomProviderAuthView.as_view(),
     name='provider_auth'
   ),
-  path('users/', CustomUserViewSet.as_view()),
   path('jwt/create/', CustomTokenObtainPairView.as_view()),
   path('jwt/refresh/', CustomTokenRefreshView.as_view()),
   path('jwt/verify/', CustomTokenVerifyView.as_view()),

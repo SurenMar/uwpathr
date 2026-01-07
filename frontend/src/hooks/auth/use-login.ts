@@ -31,10 +31,6 @@ export default function useLogin() {
 			.unwrap()
 			.then(() => {
 				dispatch(setAuth());
-				
-				// After login, check if user has a checklist
-				// This will be handled by a separate effect/component
-				toast.success('Logged in');
 				router.push('/dashboard');
 			})
 			.catch(() => {
