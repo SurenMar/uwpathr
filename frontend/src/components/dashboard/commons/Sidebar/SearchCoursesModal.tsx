@@ -51,7 +51,7 @@ export default function SearchCoursesModal({ isOpen, onClose }: SearchCoursesMod
   useEffect(() => {
     if (isOpen && courses.available.length === 0) {
       setCourses(prev => ({ ...prev, loading: true }));
-      const url = `${process.env.NEXT_PUBLIC_HOST}/api/courses/?limit=10000`;
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/courses/?limit=10000`;
       fetch(url)
         .then(res => {
           if (!res.ok) throw new Error(`HTTP ${res.status}`);

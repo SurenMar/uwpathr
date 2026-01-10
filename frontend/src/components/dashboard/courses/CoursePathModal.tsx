@@ -72,7 +72,7 @@ export default function CoursePathModal({
       setLoading(true);
       setError(null);
       try {
-        const url = `${process.env.NEXT_PUBLIC_HOST}/api/prerequisites/?target_course=${courseId}`;
+        const url = `${process.env.NEXT_PUBLIC_API_URL}/api/prerequisites/?target_course=${courseId}`;
         const response = await fetch(url, {
           credentials: 'include',
         });
@@ -111,7 +111,7 @@ export default function CoursePathModal({
           
           // Try to fetch existing path
           try {
-            const pathUrl = `${process.env.NEXT_PUBLIC_HOST}/api/user-path-nodes/?target_course=${userCourseId}`;
+            const pathUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/user-path-nodes/?target_course=${userCourseId}`;
             const pathResponse = await fetch(pathUrl, {
               credentials: 'include',
             });
@@ -269,7 +269,7 @@ export default function CoursePathModal({
       
       console.log('Saving path tree payload:', JSON.stringify(finalPayload, null, 2));
       
-      const url = `${process.env.NEXT_PUBLIC_HOST}/api/user-path-nodes/`;
+      const url = `${process.env.NEXT_PUBLIC_API_URL}/api/user-path-nodes/`;
       const response = await fetch(url, {
         method: 'POST',
         headers: {

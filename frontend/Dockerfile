@@ -16,6 +16,10 @@ COPY . .
 # Uncomment the following line if you want to disable telemetry during build
 # ENV NEXT_TELEMETRY_DISABLED=1
 
+# Accept build-time arguments for Next.js public env vars
+ARG NEXT_PUBLIC_API_URL
+ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+
 RUN npm run build
 
 # Production image, copy all the files and run next

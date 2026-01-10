@@ -32,7 +32,7 @@ const progressApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getUserCourses: builder.query<UserCourse[], GetUserCoursesParams | void>({
             query: (params) => {
-                const url = new URL('/user-courses/', `${process.env.NEXT_PUBLIC_HOST}/api`);
+                const url = new URL('/user-courses/', `${process.env.NEXT_PUBLIC_API_URL}/api`);
                 
                 if (params && 'course_list' in params && params.course_list) {
                     url.searchParams.append('course_list', params.course_list);
