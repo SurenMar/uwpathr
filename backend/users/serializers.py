@@ -1,5 +1,6 @@
 from typing import Any, Dict
 from rest_framework import serializers
+from django.conf import settings
 from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer
 from .models import UserAccount
 from .turnstile import (
@@ -25,13 +26,16 @@ class CaptchaUserCreateSerializer(BaseUserCreateSerializer):
         )
 
     def validate(self, attrs: Dict[str, Any]) -> Dict[str, Any]:
-        token = attrs.pop('captcha_token', None)
-        request = self.context.get('request')
-        remote_ip = get_remote_ip(request)
+        if getattr(settings, 'CAPTCHA_ENABLED', False):
+            token = attrs.pop('captcha_token', None)
+            request = self.context.get('request')
+            remote_ip = get_remote_ip(request)
 
-        try:
-            verify_turnstile_token(token, remote_ip=remote_ip)
-        except CaptchaVerificationError as exc:
-            raise serializers.ValidationError({'captcha': str(exc)})
+            try:
+                verify_turnstile_token(token, remote_ip=remote_ip)
+            except CaptchaVerificationError as exc:
+                raise serializers.ValidationError({'captcha': str(exc)})
+        else:
+            attrs.pop('captcha_token', None)
 
         return super().validate(attrs)

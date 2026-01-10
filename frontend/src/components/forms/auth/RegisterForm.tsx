@@ -28,7 +28,8 @@ export default function RegisterForm() {
 		setCaptchaToken,
 	} = useRegister();
 
-	const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? '';
+	const captchaEnabled = process.env.NEXT_PUBLIC_CAPTCHA_ENABLED === 'true';
+	const siteKey = captchaEnabled ? (process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY ?? '') : '';
 	const [scriptLoaded, setScriptLoaded] = useState(false);
 	const [turnstileReady, setTurnstileReady] = useState(false);
 	const [initError, setInitError] = useState<string | null>(null);
@@ -95,7 +96,7 @@ export default function RegisterForm() {
 	}, [renderTurnstile, scriptLoaded]);
 
 	const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
-		if (!siteKey) {
+		if (captchaEnabled && !siteKey) {
 			event.preventDefault();
 			setCaptchaMessage('Signup CAPTCHA is not configured.');
 			return;
@@ -148,7 +149,7 @@ export default function RegisterForm() {
 
 	return (
 		<>
-			{siteKey && (
+			{captchaEnabled && siteKey && (
 				<Script
 					src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit'
 					strategy='afterInteractive'
@@ -162,26 +163,28 @@ export default function RegisterForm() {
 				onChange={onChange}
 				onSubmit={handleSubmit}
 					extraContent={
-						siteKey ? (
-							<div className='space-y-2'>
-								<p className='sr-only' id='signup-captcha-label'>
-									Complete the CAPTCHA challenge to finish signing up.
+						captchaEnabled ? (
+							siteKey ? (
+								<div className='space-y-2'>
+									<p className='sr-only' id='signup-captcha-label'>
+										Complete the CAPTCHA challenge to finish signing up.
+									</p>
+									<div
+										ref={captchaRef}
+										className='flex justify-center'
+										aria-labelledby='signup-captcha-label'
+									/>
+									{captchaMessage && (
+										<p className='text-sm text-red-600'>{captchaMessage}</p>
+									)}
+									{initError && <p className='text-sm text-red-600'>{initError}</p>}
+								</div>
+							) : (
+								<p className='text-sm text-red-600'>
+									Signup CAPTCHA is not configured. Please try again later.
 								</p>
-								<div
-									ref={captchaRef}
-									className='flex justify-center'
-									aria-labelledby='signup-captcha-label'
-								/>
-								{captchaMessage && (
-									<p className='text-sm text-red-600'>{captchaMessage}</p>
-								)}
-								{initError && <p className='text-sm text-red-600'>{initError}</p>}
-							</div>
-						) : (
-							<p className='text-sm text-red-600'>
-								Signup CAPTCHA is not configured. Please try again later.
-							</p>
-						)
+							)
+						) : null
 					}
 			/>
 		</>

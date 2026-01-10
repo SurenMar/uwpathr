@@ -52,6 +52,11 @@ Setup instructions for each part of the project are located in their respective 
 - `backend/README.md`
 - `frontend/README.md`
 
+### Prerequisites
+- Python 3.11+
+- Node.js 18+
+- Docker
+
 ---
 
 ## Contributing
