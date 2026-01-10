@@ -40,7 +40,7 @@ If you’re unsure where to start, look for issues labeled `good first issue` or
 └── README.md
 ```
 
-- The backend is considered stable and production-critical.
+- The backend is mostly stable but still welcomes contributions.
 - The frontend is the primary area open for community contributions.
 
 ---
