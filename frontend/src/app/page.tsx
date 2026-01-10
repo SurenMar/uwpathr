@@ -86,7 +86,7 @@ export default function LandingPage() {
             Plan Your CS Degree with Confidence
           </h2>
           <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto">
-            UWPathr is your personal guide to completing your Bachelor of Computer Science degree at the University of Waterloo. Discover courses and stay on top of your progress without worrying about missing requirements.
+            UWPathr is your personal guide to completing your Bachelor of Computer Science degree at the University of Waterloo. Plan courses and stay on top of your progress without worrying about missing requirements.
           </p>
           <Link
             href="/auth/register"
