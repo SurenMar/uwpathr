@@ -4,10 +4,4 @@
 2. Allow the user to add planned courses to checklist too and 
    display this using yellow colour in the progress bar.
 
-3. When selecting course in frontend, only update UI if no error 
-   is recieved from backend (Course already selected error). Also
-   handle replacing logic bugs,
-
-4. If an allowed courses list has only 1 course, then hitting enter will add that course.
-
-5. Add options for 'any course' checkboxes.
+3. Add options for 'any course' checkboxes.

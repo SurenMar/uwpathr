@@ -91,6 +91,14 @@ function CourseSearchInput({ checkboxId, onCourseSelect, onClearSelection, selec
         onChange={(e) => setSearchTerm(e.target.value)}
         onKeyDown={(e) => {
           if (e.key === 'Enter') {
+            e.preventDefault();
+            // If exactly one option is available, select it
+            if (filteredCourses.length === 1) {
+              onCourseSelect(filteredCourses[0]);
+              setShowDropdown(false);
+              return;
+            }
+            // If input is empty, clear selection
             if (searchTerm.trim() === '') {
               onClearSelection();
             }
