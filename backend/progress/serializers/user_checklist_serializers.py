@@ -2,7 +2,6 @@ from rest_framework import serializers
 from django.db import transaction
 from progress.models.user_checklist import UserChecklist, UserChecklistNode
 from progress.models.user_requirements import UserAdditionalConstraint
-from progress.models.user_course import UserCourse
 from checklists.models.checklist import Checklist, ChecklistNode
 from checklists.models.requirements import AdditionalConstraint
 
@@ -73,6 +72,7 @@ class UserChecklistNodeUpdateSerializer(serializers.ModelSerializer):
         'Cannot select a course that does not belong to you.'
       )
     
+    # Only taken courses can be selected
     if value.course_list != 'taken':
       raise serializers.ValidationError(
         'Selected course has not been taken.'

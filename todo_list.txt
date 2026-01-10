@@ -2,4 +2,9 @@
    doesnt have to retreive the entire checklist each update.
 
 2. Allow the user to add planned courses to checklist too and 
-   account for this via yellow progress in the progress bar.
+   display this using yellow colour in the progress bar.
+
+3. When selecting course in frontend, only update UI if no error 
+   is recieved from backend (Course already selected error). Also
+   handle replacing logic bugs,
+

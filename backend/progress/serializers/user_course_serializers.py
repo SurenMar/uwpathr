@@ -47,6 +47,16 @@ class UserCourseCreateSerializer(serializers.ModelSerializer):
 		read_only_fields = ['id', 'created_at', 'updated_at']
 
 	def validate(self, attrs):
+		# Check if user already added this course to this list
+		if UserCourse.objects.filter(
+				user=self.context['request'].user,
+				course=attrs['course'],
+				course_list=attrs['course_list'],
+			).exists():
+			raise serializers.ValidationError(
+				f'This course has already been added to the {attrs["course_list"]} list.'
+			)
+
 		# Check if user has correct prerequisites to add course:
 		if attrs.get('course_list') == 'taken' :
 			course = attrs.get('course')
