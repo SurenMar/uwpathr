@@ -78,12 +78,21 @@ class UserChecklistNodeUpdateSerializer(serializers.ModelSerializer):
         'Selected course has not been taken.'
       )
     
+    # Verify that a course has not already been selected for a different checkbox
+    if UserChecklistNode.objects.filter(
+      user=self.context['request'].user,
+      selected_course=value,
+    ).exclude(pk=self.instance.pk).exists():
+      raise serializers.ValidationError(
+        'Course has already been selected for another checkbox.'
+      )
+    
     # For updates, verify the course is in allowed list
     if self.instance and self.instance.original_checkbox:
       # Get the CheckboxAllowedCourses object
       allowed_courses_obj = self.instance.original_checkbox.allowed_courses.first()
       # If allowed courses are defined, validate the selection
-      if not allowed_courses_obj.courses.filter(pk=value.course.pk).exists():
+      if allowed_courses_obj and not allowed_courses_obj.courses.filter(pk=value.course.pk).exists():
         raise serializers.ValidationError(
           "Selected course is not in allowed courses."
         )

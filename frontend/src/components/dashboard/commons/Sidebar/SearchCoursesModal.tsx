@@ -27,22 +27,23 @@ export default function SearchCoursesModal({ isOpen, onClose }: SearchCoursesMod
   const modalRef = useRef<HTMLDivElement>(null);
   const [createUserCourse] = useCreateUserCourseMutation();
 
-  const extractApiErrorMessage = (error: any, fallback: string) => {
-    if (error?.data?.non_field_errors?.[0]) return error.data.non_field_errors[0];
-    if (error?.data?.detail) return error.data.detail;
-    if (error?.data?.prereqs_met?.[0]) return error.data.prereqs_met[0];
-    return fallback;
-  };
-
   const handleAddCourse = async (courseId: string, courseList: 'taken' | 'planned' | 'wishlist', courseName: string) => {
     console.log('Adding course:', { courseId, courseList, courseName });
     try {
       await createUserCourse({ courseId, courseList }).unwrap();
       toast.success(`Added ${courseName} to ${courseList} list`);
     } catch (error: any) {
-      const errorMessage = extractApiErrorMessage(error, 'Failed to add course');
+      let errorMessage = 'Failed to add course';
+      
+      if (error?.data?.non_field_errors?.[0]) {
+        errorMessage = error.data.non_field_errors[0];
+      } else if (error?.data?.detail) {
+        errorMessage = error.data.detail;
+      } else if (error?.data?.prereqs_met?.[0]) {
+        errorMessage = error.data.prereqs_met[0];
+      }
+      
       toast.error(errorMessage);
-      return;
     }
   };
 

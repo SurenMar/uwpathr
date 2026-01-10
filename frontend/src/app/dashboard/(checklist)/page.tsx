@@ -142,13 +142,6 @@ function ChecklistNodeComponent({ node, level = 0 }: { node: ChecklistNode; leve
   const [createUserCourse] = useCreateUserCourseMutation();
   const hasChildren = node.children && node.children.length > 0;
   
-  const extractApiErrorMessage = (error: any, fallback: string) => {
-    if (error?.data?.non_field_errors?.[0]) return error.data.non_field_errors[0];
-    if (error?.data?.detail) return error.data.detail;
-    if (error?.data?.course?.[0]) return error.data.course[0];
-    return fallback;
-  };
-  
   // Sync checkbox state with selected_course whenever the node data changes
   useEffect(() => {
     setIsChecked(!!node.selected_course);
@@ -172,9 +165,22 @@ function ChecklistNodeComponent({ node, level = 0 }: { node: ChecklistNode; leve
       setIsChecked(true);
     } catch (error: any) {
       console.error('Failed to select course:', error);
-      const errorMessage = extractApiErrorMessage(error, 'Failed to select course');
+      
+      // Extract error message from the response
+      let errorMessage = 'Failed to select course';
+      
+      // Check various possible error locations
+      if (error?.data?.non_field_errors?.[0]) {
+        errorMessage = error.data.non_field_errors[0];
+      } else if (error?.data?.detail) {
+        errorMessage = error.data.detail;
+      } else if (error?.data?.course?.[0]) {
+        errorMessage = error.data.course[0];
+      } else if (error?.data?.selected_course?.[0]) {
+        errorMessage = error.data.selected_course[0];
+      }
+      
       toast.error(errorMessage);
-      return;
     }
   };
 

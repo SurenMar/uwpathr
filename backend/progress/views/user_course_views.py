@@ -74,16 +74,30 @@ class UserCourseViewSet(ModelViewSet):
     return UserCourseDetailSerializer
   
   def perform_create(self, serializer):
-    # Delete entry if one already exists (course must be in at most 1 list)
+    # Get or create the UserCourse (reuse existing if already in this list)
     course = serializer.validated_data['course']
     course_list = serializer.validated_data.get('course_list', 'taken')
     user = self.request.user
     
     print(f"Creating UserCourse: course={course}, course_list={course_list}, user={user}")
     
-    UserCourse.objects.filter(user=user, course=course).delete()
-
-    serializer.save(user=self.request.user)
+    # Delete from other lists if exists
+    UserCourse.objects.filter(user=user, course=course).exclude(course_list=course_list).delete()
+    
+    # Get or create in the target list
+    user_course, created = UserCourse.objects.get_or_create(
+      user=user,
+      course=course,
+      defaults={'course_list': course_list}
+    )
+    
+    # Update the course_list if it already existed but in a different state
+    if not created and user_course.course_list != course_list:
+      user_course.course_list = course_list
+      user_course.save()
+    
+    # Return the existing or new user_course by updating the serializer instance
+    serializer.instance = user_course
   
 
 class UserPathNodeViewSet(ModelViewSet):
