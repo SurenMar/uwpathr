@@ -27,6 +27,7 @@ The project consists of a **Django + DRF backend** and a **React + Next.js front
 
 ### Auth
 - JWT
+- Djoser
 - OAuth2 (Google)
 
 ---
