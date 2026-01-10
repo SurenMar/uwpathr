@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Frontend (React + Next.js)
 
-## Getting Started
+This directory contains the frontend for UWPathr.
 
-First, run the development server:
+The frontend focuses on:
+- UI and UX
+- Accessibility
+- Responsiveness
+- Consuming the backend API
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Frontend contributions are highly encouraged.
+
+---
+
+## Tech Stack
+
+- React
+- Next.js
+
+---
+
+## Project Structure (High Level)
+```text
+src/
+├── app/       
+├── components/             
+├── hooks/
+├── store/
+├── styles/   
+└── utils/
 ```
+(Exact structure may vary.)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Setup (Local Development)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Install dependencies:
+   `npm install`
+2. Start the development server:
+   `npm run dev`
+3. Open the app in your browser (http://localhost:3000)
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Working With the API
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- The frontend communicates with the backend via REST API calls
+- API URLs and environment variables should be configured locally
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Contributing to the Frontend
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Frontend contributions are especially welcome.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+You can help by:
+- Improving UI/UX
+- Refactoring code
+- Cleaning up components
+- Improving performance
+- Fixing layout or responsiveness issues
+- Improving accessibility
+
+You do not need backend knowledge to contribute to the frontend.
+
+---
+
+## Pull Request Expectations
+
+For frontend pull requests, please:
+- Keep changes focused
+- Include screenshots or screen recordings if necessary
+- Clearly describe what changed and why
+
+For full contribution rules, see the root CONTRIBUTING.md file.
+
+---
+
+## Notes for Contributors
+
+- The frontend is actively evolving
+- Code clarity and readability are valued
+- Feel free to suggest improvements or refactors via issues
+
+---
+
+## License
+
+This frontend is licensed under the MIT License.  
+See the root LICENSE file for details.
