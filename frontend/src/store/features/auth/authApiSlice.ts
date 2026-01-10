@@ -138,6 +138,7 @@ const authApiSlice = apiSlice.injectEndpoints({
 				method: 'POST',
 				body: { specialization, year },
 			}),
+			invalidatesTags: ['UserChecklists'],
 		}),
 		createUserCourse: builder.mutation<{ id: number }, { courseId: string; courseList?: 'taken' | 'planned' | 'wishlist' }>({ 
 			query: ({ courseId, courseList = 'taken' }) => {

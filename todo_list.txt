@@ -3,5 +3,3 @@
 
 2. Allow the user to add planned courses to checklist too and 
    display this using yellow colour in the progress bar.
-
-3. Add options for 'any course' checkboxes.

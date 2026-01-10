@@ -79,9 +79,6 @@ class CheckboxAllowedCourses(models.Model):
     'courses.Course',
     related_name='+',
   )
-
-  def target_requirement_type(self):
-    return self.target_checkbox.requirement_type
   
   def target_title(self):
     return self.target_checkbox.title

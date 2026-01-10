@@ -34,6 +34,8 @@ function CourseSearchInput({ checkboxId, onCourseSelect, onClearSelection, selec
   
   const { data: allowedCoursesData, isLoading, error } = useRetrieveCheckboxAllowedCoursesQuery(checkboxId, {
     skip: !checkboxId,
+    refetchOnMountOrArgChange: true,
+    refetchOnReconnect: true,
   });
 
   // Extract courses from the response
@@ -160,6 +162,10 @@ function ChecklistNodeComponent({ node, level = 0 }: { node: ChecklistNode; leve
                   'bg-white';
   
   const handleCourseSelect = async (course: Course) => {
+    if (!node.id) {
+      toast.error('Checklist node is not ready yet. Please retry.');
+      return;
+    }
     try {
       // First, add the course to user's taken courses and get the UserCourse ID
       console.log('Creating UserCourse for course:', course.id);
