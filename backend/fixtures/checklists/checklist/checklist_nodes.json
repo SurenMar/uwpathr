@@ -1,0 +1,903 @@
+[
+{
+  "model": "checklists.checklistnode",
+  "pk": 1,
+  "fields": {
+    "created_at": "2025-12-27T23:20:15.324Z",
+    "updated_at": "2025-12-27T23:20:15.324Z",
+    "requirement_type": "head",
+    "title": "Required Courses",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": null,
+    "lft": 1,
+    "rght": 52,
+    "tree_id": 1,
+    "level": 0
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 2,
+  "fields": {
+    "created_at": "2025-12-27T23:21:17.425Z",
+    "updated_at": "2025-12-27T23:21:17.425Z",
+    "requirement_type": "group",
+    "title": "CS Units",
+    "units_required": 775,
+    "target_checklist": 1,
+    "parent": 1,
+    "lft": 2,
+    "rght": 35,
+    "tree_id": 1,
+    "level": 1
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 3,
+  "fields": {
+    "created_at": "2025-12-27T23:24:43.265Z",
+    "updated_at": "2025-12-27T23:24:43.265Z",
+    "requirement_type": "checkbox",
+    "title": "CS 115, CS 135, or CS 145",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 2,
+    "lft": 3,
+    "rght": 4,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 4,
+  "fields": {
+    "created_at": "2025-12-27T23:26:26.982Z",
+    "updated_at": "2025-12-27T23:26:26.982Z",
+    "requirement_type": "checkbox",
+    "title": "CS 136 or CS 146",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 2,
+    "lft": 5,
+    "rght": 6,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 5,
+  "fields": {
+    "created_at": "2025-12-27T23:26:42.892Z",
+    "updated_at": "2025-12-27T23:26:42.893Z",
+    "requirement_type": "checkbox",
+    "title": "CS 136L",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 2,
+    "lft": 7,
+    "rght": 8,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 6,
+  "fields": {
+    "created_at": "2025-12-27T23:26:55.370Z",
+    "updated_at": "2025-12-29T21:14:44.133Z",
+    "requirement_type": "checkbox",
+    "title": "CS 240 or CS 240E",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 2,
+    "lft": 9,
+    "rght": 10,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 7,
+  "fields": {
+    "created_at": "2025-12-27T23:27:06.493Z",
+    "updated_at": "2025-12-29T21:14:54.802Z",
+    "requirement_type": "checkbox",
+    "title": "CS 241 or CS 241E",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 2,
+    "lft": 11,
+    "rght": 12,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 8,
+  "fields": {
+    "created_at": "2025-12-27T23:27:17.499Z",
+    "updated_at": "2025-12-29T21:15:05.628Z",
+    "requirement_type": "checkbox",
+    "title": "CS 245 or CS 245E",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 2,
+    "lft": 13,
+    "rght": 14,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 9,
+  "fields": {
+    "created_at": "2025-12-27T23:27:32.498Z",
+    "updated_at": "2025-12-29T21:15:15.510Z",
+    "requirement_type": "checkbox",
+    "title": "CS 246 or CS 246E",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 2,
+    "lft": 15,
+    "rght": 16,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 10,
+  "fields": {
+    "created_at": "2025-12-27T23:27:46.440Z",
+    "updated_at": "2025-12-29T21:15:25.671Z",
+    "requirement_type": "checkbox",
+    "title": "CS 251 or CS 251E",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 2,
+    "lft": 17,
+    "rght": 18,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 11,
+  "fields": {
+    "created_at": "2025-12-27T23:27:58.496Z",
+    "updated_at": "2025-12-27T23:27:58.496Z",
+    "requirement_type": "checkbox",
+    "title": "CS 341",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 2,
+    "lft": 19,
+    "rght": 20,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 12,
+  "fields": {
+    "created_at": "2025-12-27T23:28:37.658Z",
+    "updated_at": "2025-12-27T23:28:37.658Z",
+    "requirement_type": "checkbox",
+    "title": "CS 350",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 2,
+    "lft": 21,
+    "rght": 22,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 13,
+  "fields": {
+    "created_at": "2025-12-27T23:29:45.882Z",
+    "updated_at": "2025-12-27T23:29:45.882Z",
+    "requirement_type": "checkbox",
+    "title": "CS 340-398 or CS 440-489",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 2,
+    "lft": 23,
+    "rght": 24,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 14,
+  "fields": {
+    "created_at": "2025-12-27T23:30:02.492Z",
+    "updated_at": "2025-12-27T23:30:02.492Z",
+    "requirement_type": "checkbox",
+    "title": "CS 340-398 or CS 440-489",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 2,
+    "lft": 25,
+    "rght": 26,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 15,
+  "fields": {
+    "created_at": "2025-12-27T23:30:20.169Z",
+    "updated_at": "2025-12-27T23:30:20.169Z",
+    "requirement_type": "checkbox",
+    "title": "CS 340-398 or CS 440-489",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 2,
+    "lft": 27,
+    "rght": 28,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 16,
+  "fields": {
+    "created_at": "2025-12-27T23:30:45.989Z",
+    "updated_at": "2025-12-27T23:30:45.989Z",
+    "requirement_type": "checkbox",
+    "title": "CS 440-489",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 2,
+    "lft": 29,
+    "rght": 30,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 17,
+  "fields": {
+    "created_at": "2025-12-27T23:30:54.692Z",
+    "updated_at": "2025-12-27T23:30:54.692Z",
+    "requirement_type": "checkbox",
+    "title": "CS 440-489",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 2,
+    "lft": 31,
+    "rght": 32,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 18,
+  "fields": {
+    "created_at": "2025-12-27T23:32:18.864Z",
+    "updated_at": "2025-12-27T23:32:18.864Z",
+    "requirement_type": "checkbox",
+    "title": "CS 440-489, CS 499T, CS 6XX, CS 7XX, CO 487, or STAT 440",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 2,
+    "lft": 33,
+    "rght": 34,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 19,
+  "fields": {
+    "created_at": "2025-12-27T23:32:42.997Z",
+    "updated_at": "2025-12-27T23:32:42.997Z",
+    "requirement_type": "group",
+    "title": "Math Units",
+    "units_required": 350,
+    "target_checklist": 1,
+    "parent": 1,
+    "lft": 36,
+    "rght": 51,
+    "tree_id": 1,
+    "level": 1
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 20,
+  "fields": {
+    "created_at": "2025-12-27T23:33:18.532Z",
+    "updated_at": "2025-12-27T23:33:18.532Z",
+    "requirement_type": "checkbox",
+    "title": "MATH 135 or MATH 145",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 19,
+    "lft": 37,
+    "rght": 38,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 21,
+  "fields": {
+    "created_at": "2025-12-27T23:35:14.936Z",
+    "updated_at": "2025-12-27T23:35:14.936Z",
+    "requirement_type": "checkbox",
+    "title": "MATH 136 or MATH 146",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 19,
+    "lft": 39,
+    "rght": 40,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 22,
+  "fields": {
+    "created_at": "2025-12-27T23:38:09.890Z",
+    "updated_at": "2025-12-27T23:38:09.890Z",
+    "requirement_type": "checkbox",
+    "title": "MATH 127, MATH 137, or MATH 147",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 19,
+    "lft": 41,
+    "rght": 42,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 23,
+  "fields": {
+    "created_at": "2025-12-27T23:38:32.131Z",
+    "updated_at": "2025-12-27T23:38:32.131Z",
+    "requirement_type": "checkbox",
+    "title": "MATH 128, MATH 138, or MATH 148",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 19,
+    "lft": 43,
+    "rght": 44,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 24,
+  "fields": {
+    "created_at": "2025-12-27T23:39:08.561Z",
+    "updated_at": "2025-12-27T23:39:08.561Z",
+    "requirement_type": "checkbox",
+    "title": "MATH 239 or MATH 249",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 19,
+    "lft": 45,
+    "rght": 46,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 25,
+  "fields": {
+    "created_at": "2025-12-27T23:39:40.871Z",
+    "updated_at": "2025-12-27T23:39:40.871Z",
+    "requirement_type": "checkbox",
+    "title": "STAT 230 or STAT 240",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 19,
+    "lft": 47,
+    "rght": 48,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 26,
+  "fields": {
+    "created_at": "2025-12-27T23:39:58.392Z",
+    "updated_at": "2025-12-27T23:39:58.392Z",
+    "requirement_type": "checkbox",
+    "title": "STAT 231 or STAT 241",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 19,
+    "lft": 49,
+    "rght": 50,
+    "tree_id": 1,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 27,
+  "fields": {
+    "created_at": "2025-12-27T23:45:57.789Z",
+    "updated_at": "2025-12-27T23:45:57.789Z",
+    "requirement_type": "head",
+    "title": "Electives",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": null,
+    "lft": 1,
+    "rght": 54,
+    "tree_id": 2,
+    "level": 0
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 28,
+  "fields": {
+    "created_at": "2025-12-27T23:46:43.974Z",
+    "updated_at": "2025-12-27T23:46:43.974Z",
+    "requirement_type": "group",
+    "title": "Non-Math Elective Units",
+    "units_required": 500,
+    "target_checklist": 1,
+    "parent": 27,
+    "lft": 2,
+    "rght": 35,
+    "tree_id": 2,
+    "level": 1
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 29,
+  "fields": {
+    "created_at": "2025-12-27T23:48:45.901Z",
+    "updated_at": "2025-12-27T23:48:45.901Z",
+    "requirement_type": "checkbox",
+    "title": "A social sciences course",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 28,
+    "lft": 3,
+    "rght": 4,
+    "tree_id": 2,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 30,
+  "fields": {
+    "created_at": "2025-12-27T23:49:00.953Z",
+    "updated_at": "2025-12-27T23:49:00.953Z",
+    "requirement_type": "checkbox",
+    "title": "A social sciences course",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 28,
+    "lft": 5,
+    "rght": 6,
+    "tree_id": 2,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 31,
+  "fields": {
+    "created_at": "2025-12-27T23:49:18.143Z",
+    "updated_at": "2025-12-27T23:49:18.143Z",
+    "requirement_type": "checkbox",
+    "title": "A pure sciences course",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 28,
+    "lft": 7,
+    "rght": 8,
+    "tree_id": 2,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 32,
+  "fields": {
+    "created_at": "2025-12-27T23:49:44.845Z",
+    "updated_at": "2025-12-27T23:49:44.845Z",
+    "requirement_type": "checkbox",
+    "title": "A pure/applied sciences course",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 28,
+    "lft": 9,
+    "rght": 10,
+    "tree_id": 2,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 33,
+  "fields": {
+    "created_at": "2025-12-27T23:50:36.941Z",
+    "updated_at": "2025-12-29T22:09:05.363Z",
+    "requirement_type": "checkbox",
+    "title": "A non-math course",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 28,
+    "lft": 11,
+    "rght": 12,
+    "tree_id": 2,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 34,
+  "fields": {
+    "created_at": "2025-12-27T23:51:18.961Z",
+    "updated_at": "2025-12-29T22:09:21.749Z",
+    "requirement_type": "checkbox",
+    "title": "A non-math course",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 28,
+    "lft": 13,
+    "rght": 14,
+    "tree_id": 2,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 35,
+  "fields": {
+    "created_at": "2025-12-27T23:56:37.711Z",
+    "updated_at": "2025-12-27T23:56:37.711Z",
+    "requirement_type": "group",
+    "title": "Additional Math or None-Math Elective Units",
+    "units_required": 375,
+    "target_checklist": 1,
+    "parent": 27,
+    "lft": 36,
+    "rght": 53,
+    "tree_id": 2,
+    "level": 1
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 36,
+  "fields": {
+    "created_at": "2025-12-27T23:56:57.303Z",
+    "updated_at": "2025-12-27T23:56:57.303Z",
+    "requirement_type": "checkbox",
+    "title": "Any course",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 35,
+    "lft": 37,
+    "rght": 38,
+    "tree_id": 2,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 37,
+  "fields": {
+    "created_at": "2025-12-27T23:57:07.108Z",
+    "updated_at": "2025-12-27T23:57:07.108Z",
+    "requirement_type": "checkbox",
+    "title": "Any course",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 35,
+    "lft": 39,
+    "rght": 40,
+    "tree_id": 2,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 38,
+  "fields": {
+    "created_at": "2025-12-27T23:57:16.901Z",
+    "updated_at": "2025-12-27T23:57:16.901Z",
+    "requirement_type": "checkbox",
+    "title": "Any course",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 35,
+    "lft": 41,
+    "rght": 42,
+    "tree_id": 2,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 39,
+  "fields": {
+    "created_at": "2025-12-27T23:57:37.838Z",
+    "updated_at": "2025-12-27T23:57:37.838Z",
+    "requirement_type": "checkbox",
+    "title": "Any course",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 35,
+    "lft": 43,
+    "rght": 44,
+    "tree_id": 2,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 40,
+  "fields": {
+    "created_at": "2025-12-27T23:58:01.981Z",
+    "updated_at": "2025-12-27T23:58:01.981Z",
+    "requirement_type": "checkbox",
+    "title": "Any course",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 35,
+    "lft": 45,
+    "rght": 46,
+    "tree_id": 2,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 41,
+  "fields": {
+    "created_at": "2025-12-27T23:58:10.671Z",
+    "updated_at": "2025-12-27T23:58:10.671Z",
+    "requirement_type": "checkbox",
+    "title": "Any course",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 35,
+    "lft": 47,
+    "rght": 48,
+    "tree_id": 2,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 42,
+  "fields": {
+    "created_at": "2025-12-27T23:58:53.950Z",
+    "updated_at": "2025-12-27T23:58:53.950Z",
+    "requirement_type": "checkbox",
+    "title": "Any course",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 35,
+    "lft": 49,
+    "rght": 50,
+    "tree_id": 2,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 43,
+  "fields": {
+    "created_at": "2025-12-27T23:59:30.872Z",
+    "updated_at": "2025-12-27T23:59:30.872Z",
+    "requirement_type": "checkbox",
+    "title": "Any course",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 35,
+    "lft": 51,
+    "rght": 52,
+    "tree_id": 2,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 48,
+  "fields": {
+    "created_at": "2025-12-30T16:23:24.814Z",
+    "updated_at": "2025-12-30T16:23:24.814Z",
+    "requirement_type": "group",
+    "title": "Option 1",
+    "units_required": 200,
+    "target_checklist": 1,
+    "parent": 28,
+    "lft": 15,
+    "rght": 24,
+    "tree_id": 2,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 49,
+  "fields": {
+    "created_at": "2025-12-30T16:24:29.428Z",
+    "updated_at": "2025-12-30T16:25:57.039Z",
+    "requirement_type": "checkbox",
+    "title": "A comm. list I course",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 48,
+    "lft": 16,
+    "rght": 17,
+    "tree_id": 2,
+    "level": 3
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 50,
+  "fields": {
+    "created_at": "2025-12-30T16:24:48.480Z",
+    "updated_at": "2025-12-30T16:26:08.689Z",
+    "requirement_type": "checkbox",
+    "title": "A comm. list II course",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 48,
+    "lft": 18,
+    "rght": 19,
+    "tree_id": 2,
+    "level": 3
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 51,
+  "fields": {
+    "created_at": "2025-12-30T16:25:23.294Z",
+    "updated_at": "2025-12-30T16:25:23.294Z",
+    "requirement_type": "checkbox",
+    "title": "A humanities course",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 48,
+    "lft": 20,
+    "rght": 21,
+    "tree_id": 2,
+    "level": 3
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 52,
+  "fields": {
+    "created_at": "2025-12-30T16:26:38.043Z",
+    "updated_at": "2025-12-30T16:26:38.043Z",
+    "requirement_type": "checkbox",
+    "title": "A humanities course",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 48,
+    "lft": 22,
+    "rght": 23,
+    "tree_id": 2,
+    "level": 3
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 53,
+  "fields": {
+    "created_at": "2025-12-30T16:27:41.447Z",
+    "updated_at": "2025-12-30T16:27:41.447Z",
+    "requirement_type": "group",
+    "title": "Option 2",
+    "units_required": 200,
+    "target_checklist": 1,
+    "parent": 28,
+    "lft": 25,
+    "rght": 34,
+    "tree_id": 2,
+    "level": 2
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 54,
+  "fields": {
+    "created_at": "2025-12-30T16:28:02.302Z",
+    "updated_at": "2025-12-30T16:28:02.302Z",
+    "requirement_type": "checkbox",
+    "title": "A comm. list I course",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 53,
+    "lft": 26,
+    "rght": 27,
+    "tree_id": 2,
+    "level": 3
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 55,
+  "fields": {
+    "created_at": "2025-12-30T16:29:08.999Z",
+    "updated_at": "2025-12-30T16:29:08.999Z",
+    "requirement_type": "checkbox",
+    "title": "A COMMST or ENGL course from comm. list II",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 53,
+    "lft": 28,
+    "rght": 29,
+    "tree_id": 2,
+    "level": 3
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 56,
+  "fields": {
+    "created_at": "2025-12-30T16:30:16.204Z",
+    "updated_at": "2025-12-30T16:30:16.204Z",
+    "requirement_type": "checkbox",
+    "title": "A humanities course",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 53,
+    "lft": 30,
+    "rght": 31,
+    "tree_id": 2,
+    "level": 3
+  }
+},
+{
+  "model": "checklists.checklistnode",
+  "pk": 57,
+  "fields": {
+    "created_at": "2025-12-30T16:30:37.684Z",
+    "updated_at": "2025-12-30T16:30:37.684Z",
+    "requirement_type": "checkbox",
+    "title": "A non-math course",
+    "units_required": null,
+    "target_checklist": 1,
+    "parent": 53,
+    "lft": 32,
+    "rght": 33,
+    "tree_id": 2,
+    "level": 3
+  }
+}
+]

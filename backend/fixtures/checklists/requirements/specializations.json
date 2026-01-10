@@ -1,0 +1,92 @@
+[
+{
+  "model": "checklists.specialization",
+  "pk": 3,
+  "fields": {
+    "created_at": "2025-12-27T21:40:04.180Z",
+    "updated_at": "2025-12-27T21:40:04.180Z",
+    "name": null,
+    "description": ""
+  }
+},
+{
+  "model": "checklists.specialization",
+  "pk": 4,
+  "fields": {
+    "created_at": "2025-12-27T21:40:47.739Z",
+    "updated_at": "2025-12-27T21:40:47.739Z",
+    "name": "AI",
+    "description": "Artificial Intelligence Specialization"
+  }
+},
+{
+  "model": "checklists.specialization",
+  "pk": 5,
+  "fields": {
+    "created_at": "2025-12-27T21:41:07.278Z",
+    "updated_at": "2025-12-27T21:41:07.278Z",
+    "name": "BIO",
+    "description": "Bioinformatics"
+  }
+},
+{
+  "model": "checklists.specialization",
+  "pk": 6,
+  "fields": {
+    "created_at": "2025-12-27T21:41:56.240Z",
+    "updated_at": "2025-12-27T21:41:56.240Z",
+    "name": "BUS",
+    "description": "Business"
+  }
+},
+{
+  "model": "checklists.specialization",
+  "pk": 7,
+  "fields": {
+    "created_at": "2025-12-27T21:42:21.244Z",
+    "updated_at": "2025-12-27T21:42:21.244Z",
+    "name": "CFA",
+    "description": "Computational Fine Arts"
+  }
+},
+{
+  "model": "checklists.specialization",
+  "pk": 8,
+  "fields": {
+    "created_at": "2025-12-27T21:42:34.551Z",
+    "updated_at": "2025-12-27T21:42:34.551Z",
+    "name": "DH",
+    "description": "Digital Hardware"
+  }
+},
+{
+  "model": "checklists.specialization",
+  "pk": 9,
+  "fields": {
+    "created_at": "2025-12-27T21:42:49.982Z",
+    "updated_at": "2025-12-27T21:42:49.982Z",
+    "name": "GD",
+    "description": "Game Design"
+  }
+},
+{
+  "model": "checklists.specialization",
+  "pk": 10,
+  "fields": {
+    "created_at": "2025-12-27T21:43:26.415Z",
+    "updated_at": "2025-12-27T21:43:26.415Z",
+    "name": "HCI",
+    "description": "Human-Computer Interaction"
+  }
+},
+{
+  "model": "checklists.specialization",
+  "pk": 11,
+  "fields": {
+    "created_at": "2025-12-27T21:43:37.904Z",
+    "updated_at": "2025-12-27T21:43:37.904Z",
+    "name": "SE",
+    "description": "Software Engineering"
+  }
+}
+]

@@ -1,0 +1,673 @@
+[
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 1,
+  "fields": {
+    "created_at": "2025-12-27T22:25:51.259Z",
+    "updated_at": "2025-12-27T22:40:32.590Z",
+    "year": 2025,
+    "description": "Seven (regular) or eight (co-op) terms enrolled in at least three courses totalling 1.5 units.",
+    "checklist": 1
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 2,
+  "fields": {
+    "created_at": "2025-12-27T22:26:06.468Z",
+    "updated_at": "2025-12-27T22:26:06.468Z",
+    "year": 2025,
+    "description": "No more than 2.0 units of failed courses.",
+    "checklist": 1
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 3,
+  "fields": {
+    "created_at": "2025-12-27T22:26:28.551Z",
+    "updated_at": "2025-12-27T22:42:36.442Z",
+    "year": 2025,
+    "description": "No more than 5.0 units of unusable course attempts (failures and repeats of passed courses).",
+    "checklist": 1
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 4,
+  "fields": {
+    "created_at": "2025-12-27T22:26:58.316Z",
+    "updated_at": "2025-12-27T22:26:58.316Z",
+    "year": 2025,
+    "description": "CS major average of 60% or higher.",
+    "checklist": 1
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 5,
+  "fields": {
+    "created_at": "2025-12-27T22:28:45.470Z",
+    "updated_at": "2025-12-27T22:28:45.470Z",
+    "year": 2025,
+    "description": "Cumulative average of 60% or higher.",
+    "checklist": 1
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 6,
+  "fields": {
+    "created_at": "2025-12-27T22:29:02.099Z",
+    "updated_at": "2025-12-27T22:29:02.099Z",
+    "year": 2025,
+    "description": "Co-op requirements met, if applicable, including PD 1, PD\r\n11, PD 10, and a minimum of two other PD courses.",
+    "checklist": 1
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 7,
+  "fields": {
+    "created_at": "2025-12-27T22:29:36.956Z",
+    "updated_at": "2025-12-27T22:42:29.992Z",
+    "year": 2025,
+    "description": "Seven (regular) or eight (co-op) terms enrolled in at least three courses totaling 1.5 units.",
+    "checklist": 2
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 8,
+  "fields": {
+    "created_at": "2025-12-27T22:29:50.444Z",
+    "updated_at": "2025-12-27T22:29:50.444Z",
+    "year": 2025,
+    "description": "No more than 2.0 units of failed courses.",
+    "checklist": 2
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 9,
+  "fields": {
+    "created_at": "2025-12-27T22:30:05.942Z",
+    "updated_at": "2025-12-27T22:42:22.328Z",
+    "year": 2025,
+    "description": "No more than 5.0 units of unusable course attempts (failures and repeats of passed courses).",
+    "checklist": 2
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 10,
+  "fields": {
+    "created_at": "2025-12-27T22:30:18.677Z",
+    "updated_at": "2025-12-27T22:30:18.677Z",
+    "year": 2025,
+    "description": "CS major average of 60% or higher.",
+    "checklist": 2
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 11,
+  "fields": {
+    "created_at": "2025-12-27T22:30:32.378Z",
+    "updated_at": "2025-12-27T22:30:32.378Z",
+    "year": 2025,
+    "description": "Cumulative average of 60% or higher.",
+    "checklist": 2
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 12,
+  "fields": {
+    "created_at": "2025-12-27T22:30:45.492Z",
+    "updated_at": "2025-12-27T22:42:10.759Z",
+    "year": 2025,
+    "description": "Co-op requirements met, if applicable, including PD 1, PD 11, PD 10, and a minimum of two other PD courses.",
+    "checklist": 2
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 13,
+  "fields": {
+    "created_at": "2025-12-27T22:31:10.514Z",
+    "updated_at": "2025-12-27T22:41:53.281Z",
+    "year": 2025,
+    "description": "Special topics courses (e.g. CS 489) may sometimes be appropriate for List A; interested students should see a CS advisor for confirmation.",
+    "checklist": 2
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 14,
+  "fields": {
+    "created_at": "2025-12-27T22:31:35.293Z",
+    "updated_at": "2025-12-27T22:41:31.855Z",
+    "year": 2025,
+    "description": "You must meet the pre-requisites before taking any course in List A. In some cases, this means that you might need to take one or more additional courses beyond those on this checklist.",
+    "checklist": 2
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 15,
+  "fields": {
+    "created_at": "2025-12-27T22:31:50.936Z",
+    "updated_at": "2025-12-27T22:41:04.080Z",
+    "year": 2025,
+    "description": "One of CS 480 and CS 485 is required. If both courses are taken, then one of them can count as one of 'Choose four courses below' from List A. If only one course is taken, it cannot count as one of ‘Choose four courses below’ from list A.",
+    "checklist": 2
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 16,
+  "fields": {
+    "created_at": "2025-12-27T22:33:44.872Z",
+    "updated_at": "2025-12-27T22:33:44.872Z",
+    "year": 2025,
+    "description": "Breadth and depth met by BIOL and CHEM courses.",
+    "checklist": 3
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 17,
+  "fields": {
+    "created_at": "2025-12-27T22:34:15.050Z",
+    "updated_at": "2025-12-27T22:34:15.050Z",
+    "year": 2025,
+    "description": "Seven (regular) or eight (co-op) terms enrolled in at least three courses totalling 1.5 units.",
+    "checklist": 3
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 18,
+  "fields": {
+    "created_at": "2025-12-27T22:34:26.796Z",
+    "updated_at": "2025-12-27T22:34:26.796Z",
+    "year": 2025,
+    "description": "No more than 2.0 units of failed courses.",
+    "checklist": 3
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 19,
+  "fields": {
+    "created_at": "2025-12-27T22:37:51.946Z",
+    "updated_at": "2025-12-27T22:37:51.946Z",
+    "year": 2025,
+    "description": "No more than 5.0 units of unusable course attempts (failures and repeats of passed courses).",
+    "checklist": 3
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 20,
+  "fields": {
+    "created_at": "2025-12-27T22:38:13.541Z",
+    "updated_at": "2025-12-27T22:38:13.541Z",
+    "year": 2025,
+    "description": "CS major average of 60% or higher.",
+    "checklist": 3
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 21,
+  "fields": {
+    "created_at": "2025-12-27T22:38:26.462Z",
+    "updated_at": "2025-12-27T22:38:26.462Z",
+    "year": 2025,
+    "description": "Cumulative average of 60% or higher.",
+    "checklist": 3
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 22,
+  "fields": {
+    "created_at": "2025-12-27T22:38:45.953Z",
+    "updated_at": "2025-12-27T22:38:45.953Z",
+    "year": 2025,
+    "description": "BIOL 465 requires CHEM 233 or CHEM 237 as a prerequisite, but this is waived for CS students in the bioinformatics specialization.",
+    "checklist": 3
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 23,
+  "fields": {
+    "created_at": "2025-12-27T22:40:12.725Z",
+    "updated_at": "2025-12-27T22:40:12.725Z",
+    "year": 2025,
+    "description": "Seven (regular) or eight (co-op) terms enrolled in at least three courses totalling 1.5 units.",
+    "checklist": 4
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 24,
+  "fields": {
+    "created_at": "2025-12-27T22:52:07.755Z",
+    "updated_at": "2025-12-27T22:52:07.755Z",
+    "year": 2025,
+    "description": "No more than 2.0 units of failed courses.",
+    "checklist": 4
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 25,
+  "fields": {
+    "created_at": "2025-12-27T22:52:28.019Z",
+    "updated_at": "2025-12-27T22:52:51.871Z",
+    "year": 2025,
+    "description": "No more than 5.0 units of unusable course attempts (failures and repeats of passed courses).",
+    "checklist": 4
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 26,
+  "fields": {
+    "created_at": "2025-12-27T22:52:44.525Z",
+    "updated_at": "2025-12-27T22:52:44.525Z",
+    "year": 2025,
+    "description": "CS major average of 60% or higher.",
+    "checklist": 4
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 27,
+  "fields": {
+    "created_at": "2025-12-27T22:53:02.775Z",
+    "updated_at": "2025-12-27T22:53:02.775Z",
+    "year": 2025,
+    "description": "Cumulative average of 60% or higher.",
+    "checklist": 4
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 28,
+  "fields": {
+    "created_at": "2025-12-27T22:53:43.380Z",
+    "updated_at": "2025-12-27T22:53:43.380Z",
+    "year": 2025,
+    "description": "Co-op requirements met, if applicable, including PD 1, PD 11, PD 10, and a minimum of two other PD courses.",
+    "checklist": 4
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 29,
+  "fields": {
+    "created_at": "2025-12-27T22:54:19.468Z",
+    "updated_at": "2025-12-27T22:54:19.468Z",
+    "year": 2025,
+    "description": "Seven (regular) or eight (co-op) terms enrolled in at least three courses totaling 1.5 units.",
+    "checklist": 5
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 30,
+  "fields": {
+    "created_at": "2025-12-27T22:54:30.368Z",
+    "updated_at": "2025-12-27T22:54:30.368Z",
+    "year": 2025,
+    "description": "No more than 2.0 units of failed courses.",
+    "checklist": 5
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 31,
+  "fields": {
+    "created_at": "2025-12-27T22:54:48.910Z",
+    "updated_at": "2025-12-27T22:54:48.910Z",
+    "year": 2025,
+    "description": "No more than 5.0 units of unusable course attempts (failures and repeats of passed courses).",
+    "checklist": 5
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 32,
+  "fields": {
+    "created_at": "2025-12-27T22:55:01.479Z",
+    "updated_at": "2025-12-27T22:55:01.479Z",
+    "year": 2025,
+    "description": "CS major average of 60% or higher.",
+    "checklist": 5
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 33,
+  "fields": {
+    "created_at": "2025-12-27T22:55:13.269Z",
+    "updated_at": "2025-12-27T22:55:13.269Z",
+    "year": 2025,
+    "description": "Cumulative average of 60% or higher.",
+    "checklist": 5
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 34,
+  "fields": {
+    "created_at": "2025-12-27T22:55:33.171Z",
+    "updated_at": "2025-12-27T22:55:33.171Z",
+    "year": 2025,
+    "description": "Co-op requirements met, if applicable, including PD 1, PD 11, PD 10, and a minimum of two other PD courses.",
+    "checklist": 5
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 35,
+  "fields": {
+    "created_at": "2025-12-27T22:57:33.888Z",
+    "updated_at": "2025-12-27T22:57:33.888Z",
+    "year": 2025,
+    "description": "The depth requirement is automatically met by the required ECE courses.",
+    "checklist": 6
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 36,
+  "fields": {
+    "created_at": "2025-12-27T22:57:53.094Z",
+    "updated_at": "2025-12-27T22:57:53.094Z",
+    "year": 2025,
+    "description": "Seven (regular) or eight (co-op) terms enrolled in at least three courses totalling 1.5 units.",
+    "checklist": 6
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 37,
+  "fields": {
+    "created_at": "2025-12-27T22:59:05.934Z",
+    "updated_at": "2025-12-27T22:59:05.934Z",
+    "year": 2025,
+    "description": "No more than 2.0 units of failed courses.",
+    "checklist": 6
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 38,
+  "fields": {
+    "created_at": "2025-12-27T22:59:23.580Z",
+    "updated_at": "2025-12-27T22:59:23.580Z",
+    "year": 2025,
+    "description": "No more than 5.0 units of unusable course attempts (failures and repeats of passed courses).",
+    "checklist": 6
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 39,
+  "fields": {
+    "created_at": "2025-12-27T23:00:31.702Z",
+    "updated_at": "2025-12-27T23:00:31.702Z",
+    "year": 2025,
+    "description": "CS major average of 60% or higher.",
+    "checklist": 6
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 40,
+  "fields": {
+    "created_at": "2025-12-27T23:00:43.490Z",
+    "updated_at": "2025-12-27T23:00:43.490Z",
+    "year": 2025,
+    "description": "Cumulative average of 60% or higher.",
+    "checklist": 6
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 41,
+  "fields": {
+    "created_at": "2025-12-27T23:01:07.330Z",
+    "updated_at": "2025-12-27T23:01:07.330Z",
+    "year": 2025,
+    "description": "Co-op requirements met, if applicable, including PD 1, PD 11, PD 10, and a minimum of two other PD courses.",
+    "checklist": 6
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 42,
+  "fields": {
+    "created_at": "2025-12-27T23:01:59.433Z",
+    "updated_at": "2025-12-27T23:07:25.273Z",
+    "year": 2025,
+    "description": "Seven (regular) or eight (co-op) terms enrolled in at least three courses totalling 1.5 units.",
+    "checklist": 7
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 43,
+  "fields": {
+    "created_at": "2025-12-27T23:02:15.232Z",
+    "updated_at": "2025-12-27T23:02:15.232Z",
+    "year": 2025,
+    "description": "No more than 2.0 units of failed courses.",
+    "checklist": 7
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 44,
+  "fields": {
+    "created_at": "2025-12-27T23:02:28.150Z",
+    "updated_at": "2025-12-27T23:02:28.150Z",
+    "year": 2025,
+    "description": "No more than 5.0 units of unusable course attempts (failures and repeats of passed courses)",
+    "checklist": 7
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 45,
+  "fields": {
+    "created_at": "2025-12-27T23:02:45.251Z",
+    "updated_at": "2025-12-27T23:02:45.251Z",
+    "year": 2025,
+    "description": "CS major average of 60% or higher.",
+    "checklist": 7
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 46,
+  "fields": {
+    "created_at": "2025-12-27T23:02:57.852Z",
+    "updated_at": "2025-12-27T23:02:57.852Z",
+    "year": 2025,
+    "description": "Cumulative average of 60% or higher.",
+    "checklist": 7
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 47,
+  "fields": {
+    "created_at": "2025-12-27T23:03:11.689Z",
+    "updated_at": "2025-12-27T23:03:11.689Z",
+    "year": 2025,
+    "description": "Co-op requirements met, if applicable, including PD 1, PD 11, PD 10, and a minimum of two other PD courses.",
+    "checklist": 7
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 48,
+  "fields": {
+    "created_at": "2025-12-27T23:03:27.540Z",
+    "updated_at": "2025-12-27T23:03:27.540Z",
+    "year": 2025,
+    "description": "Only one of CS 453 or CS 459 can be used towards the list B requirement.",
+    "checklist": 7
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 49,
+  "fields": {
+    "created_at": "2025-12-27T23:03:58.577Z",
+    "updated_at": "2025-12-27T23:03:58.577Z",
+    "year": 2025,
+    "description": "Seven (regular) or eight (co-op) terms enrolled in at least three courses totalling 1.5 units.",
+    "checklist": 8
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 50,
+  "fields": {
+    "created_at": "2025-12-27T23:04:13.077Z",
+    "updated_at": "2025-12-27T23:04:13.077Z",
+    "year": 2025,
+    "description": "No more than 2.0 units of failed courses.",
+    "checklist": 8
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 51,
+  "fields": {
+    "created_at": "2025-12-27T23:04:31.021Z",
+    "updated_at": "2025-12-27T23:04:31.021Z",
+    "year": 2025,
+    "description": "No more than 5.0 units of unusable course attempts (failures and repeats of passed courses).",
+    "checklist": 8
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 52,
+  "fields": {
+    "created_at": "2025-12-27T23:04:42.053Z",
+    "updated_at": "2025-12-27T23:04:42.053Z",
+    "year": 2025,
+    "description": "CS major average of 60% or higher.",
+    "checklist": 8
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 53,
+  "fields": {
+    "created_at": "2025-12-27T23:04:52.423Z",
+    "updated_at": "2025-12-27T23:04:52.423Z",
+    "year": 2025,
+    "description": "Cumulative average of 60% or higher.",
+    "checklist": 8
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 54,
+  "fields": {
+    "created_at": "2025-12-27T23:05:06.837Z",
+    "updated_at": "2025-12-27T23:05:06.837Z",
+    "year": 2025,
+    "description": "Co-op requirements met, if applicable, including PD 1, PD 11, PD 10, and a minimum of two other PD courses.",
+    "checklist": 8
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 55,
+  "fields": {
+    "created_at": "2025-12-27T23:05:40.469Z",
+    "updated_at": "2025-12-27T23:05:40.469Z",
+    "year": 2025,
+    "description": "Seven (regular) or eight (co-op) terms enrolled in at least three courses totalling 1.5 units.",
+    "checklist": 9
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 56,
+  "fields": {
+    "created_at": "2025-12-27T23:05:51.603Z",
+    "updated_at": "2025-12-27T23:05:51.603Z",
+    "year": 2025,
+    "description": "No more than 2.0 units of failed courses.",
+    "checklist": 9
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 57,
+  "fields": {
+    "created_at": "2025-12-27T23:06:06.227Z",
+    "updated_at": "2025-12-27T23:06:06.227Z",
+    "year": 2025,
+    "description": "No more than 5.0 units of unusable course attempts (failures and repeats of passed courses).",
+    "checklist": 9
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 58,
+  "fields": {
+    "created_at": "2025-12-27T23:06:16.646Z",
+    "updated_at": "2025-12-27T23:06:16.646Z",
+    "year": 2025,
+    "description": "CS major average of 60% or higher.",
+    "checklist": 9
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 59,
+  "fields": {
+    "created_at": "2025-12-27T23:06:26.236Z",
+    "updated_at": "2025-12-27T23:06:26.236Z",
+    "year": 2025,
+    "description": "Cumulative average of 60% or higher.",
+    "checklist": 9
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 60,
+  "fields": {
+    "created_at": "2025-12-27T23:06:41.072Z",
+    "updated_at": "2025-12-27T23:06:41.072Z",
+    "year": 2025,
+    "description": "Co-op requirements met, if applicable, including PD 1, PD 11, PD 10, and a minimum of two other PD courses.",
+    "checklist": 9
+  }
+},
+{
+  "model": "checklists.noncourserequirement",
+  "pk": 61,
+  "fields": {
+    "created_at": "2025-12-27T23:08:19.025Z",
+    "updated_at": "2025-12-27T23:08:19.025Z",
+    "year": 2025,
+    "description": "Only one of CS 453 or CS 459 can be used towards the list B requirement.",
+    "checklist": 9
+  }
+}
+]

@@ -1,0 +1,101 @@
+[
+{
+  "model": "checklists.checklist",
+  "pk": 1,
+  "fields": {
+    "created_at": "2025-12-27T22:13:42.848Z",
+    "updated_at": "2025-12-27T22:18:16.102Z",
+    "year": 2025,
+    "units_required": 2000,
+    "specialization": 3
+  }
+},
+{
+  "model": "checklists.checklist",
+  "pk": 2,
+  "fields": {
+    "created_at": "2025-12-27T22:14:03.899Z",
+    "updated_at": "2025-12-27T22:18:09.190Z",
+    "year": 2025,
+    "units_required": 2000,
+    "specialization": 4
+  }
+},
+{
+  "model": "checklists.checklist",
+  "pk": 3,
+  "fields": {
+    "created_at": "2025-12-27T22:14:23.903Z",
+    "updated_at": "2025-12-27T22:14:23.903Z",
+    "year": 2025,
+    "units_required": 2000,
+    "specialization": 5
+  }
+},
+{
+  "model": "checklists.checklist",
+  "pk": 4,
+  "fields": {
+    "created_at": "2025-12-27T22:14:41.933Z",
+    "updated_at": "2025-12-27T22:14:41.933Z",
+    "year": 2025,
+    "units_required": 2000,
+    "specialization": 6
+  }
+},
+{
+  "model": "checklists.checklist",
+  "pk": 5,
+  "fields": {
+    "created_at": "2025-12-27T22:15:02.559Z",
+    "updated_at": "2025-12-27T22:15:02.559Z",
+    "year": 2025,
+    "units_required": 2000,
+    "specialization": 7
+  }
+},
+{
+  "model": "checklists.checklist",
+  "pk": 6,
+  "fields": {
+    "created_at": "2025-12-27T22:15:22.223Z",
+    "updated_at": "2025-12-27T22:15:22.223Z",
+    "year": 2025,
+    "units_required": 2000,
+    "specialization": 8
+  }
+},
+{
+  "model": "checklists.checklist",
+  "pk": 7,
+  "fields": {
+    "created_at": "2025-12-27T22:15:57.991Z",
+    "updated_at": "2025-12-27T22:15:57.991Z",
+    "year": 2025,
+    "units_required": 2000,
+    "specialization": 9
+  }
+},
+{
+  "model": "checklists.checklist",
+  "pk": 8,
+  "fields": {
+    "created_at": "2025-12-27T22:16:13.180Z",
+    "updated_at": "2025-12-27T22:16:13.180Z",
+    "year": 2025,
+    "units_required": 2000,
+    "specialization": 10
+  }
+},
+{
+  "model": "checklists.checklist",
+  "pk": 9,
+  "fields": {
+    "created_at": "2025-12-27T22:16:35.841Z",
+    "updated_at": "2025-12-27T22:16:35.841Z",
+    "year": 2025,
+    "units_required": 2000,
+    "specialization": 11
+  }
+}
+]
