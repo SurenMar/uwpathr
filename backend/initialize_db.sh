@@ -21,9 +21,9 @@ if [ "$COURSE_COUNT" = "0" ]; then
   python manage.py loaddata fixtures/courses/course_prerequisites.json
 
   # Checklists and related data
+  python manage.py loaddata fixtures/checklists/requirements/specializations.json
   python manage.py loaddata fixtures/checklists/checklist/checklists.json
   python manage.py loaddata fixtures/checklists/checklist/checklist_nodes.json
   python manage.py loaddata fixtures/checklists/checklist/checkbox_allowed_courses.json
-  python manage.py loaddata fixtures/checklists/requirements/specializations.json
   python manage.py loaddata fixtures/checklists/requirements/non_course_requirements.json
 fi
