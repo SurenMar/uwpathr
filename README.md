@@ -61,14 +61,18 @@ More detailed descriptions of the frontend and backend can be found in their res
 1. Fork repo.
 2. Clone repo and cd to it.
 3. Copy .env.example files to .env.development.
-   `cp .env.example .env.development
-    cp frontend/.env.example frontend/.env.development
-    cp backend/.env.example backend/.env.development`
-4. Start Docker and build with docker compose in root directory:
-   `docker compose --env-file .env.development up --build`
-5. Verify functionality:
+   ```Bash
+   cp .env.example .env.development
+   cp frontend/.env.example frontend/.env.development
+   cp backend/.env.example backend/.env.development
+   ```
+5. Start Docker and build with docker compose in root directory:
+   ```Bash
+   docker compose --env-file .env.development up --build
+   ```
+7. Verify functionality:
    Go to [http://localhost:3000](http://localhost:3000), create an account, and verify that a checklist is loaded and that you can search courses.
-6. Optional: create a superuser for the django admin:
+8. Optional: create a superuser for the django admin:
    `docker compose exec backend python manage.py createsuperuser`
    then login to [http://localhost:8000/admin](http://localhost:8000/admin)
 
