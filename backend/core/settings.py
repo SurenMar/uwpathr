@@ -2,15 +2,9 @@ from os import getenv, path
 from pathlib import Path
 from datetime import timedelta
 from django.core.management.utils import get_random_secret_key
-import dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-dotenv_file = BASE_DIR / '.env'
-
-if path.isfile(dotenv_file):
-  dotenv.load_dotenv(dotenv_file)
 
 DEVELOPMENT_MODE = getenv('DEVELOPMENT_MODE', 'False') == 'True'
 OAUTH2_ENABLED = getenv('OAUTH2_ENABLED', 'False') == 'True'

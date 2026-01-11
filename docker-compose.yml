@@ -4,7 +4,7 @@ services:
     container_name: uwpathr_postgres
     restart: unless-stopped
     env_file:
-      - .env
+      - .env.${ENVIRONMENT}
     environment:
       POSTGRES_DB: ${DB_NAME}
       POSTGRES_USER: ${DB_USER}
@@ -29,7 +29,7 @@ services:
     working_dir: /app
     command: sh -c "./initialize_db.sh && python manage.py runserver 0.0.0.0:8000"
     env_file:
-      - ./backend/.env
+      - ./backend/.env.${ENVIRONMENT}
     depends_on:
       db:
         condition: service_healthy
@@ -43,6 +43,8 @@ services:
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://localhost:8000}
     container_name: uwpathr_frontend
     restart: unless-stopped
+    env_file:
+      - ./frontend/.env.${ENVIRONMENT}
     depends_on:
       - backend
     ports:
