@@ -3,3 +3,7 @@
 
 2. Allow the user to add planned courses to checklist too and 
    display this using yellow colour in the progress bar.
+
+3. In README, add screenshots, explain core benifits (difference with uwplan),
+   Change set up instructions to use make build, and add doc about
+   Makefile commands.
