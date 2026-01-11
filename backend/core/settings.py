@@ -108,11 +108,12 @@ DOMAIN = getenv('DOMAIN')
 SITE_NAME = 'UWPathr'
 
 CAPTCHA_ENABLED = getenv('CAPTCHA_ENABLED', 'False') == 'True'
-TURNSTILE_SECRET_KEY = getenv('TURNSTILE_SECRET_KEY')
-TURNSTILE_VERIFY_TIMEOUT = int(getenv('TURNSTILE_VERIFY_TIMEOUT', '5'))
-TURNSTILE_REPLAY_CACHE_SECONDS = int(
-  getenv('TURNSTILE_REPLAY_CACHE_SECONDS', '600')
-)
+if CAPTCHA_ENABLED:
+  TURNSTILE_SECRET_KEY = getenv('TURNSTILE_SECRET_KEY')
+  TURNSTILE_VERIFY_TIMEOUT = int(getenv('TURNSTILE_VERIFY_TIMEOUT', '5'))
+  TURNSTILE_REPLAY_CACHE_SECONDS = int(
+    getenv('TURNSTILE_REPLAY_CACHE_SECONDS', '600')
+  )
 
 
 # Password
@@ -213,15 +214,15 @@ SIMPLE_JWT = {
 }
 
 if OAUTH2_ENABLED:
-    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = getenv('GOOGLE_AUTH_KEY')
-    SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = getenv('GOOGLE_AUTH_SECRET_KEY')
-    SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URL = getenv('REDIRECT_URLS').split(',')[0]
-    SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
-      'https://www.googleapis.com/auth/userinfo.email',
-      'https://www.googleapis.com/auth/userinfo.profile',
-      'openid',
-    ]
-    SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
+  SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = getenv('GOOGLE_AUTH_KEY')
+  SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = getenv('GOOGLE_AUTH_SECRET_KEY')
+  SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URL = getenv('REDIRECT_URLS').split(',')[0]
+  SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'openid',
+  ]
+  SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
 
 CORS_ALLOWED_ORIGINS = getenv(
   'CORS_ALLOWED_ORIGINS', 
