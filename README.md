@@ -8,7 +8,7 @@ The project consists of a **Django + DRF backend** and a **React + Next.js front
 
 ## Project Status
 
-- Backend: **improving but mostly stable**
+- Backend: **improving**
 - Frontend: **actively improving**
 - Contributions: **open and welcome**, especially frontend/UI improvements
 
@@ -56,6 +56,20 @@ Setup instructions for each part of the project are located in their respective 
 - Python 3.11+
 - Node.js 18+
 - Docker
+
+### Setup (Local Development)
+
+1. Fork and clone repo
+2. Rename .env.example to .env
+3. Start Docker Engine and build with docker compose in root directory:
+   `docker compose up --build -d`
+4. Verify functionality:
+   Go to [http://localhost:3000](http://localhost:3000), create an account, and verify that a checklist is loaded and that you can search courses.
+5. Optional: create a superuser for the django admin:
+   `docker compose exec backend python manage.py createsuperuser`
+   then login to [http://localhost:8000/admin](http://localhost:8000/admin)
+
+If help is needed, contact suren.v.mar@gmail.com.
 
 ---
 
