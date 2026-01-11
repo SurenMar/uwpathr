@@ -4,6 +4,10 @@ UWPathr is a web application designed to help University of Waterloo CS students
 
 The project consists of a **Django + DRF backend** and a **React + Next.js frontend**, with a focus on correctness, robustness, and an intuitive user experience.
 
+More detailed descriptions of the frontend and backend can be found in their respective directories:
+`frontend/README.md`
+`backend/README.md`
+
 ---
 
 ## Project Status
@@ -47,11 +51,6 @@ The project consists of a **Django + DRF backend** and a **React + Next.js front
 
 ## Getting Started
 
-Setup instructions for each part of the project are located in their respective directories:
-
-- `backend/README.md`
-- `frontend/README.md`
-
 ### Prerequisites
 - Python 3.11+
 - Node.js 18+
@@ -70,6 +69,16 @@ Setup instructions for each part of the project are located in their respective 
    then login to [http://localhost:8000/admin](http://localhost:8000/admin)
 
 If help is needed, contact suren.v.mar@gmail.com.
+
+---
+
+## Disabled in Development
+
+- OAuth login
+- CAPTCHA
+- AWS Simple Email Service (Disabled in production too)
+
+The above are disabled since they rely on secret keys to work.
 
 ---
 
