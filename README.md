@@ -70,6 +70,7 @@ For more detailed instructions about the backend and frontend implementation, pl
 
 ### 3. Adding courses to your course list
 - From the dashboard sidebar, navigate to **My Courses**, which contains three lists described on the site.
+- You can add a course to a particular list by searching for the course from the sidebar and choosing which list to add it to.
 - You can only add courses to your **Taken** list if you have completed the required prerequisites. You may add any course to the **Planned** and **Wishlist** lists.
 - When you add a course to a checkbox in your checklist, it is automatically added to your **Taken** list. If you remove it from the checklist, it is not removed from the list and must be removed manually.
 
