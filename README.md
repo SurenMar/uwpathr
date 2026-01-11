@@ -10,6 +10,26 @@ More detailed descriptions of the frontend and backend can be found in their res
 
 ---
 
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Usage](#usage)
+- [Project Status](#)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Commands](#commands)
+- [Disabled in Development](#disabled-in-development)
+- [Contributing](#contributing)
+- [Contribution Guidelines](#contribution-guidelines)
+- [License](#license)
+- [Acknowledgements](#acknowledgements)
+
+---
+
 ## Project Status
 
 - Backend: **improving**
@@ -56,7 +76,7 @@ More detailed descriptions of the frontend and backend can be found in their res
 - Node.js 18+
 - Docker
 
-### Setup (Local Development)
+### Installation
 
 1. Fork repo.
 2. Clone repo and cd to it.
@@ -68,15 +88,32 @@ More detailed descriptions of the frontend and backend can be found in their res
    ```
 5. Start Docker and build with docker compose in root directory:
    ```Bash
-   docker compose --env-file .env.development up --build
+   make build
    ```
 7. Verify functionality:
-   Go to [http://localhost:3000](http://localhost:3000), create an account, and verify that a checklist is loaded and that you can search courses.
+   Go to [http://localhost:3000](http://localhost:3000), create an account, and verify that a checklist is loaded when you log in and that you can search courses.
 8. Optional: create a superuser for the django admin:
-   `docker compose exec backend python manage.py createsuperuser`
+   `make superuser`
    then login to [http://localhost:8000/admin](http://localhost:8000/admin)
 
 If help is needed, contact suren.v.mar@gmail.com.
+
+### Commands
+
+This project is managed using a `Makefile`. Use the commands below to build and run the project locally.
+
+Docker:
+```bash
+make up       # Start the containers in detached mode using .env.development
+make build    # Build images and start containers using .env.development
+make down     # Stop and remove running containers
+make down-v   # Stop containers and remove volumes (resets persisted data)
+```
+
+Django:
+```bash
+make superuser   # Creates a django superuser for admin panel
+```
 
 ---
 
@@ -99,13 +136,13 @@ Please read **[CONTRIBUTING.md](CONTRIBUTING.md)** before opening issues or pull
 
 ---
 
-## Contribution Guidelines (Quick Summary)
+## Contribution Guidelines
 
 - Fork the repository
 - Create a feature branch from `main`
 - Keep changes focused and scoped
 - Open a Pull Request with a clear description
-- Include screenshots for frontend/UI changes
+- Include screenshots if necessary for frontend/UI changes
 
 The maintainer reviews and approves all pull requests.
 
