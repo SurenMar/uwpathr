@@ -57,12 +57,12 @@ backend/
 ### Optional (Safe Defaults Provided)
 - `DEBUG` — Django debug mode (default: True for dev)
 - `CAPTCHA_ENABLED` — Enable Turnstile CAPTCHA on signup (default: False). Set to True in production.
-- `OAUTH2_ENABLED` — Enable Google OAuth2 (default: False)
+- `OAUTH2_ENABLED` — Enable Google OAuth2 (default: False). Set to True in production
 - `AWS_SES_ENABLED` — Enable AWS SES for email (default: False)
 
 **Note:** Contributors don't need to set optional env vars. Development works without them.
 
-If help is needed, contact suren.v.mar@gmail.com
+If help is needed, contact suren.v.mar@gmail.com.
 
 ---
 
