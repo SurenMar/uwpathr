@@ -58,13 +58,17 @@ More detailed descriptions of the frontend and backend can be found in their res
 
 ### Setup (Local Development)
 
-1. Fork and clone repo
-2. Rename .env.example to .env
-3. Start Docker Engine and build with docker compose in root directory:
-   `docker compose up --build -d`
-4. Verify functionality:
+1. Fork repo.
+2. Clone repo and cd to it.
+3. Copy .env.example files to .env.development.
+   `cp .env.example .env.development
+    cp frontend/.env.example frontend/.env.development
+    cp backend/.env.example backend/.env.development`
+4. Start Docker and build with docker compose in root directory:
+   `docker compose --env-file .env.development up --build`
+5. Verify functionality:
    Go to [http://localhost:3000](http://localhost:3000), create an account, and verify that a checklist is loaded and that you can search courses.
-5. Optional: create a superuser for the django admin:
+6. Optional: create a superuser for the django admin:
    `docker compose exec backend python manage.py createsuperuser`
    then login to [http://localhost:8000/admin](http://localhost:8000/admin)
 
@@ -76,9 +80,7 @@ If help is needed, contact suren.v.mar@gmail.com.
 
 - OAuth login
 - CAPTCHA
-- AWS Simple Email Service (Disabled in production too)
-
-The above are disabled since they rely on secret keys to work.
+- AWS SES (Disabled in production too for now)
 
 ---
 
