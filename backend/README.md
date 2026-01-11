@@ -39,10 +39,10 @@ backend/
 1. Fork and clone repo
 2. Rename .env.example to .env
 3. Start Docker Engine and build with docker compose in root directory:
-   `docker compose up --build`
+   `docker compose up --build -d`
 4. Verify functionality:
    Go to [http://localhost:3000](http://localhost:3000), create an account, and verify that a checklist is loaded and that you can search courses.
-5. If needed, create a superuser for the django admin:
+5. Optional: create a superuser for the django admin:
    `docker compose exec backend python manage.py createsuperuser`
    then login to [http://localhost:8000/admin](http://localhost:8000/admin)
 
