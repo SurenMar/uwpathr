@@ -1,4 +1,4 @@
-.PHONY: up build down down-v
+.PHONY: up build down down-v superuser
 up:
 	docker compose --env-file .env.development up -d
 
@@ -10,3 +10,6 @@ down:
 
 down-v:
 	docker compose --env-file .env.development down -v
+
+superuser:
+	docker compose --env-file .env.development exec backend python manage.py createsuperuser
