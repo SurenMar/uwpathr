@@ -67,18 +67,23 @@ For more detailed instructions about the backend and frontend implementation, pl
 - If you have not completed the required prerequisites for a course, the checklist will prevent you from adding it.
 - As you add or remove courses, your progress bar and unit requirements update automatically.
 - As with the official university checklists, a course cannot be added to more than one checkbox.
+<img width="500" alt="Screenshot 2026-01-11 at 5 24 58 PM" src="https://github.com/user-attachments/assets/33d5e31c-8bc1-4728-8962-f7e01bfc82e0" />
+<img width="500" alt="Screenshot 2026-01-11 at 5 29 37 PM" src="https://github.com/user-attachments/assets/b4d036ad-5498-407c-be37-8df518fbf9fc" />
 
 ### 3. Adding courses to your course list
 - From the dashboard sidebar, navigate to **My Courses**, which contains three lists described on the site.
 - You can add a course to a particular list by searching for the course from the sidebar and choosing which list to add it to.
 - You can only add courses to your **Taken** list if you have completed the required prerequisites. You may add any course to the **Planned** and **Wishlist** lists.
 - When you add a course to a checkbox in your checklist, it is automatically added to your **Taken** list. If you remove it from the checklist, it is not removed from the list and must be removed manually.
+<img width="500" alt="Screenshot 2026-01-11 at 5 42 59 PM" src="https://github.com/user-attachments/assets/fc38b417-f570-47dd-b70a-2f13982f3372" />
+<img width="500" alt="Screenshot 2026-01-11 at 5 35 53 PM" src="https://github.com/user-attachments/assets/3ac46c96-369f-4d98-b561-4ad5e4bce81e" />
 
 ### 4. Creating a course path
 - If you want to take an upper-year course but are unsure which prerequisites to choose, add the course to your **Planned** or **Wishlist** list and create a path.
 - Clicking this option opens a prerequisite tree that shows the available paths to that course.
-- After deciding which path you want to take, select the appropriate branches and click **Save Path**.
+- After deciding which path you want to take, select the appropriate branches and click **Save Path**. Your selected branches will change colour to blue.
 - You now have a clear list of courses to take in order to reach that upper-year course.
+<img width="500" alt="Screenshot 2026-01-11 at 5 36 28 PM" src="https://github.com/user-attachments/assets/3e57a664-fb5d-454e-ab33-ebe767620a0d" />
 
 ---
 
