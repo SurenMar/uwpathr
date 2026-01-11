@@ -1,6 +1,6 @@
 # UWPathr
 
-UWPathr is a web application designed to help University of Waterloo CS students plan, explore, and optimize their degree.
+UWPathr is an open source web application designed to help University of Waterloo CS students plan, explore, and optimize their degree.
 
 The project consists of a **Django + DRF backend** and a **React + Next.js frontend**, with a focus on correctness, robustness, and an intuitive user experience.
 
@@ -13,9 +13,11 @@ More detailed descriptions of the frontend and backend can be found in their res
 ## Table of Contents
 
 - [Overview](#overview)
-- [Features](#features)
+  - [About the Tool](#about-the-tool)
+  - [About this README](#about-this-readme)
+    
 - [Usage](#usage)
-- [Project Status](#)
+- [Project Status](#project-status)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
@@ -27,6 +29,55 @@ More detailed descriptions of the frontend and backend can be found in their res
 - [Contribution Guidelines](#contribution-guidelines)
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
+
+---
+
+## Overview
+
+### About the Tool
+
+UWPathr is an open source degree planner for University of Waterloo CS students.
+
+Planning a CS degree is mostly in the hands of the CS student, making it stressful and error-prone. UWPathr simplifies this process by providing a clear degree checklist, automatic prerequisite checking, and tools to plan a valid path to any upper-year course.
+
+What sets UWPathr apart from other degree planners is that it handles course validation automatically. Instead of requiring students to determine whether their course selections are valid, UWPathr enforces degree rules and prerequisites internally, allowing students to focus on exploring courses they’re interested in.
+
+UWPathr is limited to Computer Science degrees, as most other programs at the University of Waterloo are already planned out by the university.
+
+UWPathr currently only supports the base degree (no specialization), but more degrees will come in the future.
+
+### About this README
+
+This file contains instructions about how to use the tool. Below it are setup instructions for anyone who wants to contribute.
+
+For more detailed instructions about the backend and frontend implementation, please visit the their respective READMEs,
+
+---
+
+## Usage
+
+### 1. Landing page
+- When you enter the site, you are shown the landing page with brief information about UWPathr.
+- Create an account and log in. There is currently no email verification.
+
+### 2. Filling in your checklist
+- After logging in, you are taken to the dashboard, which displays your degree checklist.
+- This checklist matches the official checklists provided by the university.
+- For each checkbox, you can add a course by typing its course code and selecting it from the dropdown. Only courses that are valid for that checkbox are shown.
+- If you have not completed the required prerequisites for a course, the checklist will prevent you from adding it.
+- As you add or remove courses, your progress bar and unit requirements update automatically.
+- As with the official university checklists, a course cannot be added to more than one checkbox.
+
+### 3. Adding courses to your course list
+- From the dashboard sidebar, navigate to **My Courses**, which contains three lists described on the site.
+- You can only add courses to your **Taken** list if you have completed the required prerequisites. You may add any course to the **Planned** and **Wishlist** lists.
+- When you add a course to a checkbox in your checklist, it is automatically added to your **Taken** list. If you remove it from the checklist, it is not removed from the list and must be removed manually.
+
+### 4. Creating a course path
+- If you want to take an upper-year course but are unsure which prerequisites to choose, add the course to your **Planned** or **Wishlist** list and create a path.
+- Clicking this option opens a prerequisite tree that shows the available paths to that course.
+- After deciding which path you want to take, select the appropriate branches and click **Save Path**.
+- You now have a clear list of courses to take in order to reach that upper-year course.
 
 ---
 
