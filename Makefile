@@ -1,6 +1,6 @@
 .PHONY: up build
 up:
-  docker compose --env-file .env.development up -d
+	docker compose --env-file .env.development up -d
 
 build:
-  docker compose --env-file .env.development up --build
+	docker compose --env-file .env.development up --build
