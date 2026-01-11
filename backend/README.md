@@ -36,14 +36,33 @@ backend/
 
 ## Setup (Local Development)
 
-1. Create and activate a virtual environment
-2. Install dependencies:
-   `pip install -r requirements.txt`
-3. Configure environment variables
-4. Run migrations:
-   python manage.py migrate
-5. Start the development server:
-   python manage.py runserver
+1. Fork and clone repo
+2. Rename .env.example to .env
+3. Start Docker Engine and build with docker compose in root directory:
+   `docker compose up --build -d`
+4. Verify functionality:
+   Go to [http://localhost:3000](http://localhost:3000), create an account, and verify that a checklist is loaded and that you can search courses.
+5. Optional: create a superuser for the django admin:
+   `docker compose exec backend python manage.py createsuperuser`
+   then login to [http://localhost:8000/admin](http://localhost:8000/admin)
+
+---
+
+## Environment Variables
+
+### Required
+- `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, `DB_PORT` — PostgreSQL config
+- `DJANGO_SECRET_KEY` — Django secret key
+
+### Optional (Safe Defaults Provided)
+- `DEBUG` — Django debug mode (default: True for dev)
+- `CAPTCHA_ENABLED` — Enable Turnstile CAPTCHA on signup (default: False). Set to True in production.
+- `OAUTH2_ENABLED` — Enable Google OAuth2 (default: False). Set to True in production
+- `AWS_SES_ENABLED` — Enable AWS SES for email (default: False)
+
+**Note:** Contributors don't need to set optional env vars. Development works without them.
+
+If help is needed, contact suren.v.mar@gmail.com.
 
 ---
 

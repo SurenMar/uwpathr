@@ -13,8 +13,14 @@ if path.isfile(dotenv_file):
   dotenv.load_dotenv(dotenv_file)
 
 DEVELOPMENT_MODE = getenv('DEVELOPMENT_MODE', 'False') == 'True'
+OAUTH2_ENABLED = getenv('OAUTH2_ENABLED', 'False') == 'True'
 
 SECRET_KEY = getenv('DJANGO_SECRET_KEY')
+if not SECRET_KEY:
+  if not DEVELOPMENT_MODE:
+    raise ValueError('DJANGO_SECRET_KEY is required')
+  SECRET_KEY = get_random_secret_key()
+
 DEBUG = getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = getenv('DJANGO_ALLOWED_HOSTS', 
@@ -107,6 +113,7 @@ if DEVELOPMENT_MODE is True:
 DOMAIN = getenv('DOMAIN')
 SITE_NAME = 'UWPathr'
 
+CAPTCHA_ENABLED = getenv('CAPTCHA_ENABLED', 'False') == 'True'
 TURNSTILE_SECRET_KEY = getenv('TURNSTILE_SECRET_KEY')
 TURNSTILE_VERIFY_TIMEOUT = int(getenv('TURNSTILE_VERIFY_TIMEOUT', '5'))
 TURNSTILE_REPLAY_CACHE_SECONDS = int(
@@ -185,11 +192,13 @@ DJOSER = {
   # 'PASSWORD_RESET_CONFIRM_RETYPE': True,
   'USER_CREATE_PASSWORD_RETYPE': True,
   'TOKEN_MODEL': None,
-  'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': getenv('REDIRECT_URLS').split(','),
   'SERIALIZERS': {
     'user_create': 'users.serializers.CaptchaUserCreateSerializer',
   },
 }
+
+if OAUTH2_ENABLED:
+  DJOSER['SOCIAL_AUTH_ALLOWED_REDIRECT_URIS'] = getenv('REDIRECT_URLS').split(',')
 
 AUTH_COOKIE = 'access'
 AUTH_COOKIE_ACCESS_MAX_AGE = 60 * 10 # 10 minutes
@@ -209,15 +218,16 @@ SIMPLE_JWT = {
     'UPDATE_LAST_LOGIN': True,
 }
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = getenv('GOOGLE_AUTH_KEY')
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = getenv('GOOGLE_AUTH_SECRET_KEY')
-SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URL = getenv('REDIRECT_URLS').split(',')[0]
-SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
-  'https://www.googleapis.com/auth/userinfo.email',
-  'https://www.googleapis.com/auth/userinfo.profile',
-  'openid',
-]
-SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
+if OAUTH2_ENABLED:
+    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = getenv('GOOGLE_AUTH_KEY')
+    SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = getenv('GOOGLE_AUTH_SECRET_KEY')
+    SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URL = getenv('REDIRECT_URLS').split(',')[0]
+    SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+      'https://www.googleapis.com/auth/userinfo.email',
+      'https://www.googleapis.com/auth/userinfo.profile',
+      'openid',
+    ]
+    SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
 
 CORS_ALLOWED_ORIGINS = getenv(
   'CORS_ALLOWED_ORIGINS', 

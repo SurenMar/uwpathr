@@ -8,6 +8,7 @@ type SubmitResult = boolean;
 export default function useRegister() {
 	const router = useRouter();
 	const [register, { isLoading }] = useRegisterMutation();
+	const captchaEnabled = process.env.NEXT_PUBLIC_CAPTCHA_ENABLED === 'true';
 	const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
 	const [formData, setFormData] = useState({
@@ -42,7 +43,7 @@ export default function useRegister() {
 	const onSubmit = async (event: FormEvent<HTMLFormElement>): Promise<SubmitResult> => {
 		event.preventDefault();
 
-		if (!captchaToken) {
+		if (captchaEnabled && !captchaToken) {
 			toast.error('Please complete the CAPTCHA before signing up.');
 			return false;
 		}
@@ -54,7 +55,7 @@ export default function useRegister() {
 				email,
 				password,
 				re_password,
-				captcha_token: captchaToken,
+				...(captchaEnabled && captchaToken ? { captcha_token: captchaToken } : {}),
 			}).unwrap();
 
 			toast.success('You have registered successfully. Please login.');
