@@ -35,16 +35,6 @@ backend/
 
 ---
 
-## Disabled in Development
-
-- OAuth login
-- CAPTCHA
-- AWS Simple Email Service (Disabled in production too)
-
-The above are disabled since they rely on secret keys to work.
-
----
-
 ## API Usage
 
 - The backend exposes a REST API consumed by the frontend
