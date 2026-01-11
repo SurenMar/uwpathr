@@ -2,15 +2,9 @@ from os import getenv, path
 from pathlib import Path
 from datetime import timedelta
 from django.core.management.utils import get_random_secret_key
-import dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-dotenv_file = BASE_DIR / '.env'
-
-if path.isfile(dotenv_file):
-  dotenv.load_dotenv(dotenv_file)
 
 DEVELOPMENT_MODE = getenv('DEVELOPMENT_MODE', 'False') == 'True'
 OAUTH2_ENABLED = getenv('OAUTH2_ENABLED', 'False') == 'True'
@@ -114,11 +108,12 @@ DOMAIN = getenv('DOMAIN')
 SITE_NAME = 'UWPathr'
 
 CAPTCHA_ENABLED = getenv('CAPTCHA_ENABLED', 'False') == 'True'
-TURNSTILE_SECRET_KEY = getenv('TURNSTILE_SECRET_KEY')
-TURNSTILE_VERIFY_TIMEOUT = int(getenv('TURNSTILE_VERIFY_TIMEOUT', '5'))
-TURNSTILE_REPLAY_CACHE_SECONDS = int(
-  getenv('TURNSTILE_REPLAY_CACHE_SECONDS', '600')
-)
+if CAPTCHA_ENABLED:
+  TURNSTILE_SECRET_KEY = getenv('TURNSTILE_SECRET_KEY')
+  TURNSTILE_VERIFY_TIMEOUT = int(getenv('TURNSTILE_VERIFY_TIMEOUT', '5'))
+  TURNSTILE_REPLAY_CACHE_SECONDS = int(
+    getenv('TURNSTILE_REPLAY_CACHE_SECONDS', '600')
+  )
 
 
 # Password
@@ -219,15 +214,15 @@ SIMPLE_JWT = {
 }
 
 if OAUTH2_ENABLED:
-    SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = getenv('GOOGLE_AUTH_KEY')
-    SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = getenv('GOOGLE_AUTH_SECRET_KEY')
-    SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URL = getenv('REDIRECT_URLS').split(',')[0]
-    SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
-      'https://www.googleapis.com/auth/userinfo.email',
-      'https://www.googleapis.com/auth/userinfo.profile',
-      'openid',
-    ]
-    SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
+  SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = getenv('GOOGLE_AUTH_KEY')
+  SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = getenv('GOOGLE_AUTH_SECRET_KEY')
+  SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URL = getenv('REDIRECT_URLS').split(',')[0]
+  SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'openid',
+  ]
+  SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
 
 CORS_ALLOWED_ORIGINS = getenv(
   'CORS_ALLOWED_ORIGINS', 

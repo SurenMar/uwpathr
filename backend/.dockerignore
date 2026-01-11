@@ -2,7 +2,8 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyo
-.env
+.env.development
+.env.production
 .git/
 .DS_Store
 venv/
