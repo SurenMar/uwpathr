@@ -22,13 +22,12 @@ This document explains **how to contribute**, **what kinds of contributions are 
 ## Ways to Contribute
 
 You can contribute by:
-- Reporting bugs
+- Reporting/Fixing bugs
 - Improving the UI / UX
-- Fixing frontend bugs
+- Adding new features
+- Displaying new content
 - Improving performance or accessibility
 - Improving documentation
-
-If you’re unsure where to start, look for issues labeled `good first issue` or `frontend`.
 
 ---
 
@@ -40,7 +39,7 @@ If you’re unsure where to start, look for issues labeled `good first issue` or
 └── README.md
 ```
 
-- The backend is mostly stable but still welcomes contributions.
+- The backend is improving and welcomes contributions.
 - The frontend is the primary area open for community contributions.
 
 ---
@@ -107,7 +106,7 @@ Guidelines:
 Backend changes should be discussed before starting work.
 
 Please open an issue first if you want to:
-- Modify API behavior
+- Modify or add to API behavior
 - Change authentication or permissions
 - Change database models
 - Refactor backend architecture
