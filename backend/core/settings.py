@@ -231,7 +231,7 @@ if OAUTH2_ENABLED:
 
 # SECURITY SETTINGS:
 
-if DEVELOPMENT_MODE:
+if not DEVELOPMENT_MODE:
   SECURE_PROXY_SSL_HEADER = (                 # Trust reverse proxy headers for SSL detection
     'HTTP_X_FORWARDED_PROTO', 
     'https'
