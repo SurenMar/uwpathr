@@ -2,6 +2,7 @@ from os import getenv, path
 from pathlib import Path
 from datetime import timedelta
 from django.core.management.utils import get_random_secret_key
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -79,17 +80,13 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database
 
-if DEVELOPMENT_MODE is True:
-  DATABASES = {
-      'default': {
-          'ENGINE': 'django.db.backends.postgresql',
-          'NAME': getenv('DB_NAME'),
-          "USER": getenv('DB_USER'),
-          "PASSWORD": getenv('DB_PASSWORD'),
-          'HOST': getenv('DB_HOST'),
-          'PORT': getenv('DB_PORT'),
-      }
-  }
+DATABASES = {
+  'default': dj_database_url.config(
+    default=getenv('DATABASE_URL'),
+    conn_max_age=600,
+    ssl_require=not DEVELOPMENT_MODE,
+  )
+}
 
 
 # Email settings
@@ -151,11 +148,11 @@ USE_TZ = True
 
 # Static files (admin)
 
-if DEVELOPMENT_MODE is True:
-  STATIC_URL = 'static/'
-  STATIC_ROOT = BASE_DIR / 'static'
-  MEDIA_URL = 'media/'
-  MEDIA_ROOT = BASE_DIR / 'media'
+
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'static'
+MEDIA_URL = 'media/'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 
 AUTHENTICATION_BACKENDS = {
@@ -223,6 +220,26 @@ if OAUTH2_ENABLED:
     'openid',
   ]
   SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
+
+
+# SECURITY SETTINGS:
+
+if DEVELOPMENT_MODE:
+  SECURE_PROXY_SSL_HEADER = (                 # Trust reverse proxy headers for SSL detection
+    'HTTP_X_FORWARDED_PROTO', 
+    'https'
+  )
+  SECURE_SSL_REDIRECT = True                  # Redirect all HTTP requests to HTTPS
+  SECURE_HSTS_SECONDS = 31536000              # HTTP Strict-Transport-Security: enforce HTTPS for 1 year
+  SECURE_HSTS_INCLUDE_SUBDOMAINS = True       # Apply HSTS policy to all subdomains
+  SECURE_HSTS_PRELOAD = True                  # Allow inclusion in browser HSTS preload lists
+  SECURE_BROWSER_XSS_FILTER = True            # Enable browser XSS protection filter
+  X_FRAME_OPTIONS = 'DENY'                    # Prevent clickjacking by denying embedding in frames
+
+CSRF_TRUSTED_ORIGINS = getenv(                # List of allowed origins for CSRF-protected requests
+  'CSRF_TRUSTED_ORIGINS', ''
+).split(',')
+
 
 CORS_ALLOWED_ORIGINS = getenv(
   'CORS_ALLOWED_ORIGINS', 
