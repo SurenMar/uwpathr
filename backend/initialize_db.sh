@@ -1,12 +1,6 @@
 #!/bin/bash
 set -euo pipefail
 
-# wait for DB to be ready
-echo "Waiting for DB..."
-while ! pg_isready -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USER"; do
-  sleep 1
-done
-
 echo "Applying migrations..."
 python manage.py migrate --noinput
 
