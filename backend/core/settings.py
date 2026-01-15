@@ -18,8 +18,14 @@ if not SECRET_KEY:
 
 DEBUG = getenv('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = getenv('DJANGO_ALLOWED_HOSTS', 
-                       '127.0.0.1,localhost').split(',')
+ALLOWED_HOSTS = [
+  h.strip()
+  for h in getenv(
+    'DJANGO_ALLOWED_HOSTS',
+    '127.0.0.1,localhost'
+  ).split(',')
+  if h.strip()
+]
 
 # Application definition
 
