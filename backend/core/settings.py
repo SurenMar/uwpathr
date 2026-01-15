@@ -232,7 +232,9 @@ if OAUTH2_ENABLED:
 # SECURITY SETTINGS:
 
 if not DEVELOPMENT_MODE:
-  SECURE_PROXY_SSL_HEADER = (                 # Trust reverse proxy headers for SSL detection
+  # Trust reverse proxy headers for SSL detection
+  USE_X_FORWARDED_HOST = True
+  SECURE_PROXY_SSL_HEADER = (
     'HTTP_X_FORWARDED_PROTO', 
     'https'
   )
