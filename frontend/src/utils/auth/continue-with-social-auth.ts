@@ -5,6 +5,7 @@ export default async function continueWithSocialAuth(
 	redirect: string
 ) {
 	try {
+		console.log('ENV:', process.env.NODE_ENV, 'REDIRECT:', process.env.NEXT_PUBLIC_REDIRECT_URL);
 		const url = `${
 			process.env.NEXT_PUBLIC_API_URL
 		}/api/o/${provider}/?redirect_uri=${
