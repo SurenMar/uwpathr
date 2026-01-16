@@ -7,6 +7,7 @@
     - [Specializations & Checklists](#specializations--checklists)
     - [User Checklists](#user-checklists)
     - [Courses](#courses)
+        - [Categories](#categories)
     - [Additional Constraints](#additional-constraints)
     - [Depth Lists & Other](#depth-lists--other)
 
@@ -173,6 +174,17 @@ erDiagram
 | parent_id | FK → CoursePrerequisiteNode (self) | MPPT tree node |
 | leaf_course_id | FK → Course | Prerequisite course (if leaf) |
 | num_children_required | SmallInt | Children required (if group) |
+
+#### Categories
+- `math`: Courses that count as a math course
+- `non-math`: Courses that don't count as a math course
+- `cs`: Courses with code CS
+- `hum`: Courses that count as a Humanities course
+- `ss`: Courses that count as a Social Sciences course
+- `ps`: Courses that count as a Pure Sciences course
+- `as`: Courses that count as an Applied Sciences course
+- `comm1`: Courses in Communications List I
+- `comm2`: Courses in Communications List II
 
 ---
 
