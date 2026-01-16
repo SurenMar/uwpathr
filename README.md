@@ -105,7 +105,7 @@ If you identify a course with incorrect prerequisites, please submit an **“Inc
 
 ## Project Status
 
-- Backend: **improving**
+- Backend: **actively improving**
 - Frontend: **actively improving**
 - Contributions: **open and welcome**, especially frontend/UI improvements
 
@@ -201,7 +201,7 @@ make superuser   # Creates a django superuser for admin panel
 Contributions are welcome!
 
 - Frontend/UI improvements are especially encouraged
-- Backend changes should be discussed before implementation
+- Backend changes should be discussed before implementation unless the change is simply adding a new api endpoint or serializer.
 
 Please read **[CONTRIBUTING.md](CONTRIBUTING.md)** before opening issues or pull requests.
 
