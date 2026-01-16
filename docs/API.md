@@ -36,10 +36,10 @@ Base URL: `/api/`
   - [List User Courses](#list-user-courses)
   - [Add Course to List](#add-course-to-list)
   - [Remove Course from List](#remove-course-from-list)
-- [Course Prerequisite Paths](#course-prerequisite-paths)
-  - [List Prerequisite Paths](#list-prerequisite-paths)
-  - [Create Prerequisite Path](#create-prerequisite-path)
-  - [Delete Prerequisite Path](#delete-prerequisite-path)
+- [Course Paths](#course-paths)
+  - [List Course Paths](#list-course-paths)
+  - [Create Course Path](#create-course-path)
+  - [Delete Course Path](#delete-course-path)
 - [Additional Constraints](#additional-constraints)
   - [List Additional Constraints](#list-additional-constraints)
   - [Update Additional Constraint](#update-additional-constraint)
@@ -74,7 +74,7 @@ Create a new user account.
   "password": "securepassword",
   "re_password": "securepassword",
   "start_year": 2024,
-  "captcha_token": "token_from_turnstile"
+  "captcha_token": "token_from_turnstile" // Disabled in development
 }
 ```
 
@@ -208,12 +208,12 @@ Get paginated list of courses with filtering, searching, and sorting.
   {
     "id": 1,
     "code": "CS",
-    "number": "137",
-    "title": "Design of Usable Interactive Systems",
+    "number": "135",
+    "title": "Introduction to the best programming language",
     "num_uwflow_ratings": 42,
-    "uwflow_liked_rating": 85,
+    "uwflow_liked_rating": 100,
     "uwflow_easy_ratings": 72,
-    "uwflow_useful_ratings": 88
+    "uwflow_useful_ratings": 100
   }
 ]
 ```
@@ -231,13 +231,13 @@ Get detailed information about a specific course.
 {
   "id": 1,
   "code": "CS",
-  "number": "137",
-  "units": 3,
-  "title": "Design of Usable Interactive Systems",
+  "number": "136",
+  "units": 50,
+  "title": "Elementary Algorithm Design And Data Abstraction",
   "description": "...",
-  "category": ["cs", "hum"],
-  "corequisites": "...",
-  "antirequisites": "...",
+  "category": ["math", "cs"],
+  "corequisites": "Coreq: CS 136L.",
+  "antirequisites": "Antireq: CS 137, 138, 146, PHYS 239",
   "num_uwflow_ratings": 42,
   "uwflow_liked_rating": 85,
   "uwflow_easy_ratings": 72,
@@ -257,21 +257,134 @@ Get the prerequisite tree for a course (root nodes only).
 - `target_course` - Course ID (required)
 
 **Response:** `200 OK`
+
+This is the prerequisite tree for CS 136. 
+
+For help understanding, visit the [academic calendar](https://uwaterloo.ca/academic-calendar/undergraduate-studies/catalog#/courses/ryrKwFEXKn?q=CS%20136&&limit=20&skip=0&bc=true&bcCurrent=&bcCurrent=Elementary%20Algorithm%20Design%20and%20Data%20Abstraction&bcItemType=courses)
 ```json
 [
-  {
-    "id": 10,
-    "target_course": { "id": 1, "code": "CS", "number": "137" },
-    "node_type": "group",
-    "leaf_course": null,
-    "num_children_required": 2,
-    "children": [
-      {
-        "node_type": "course",
-        "leaf_course": { "id": 5, "code": "CS", "number": "115" }
-      }
-    ]
-  }
+    {
+        "id": 337075,
+        "target_course": {
+            "id": 183719,
+            "code": "CS",
+            "number": "136",
+            "title": "Elementary Algorithm Design And Data Abstraction",
+            "num_uwflow_ratings": 832,
+            "uwflow_liked_rating": 81,
+            "uwflow_easy_ratings": 57,
+            "uwflow_useful_ratings": 92
+        },
+        "node_type": "group",
+        "leaf_course": null,
+        "num_children_required": 1,
+        "children": [
+            {
+                "id": 337076,
+                "target_course": {
+                    "id": 183719,
+                    "code": "CS",
+                    "number": "136",
+                    "title": "Elementary Algorithm Design And Data Abstraction",
+                    "num_uwflow_ratings": 832,
+                    "uwflow_liked_rating": 81,
+                    "uwflow_easy_ratings": 57,
+                    "uwflow_useful_ratings": 92
+                },
+                "node_type": "course",
+                "leaf_course": {
+                    "id": 181368,
+                    "code": "CS",
+                    "number": "115",
+                    "title": "Introduction To Computer Science 1",
+                    "num_uwflow_ratings": 2282,
+                    "uwflow_liked_rating": 26,
+                    "uwflow_easy_ratings": 11,
+                    "uwflow_useful_ratings": 22
+                },
+                "num_children_required": null,
+                "children": []
+            },
+            {
+                "id": 337078,
+                "target_course": {
+                    "id": 183719,
+                    "code": "CS",
+                    "number": "136",
+                    "title": "Elementary Algorithm Design And Data Abstraction",
+                    "num_uwflow_ratings": 832,
+                    "uwflow_liked_rating": 81,
+                    "uwflow_easy_ratings": 57,
+                    "uwflow_useful_ratings": 92
+                },
+                "node_type": "course",
+                "leaf_course": {
+                    "id": 181370,
+                    "code": "CS",
+                    "number": "135",
+                    "title": "Designing Functional Programs",
+                    "num_uwflow_ratings": 1091,
+                    "uwflow_liked_rating": 86,
+                    "uwflow_easy_ratings": 67,
+                    "uwflow_useful_ratings": 84
+                },
+                "num_children_required": null,
+                "children": []
+            },
+            {
+                "id": 337079,
+                "target_course": {
+                    "id": 183719,
+                    "code": "CS",
+                    "number": "136",
+                    "title": "Elementary Algorithm Design And Data Abstraction",
+                    "num_uwflow_ratings": 832,
+                    "uwflow_liked_rating": 81,
+                    "uwflow_easy_ratings": 57,
+                    "uwflow_useful_ratings": 92
+                },
+                "node_type": "course",
+                "leaf_course": {
+                    "id": 181375,
+                    "code": "CS",
+                    "number": "145",
+                    "title": "Designing Functional Programs (Advanced Level)",
+                    "num_uwflow_ratings": 309,
+                    "uwflow_liked_rating": 79,
+                    "uwflow_easy_ratings": 59,
+                    "uwflow_useful_ratings": 68
+                },
+                "num_children_required": null,
+                "children": []
+            },
+            {
+                "id": 337077,
+                "target_course": {
+                    "id": 183719,
+                    "code": "CS",
+                    "number": "136",
+                    "title": "Elementary Algorithm Design And Data Abstraction",
+                    "num_uwflow_ratings": 832,
+                    "uwflow_liked_rating": 81,
+                    "uwflow_easy_ratings": 57,
+                    "uwflow_useful_ratings": 92
+                },
+                "node_type": "course",
+                "leaf_course": {
+                    "id": 183718,
+                    "code": "CS",
+                    "number": "116",
+                    "title": "Introduction To Computer Science 2",
+                    "num_uwflow_ratings": 387,
+                    "uwflow_liked_rating": 80,
+                    "uwflow_easy_ratings": 75,
+                    "uwflow_useful_ratings": 88
+                },
+                "num_children_required": null,
+                "children": []
+            }
+        ]
+    }
 ]
 ```
 
@@ -289,9 +402,9 @@ Get all available specializations/programs.
 ```json
 [
   {
-    "id": 1,
-    "name": "Computer Science",
-    "description": "Bachelor of Science in Computer Science"
+    "id": 8,
+    "name": "DH",
+    "description": "Digital Hardware"
   }
 ]
 ```
@@ -362,21 +475,25 @@ Get all checklists for the authenticated user.
 - `specialization` - Filter by specialization ID
 
 **Response:** `200 OK`
+
+An actual response is too long to be included in this document.
+
+Please use Postman or another tool to get a full response if needed.
 ```json
 [
   {
     "id": 1,
     "year": 1,
     "specialization": 1,
-    "units_required": 36,
-    "taken_course_units": 12,
-    "planned_course_units": 12,
+    "units_required": 2000,
+    "taken_course_units": 150,
+    "planned_course_units": 0,
     "completed": false,
     "nodes": [
       {
         "id": 10,
         "requirement_type": "head",
-        "title": "First Year Requirements",
+        "title": "Required Courses",
         "units_required": null,
         "units_gathered": null,
         "completed": false,
@@ -414,7 +531,7 @@ Create a new checklist for the authenticated user based on a template.
 ```
 PATCH /api/user-checklist-nodes/{id}/
 ```
-Update a checklist node (e.g., mark as complete, select course).
+Update a checklist node (e.g., mark as complete, select a course, etc).
 
 **Request Body:**
 ```json
@@ -443,7 +560,8 @@ Get all courses for the authenticated user.
 - `course_list` - Filter by list type: `taken`, `planned`, `wishlist`
 - `course__code` - Filter by course code
 - `course__number` - Filter by course number
-- `category` - Comma-separated categories
+- `category` - Comma-separated categories: `CS`, `Non-math`, `hum`
+, etc
 - `search` - Search by course code/number
 - `ordering` - Sort by field
 
@@ -477,7 +595,10 @@ Add a course to user's taken, planned, or wishlist.
 
 **Response:** `201 Created`
 
-**Note:** Automatically removes from other lists if exists.
+**Notes:** 
+- Automatically removes from other lists if exists.
+- Automatically checks if prerequisites are met if `course_list == taken`
+
 
 ---
 
@@ -491,13 +612,15 @@ Remove a course from user's lists.
 
 ---
 
-## Course Prerequisite Paths
+## Course Paths
 
-### List Prerequisite Paths
+### List Course Paths
 ```
 GET /api/user-path-nodes/?target_course={user_course_id}
 ```
-Get prerequisite path tree for a specific user course.
+Get path tree for a specific user course.
+
+Response is similar to a prerequisite tree.
 
 **Query Parameters:**
 - `target_course` - UserCourse ID (required)
@@ -509,7 +632,7 @@ Get prerequisite path tree for a specific user course.
     "id": 1,
     "target_course": 5,
     "prerequisite_node": 10,
-    "branch_completed": true,
+    "branch_completed": true,  // True, if the user has taken the required courses for this branch. False otherwise.
     "parent": null,
     "children": [...]
   }
@@ -518,11 +641,11 @@ Get prerequisite path tree for a specific user course.
 
 ---
 
-### Create Prerequisite Path
+### Create Course Path
 ```
 POST /api/user-path-nodes/
 ```
-Create prerequisite path tree for a course.
+Bulk create path tree for a course.
 
 **Request Body:**
 ```json
@@ -544,11 +667,11 @@ Create prerequisite path tree for a course.
 
 ---
 
-### Delete Prerequisite Path
+### Delete Coruse Path
 ```
 DELETE /api/user-path-nodes/{id}/
 ```
-Remove a prerequisite path node.
+Remove a path node.
 
 **Response:** `204 No Content`
 
@@ -560,7 +683,7 @@ Remove a prerequisite path node.
 ```
 GET /api/user-additional-constraints/?target_checklist={checklist_id}
 ```
-Get all additional constraints for a user's checklist.
+Get all additional constraint requirements for a user's checklist.
 
 **Query Parameters:**
 - `target_checklist` - UserChecklist ID (required)
@@ -571,9 +694,9 @@ Get all additional constraints for a user's checklist.
   {
     "id": 1,
     "requirement_type": "group",
-    "title": "Breadth Requirements",
-    "num_courses_required": 3,
-    "num_courses_gathered": 1,
+    "title": "List 1",
+    "num_courses_required": 2,
+    "num_courses_gathered": 0,
     "completed": false,
     "selected_course": null,
     "children": [...]
@@ -587,7 +710,7 @@ Get all additional constraints for a user's checklist.
 ```
 PATCH /api/user-additional-constraints/{id}/
 ```
-Update an additional constraint (e.g., select a course).
+Update an additional constraint requirement (e.g., select a course).
 
 **Request Body:**
 ```json
@@ -619,11 +742,11 @@ Get all depth lists for a user's checklist.
     "id": 1,
     "target_checklist": 1,
     "is_chain": true,
-    "total_units": 12,
-    "num_courses": 4,
+    "total_units": 100,
+    "num_courses": 2,
     "courses": [
-      { "id": 5, "course": "CS137" },
-      { "id": 6, "course": "CS136" }
+      { "id": 5, "course": "PHYS121" },
+      { "id": 6, "course": "PHYS122" }
     ]
   }
 ]
@@ -635,7 +758,7 @@ Get all depth lists for a user's checklist.
 ```
 POST /api/user-depth-lists/
 ```
-Create a new depth list for course grouping.
+Create a new depth list.
 
 **Request Body:**
 ```json
