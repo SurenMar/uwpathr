@@ -4,7 +4,7 @@ Base URL: `/api/`
 
 ## Table of Contents
 
-### Core
+### Users
 - [Authentication](#authentication)
   - [User Registration](#user-registration)
   - [Login](#login)
@@ -51,8 +51,6 @@ Base URL: `/api/`
 ### Reference
 - [Error Handling](#error-handling)
 - [Rate Limiting](#rate-limiting)
-- [Pagination](#pagination)
-- [Filtering, Searching & Ordering](#filtering-searching--ordering)
 
 ---
 
@@ -724,7 +722,8 @@ Common HTTP status codes:
 
 ## Rate Limiting
 
-Different endpoints have different throttle limits:
+Different endpoints have different throttle limits.
+There are default throttling limits for all endpoints but some are unique: 
 - **SignUp:** Limited for new user registration
 - **Login:** Limited for login attempts
 - **OAuth:** Limited for social login
@@ -733,22 +732,3 @@ Different endpoints have different throttle limits:
 - **Delete Account:** Limited for account deletion
 
 When rate limited, response includes `Retry-After` header.
-
----
-
-## Pagination
-
-List endpoints support cursor-based pagination:
-- `count` - Total number of results
-- `next` - URL to next page
-- `previous` - URL to previous page
-- `results` - Array of items
-
----
-
-## Filtering, Searching & Ordering
-
-List endpoints support:
-- **Filtering** - Query parameters like `?code=CS&year=1`
-- **Searching** - `?search=term` searches relevant fields
-- **Ordering** - `?ordering=field` or `?ordering=-field` for descending
