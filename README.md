@@ -202,7 +202,7 @@ make superuser   # Creates a django superuser for admin panel
 Contributions are welcome!
 
 - Frontend/UI improvements are especially encouraged
-- Backend changes should be discussed before implementation unless the change is simply adding a new API endpoint or serializer.
+- Backend changes are encouraged unless they are heavy modifications to existing models or endpoints. If that is the case, then discuss the change before implementing.
 
 Please read **[CONTRIBUTING.md](CONTRIBUTING.md)** before opening issues or pull requests.
 
