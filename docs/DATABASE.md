@@ -14,40 +14,41 @@
 
 ```mermaid
 erDiagram
-    USERACCOUNT ||--o{ USERCHECKLIST : "has"
-    USERACCOUNT ||--o{ USERCHECKLIST_NODE : "has"
-    USERACCOUNT ||--o{ USERCOURSE : "has"
-    USERACCOUNT ||--o{ USERCOURSEPATH_NODE : "has"
-    USERACCOUNT ||--o{ USERADDITIONAL_CONSTRAINT : "has"
-    USERACCOUNT ||--o{ USERDEPTH_LIST : "has"
-    
-    SPECIALIZATION ||--o{ CHECKLIST : "defines"
-    SPECIALIZATION ||--o{ USERCHECKLIST : "tracks"
-    
-    CHECKLIST ||--o{ CHECKLISTNODE : "contains"
-    CHECKLIST ||--o{ USERCHECKLIST : "based-on"
-    CHECKLIST ||--o{ NONCOURSEREQ : "has"
-    CHECKLIST ||--o{ ADDITIONALCONSTRAINT : "has"
-    
-    CHECKLISTNODE ||--o{ USERCHECKLIST_NODE : "maps-to"
-    CHECKLISTNODE ||--o{ CHECKBOXALLOWEDCOURSES : "defines"
-    
-    COURSE ||--o{ USERCOURSE : "enrolled-in"
-    COURSE ||--o{ COURSEPREREQUISITE_NODE : "has-prereq"
-    COURSE ||--o{ CHECKBOXALLOWEDCOURSES : "allowed-in"
-    COURSE ||--o{ ADDITIONALCONSTRAINT_COURSES : "allowed-in"
-    COURSE ||--o{ USERCOURSEPATH_NODE : "is-prerequisite"
-    COURSE ||--o{ USERADDITIONAL_CONSTRAINT : "selected-in"
-    COURSE ||--o{ USERDEPTH_LIST : "contains"
-    
-    USERCHECKLIST ||--o{ USERCHECKLIST_NODE : "has-nodes"
-    USERCHECKLIST ||--o{ USERADDITIONAL_CONSTRAINT : "has"
-    USERCHECKLIST ||--o{ USERDEPTH_LIST : "has"
-    
-    USERCOURSE ||--o{ USERCOURSEPATH_NODE : "has-prereq-path"
-    USERCOURSE ||--o{ USERDEPTH_LIST : "in-depth-list"
-    
-    COURSEPREREQUISITE_NODE ||--o{ USERCOURSEPATH_NODE : "defines-path"
+    USERACCOUNT ||--o{ USERCHECKLIST : "FK user_id"
+    USERACCOUNT ||--o{ USERCOURSE : "FK user_id"
+    USERACCOUNT ||--o{ USERCOURSEPATH_NODE : "FK user_id"
+    USERACCOUNT ||--o{ USERADDITIONAL_CONSTRAINT : "FK user_id"
+    USERACCOUNT ||--o{ USERDEPTH_LIST : "FK user_id"
+
+    SPECIALIZATION ||--o{ CHECKLIST : "FK specialization_id"
+    SPECIALIZATION ||--o{ USERCHECKLIST : "FK specialization_id"
+
+    CHECKLIST ||--o{ CHECKLISTNODE : "FK target_checklist_id"
+    CHECKLIST ||--o{ USERCHECKLIST : "FK original_checklist_id"
+    CHECKLIST ||--o{ NONCOURSEREQ : "FK checklist_id"
+    CHECKLIST ||--o{ ADDITIONALCONSTRAINT : "FK target_checklist_id"
+
+    CHECKLISTNODE ||--o{ USERCHECKLIST_NODE : "FK original_checkbox_id"
+    CHECKLISTNODE ||--o{ CHECKBOXALLOWEDCOURSES : "M2M target_checkbox_id"
+
+    COURSE ||--o{ USERCOURSE : "FK course_id"
+    COURSE ||--o{ COURSEPREREQUISITE_NODE : "FK target_course_id"
+    COURSE ||--o{ CHECKBOXALLOWEDCOURSES : "M2M courses"
+    COURSE ||--o{ ADDITIONALCONSTRAINTALLOWEDCOURSES : "M2M courses"
+
+    COURSEPREREQUISITE_NODE ||--|{ USERCOURSEPATH_NODE : "FK prerequisite_node_id"
+    USERCOURSE ||--o{ USERCOURSEPATH_NODE : "FK target_course_id"
+
+    USERCHECKLIST ||--o{ USERCHECKLIST_NODE : "FK target_checklist_id"
+    USERCHECKLIST ||--o{ USERADDITIONAL_CONSTRAINT : "FK target_checklist_id"
+    USERCHECKLIST ||--o{ USERDEPTH_LIST : "FK target_checklist_id"
+
+    ADDITIONALCONSTRAINT ||--o{ USERADDITIONAL_CONSTRAINT : "FK original_checkbox_id"
+    ADDITIONALCONSTRAINT ||--o{ ADDITIONALCONSTRAINTALLOWEDCOURSES : "M2M target_checkbox_id"
+
+    USERADDITIONAL_CONSTRAINT ||--|| COURSE : "O2O selected_course_id"
+
+    USERDEPTH_LIST ||--o{ USERCOURSE : "M2M courses"
 ```
 
 ## Tables and Columns
@@ -65,6 +66,8 @@ erDiagram
 | first_name | String | User's first name |
 | email | String (UQ) | Unique email |
 | start_year | SmallInt | Year user started |
+
+---
 
 ### Specializations & Checklists
 
