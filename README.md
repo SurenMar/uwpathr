@@ -15,8 +15,13 @@ More detailed descriptions of the frontend and backend can be found in their res
 - [Overview](#overview)
   - [About the Tool](#about-the-tool)
   - [About this README](#about-this-readme)
-    
+- [Important Notice](#important-notice)
+  - [Prerequisite data](#prerequisite-data)
 - [Usage](#usage)
+  - [1. Landing page](#1-landing-page)
+  - [2. Filling in your checklist](#2-filling-in-your-checklist)
+  - [3. Adding courses to your course list](#3-adding-courses-to-your-course-list)
+  - [4. Creating a course path](#4-creating-a-course-path)
 - [Project Status](#project-status)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
@@ -50,7 +55,18 @@ UWPathr currently only supports the base degree (no specialization), but more de
 
 This file contains instructions about how to use the tool. Below it are setup instructions for anyone who wants to contribute.
 
-For more detailed instructions about the backend and frontend implementation, please visit the their respective READMEs,
+For more detailed instructions about the backend and frontend implementation, please visit the their respective READMEs.
+
+---
+
+## Important Notice
+
+### Prerequisite data
+To ensure prerequisite data across all courses, generative AI was used to translate web-scraped prerequisite information into a standardized format. This processed data was then used to populate prerequisite entries in the database.
+
+While this approach enables broad coverage and consistency, AI-generated outputs are not guaranteed to be fully accurate. As a result, some course prerequisites may be incorrect.
+
+If you identify a course with incorrect prerequisites, please submit an **“Incorrect Prerequisite”** issue and include the relevant course code.
 
 ---
 
@@ -84,7 +100,7 @@ For more detailed instructions about the backend and frontend implementation, pl
 - After deciding which path you want to take, select the appropriate branches and click **Save Path**. Your selected branches will change colour to blue.
 - You now have a clear list of courses to take in order to reach that upper-year course.
 <img width="500" alt="Screenshot 2026-01-11 at 5 36 28 PM" src="https://github.com/user-attachments/assets/3e57a664-fb5d-454e-ab33-ebe767620a0d" />
-
+  
 ---
 
 ## Project Status
