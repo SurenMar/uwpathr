@@ -111,7 +111,7 @@ Guidelines:
 Backend changes should be discussed before starting work unless it's simply adding a new API endpoint or serializer.
 
 Please open an issue first if you want to:
-- Modify existing API endpoint behavior
+- Heavy modifications to an existing API endpoint behavior
 - Change authentication or permissions
 - Change database models
 - Refactor backend architecture
