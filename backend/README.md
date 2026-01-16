@@ -45,7 +45,7 @@ backend/
 
 ## Contributing to the Backend
 
-Backend contributions should be discussed before implementation.
+Backend contributions should be discussed before implementation unless you are simply adding a new API endpoint or serializer.
 
 Please:
 - Open an issue before making significant backend changes
