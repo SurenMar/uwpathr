@@ -49,7 +49,7 @@ Backend contributions should be discussed before implementation unless you are s
 
 Please:
 - Open an issue before making significant backend changes
-- Avoid changing API behavior without discussion
+- Avoid changing existing API or model behavior without discussion
 - Avoid refactoring core backend logic unless explicitly approved
 
 For full contribution rules, see the root CONTRIBUTING.md file.
