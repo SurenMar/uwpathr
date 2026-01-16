@@ -132,8 +132,9 @@ If you identify a course with incorrect prerequisites, please submit an **“Inc
 ## Project Structure
 ```text
 /
-├── backend/    # Django + DRF backend
-├── frontend/   # React + Next.js frontend
+├── backend/   # Django + DRF backend
+├── docs/      # Includes API and database documentation
+├── frontend/  # React + Next.js frontend
 └── README.md
 ```
 
