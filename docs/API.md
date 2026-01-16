@@ -204,23 +204,18 @@ Get paginated list of courses with filtering, searching, and sorting.
 
 **Response:** `200 OK`
 ```json
-{
-  "count": 100,
-  "next": "...",
-  "previous": null,
-  "results": [
-    {
-      "id": 1,
-      "code": "CS",
-      "number": "137",
-      "title": "Design of Usable Interactive Systems",
-      "num_uwflow_ratings": 42,
-      "uwflow_liked_rating": 85,
-      "uwflow_easy_ratings": 72,
-      "uwflow_useful_ratings": 88
-    }
-  ]
-}
+[
+  {
+    "id": 1,
+    "code": "CS",
+    "number": "137",
+    "title": "Design of Usable Interactive Systems",
+    "num_uwflow_ratings": 42,
+    "uwflow_liked_rating": 85,
+    "uwflow_easy_ratings": 72,
+    "uwflow_useful_ratings": 88
+  }
+]
 ```
 
 ---
@@ -263,24 +258,21 @@ Get the prerequisite tree for a course (root nodes only).
 
 **Response:** `200 OK`
 ```json
-{
-  "count": 1,
-  "results": [
-    {
-      "id": 10,
-      "target_course": { "id": 1, "code": "CS", "number": "137" },
-      "node_type": "group",
-      "leaf_course": null,
-      "num_children_required": 2,
-      "children": [
-        {
-          "node_type": "course",
-          "leaf_course": { "id": 5, "code": "CS", "number": "115" }
-        }
-      ]
-    }
-  ]
-}
+[
+  {
+    "id": 10,
+    "target_course": { "id": 1, "code": "CS", "number": "137" },
+    "node_type": "group",
+    "leaf_course": null,
+    "num_children_required": 2,
+    "children": [
+      {
+        "node_type": "course",
+        "leaf_course": { "id": 5, "code": "CS", "number": "115" }
+      }
+    ]
+  }
+]
 ```
 
 ---
@@ -295,16 +287,13 @@ Get all available specializations/programs.
 
 **Response:** `200 OK`
 ```json
-{
-  "count": 5,
-  "results": [
-    {
-      "id": 1,
-      "name": "Computer Science",
-      "description": "Bachelor of Science in Computer Science"
-    }
-  ]
-}
+[
+  {
+    "id": 1,
+    "name": "Computer Science",
+    "description": "Bachelor of Science in Computer Science"
+  }
+]
 ```
 
 ---
@@ -322,19 +311,16 @@ Get list of courses allowed for a specific checklist checkbox (read-only).
 
 **Response:** `200 OK`
 ```json
-{
-  "count": 1,
-  "results": [
-    {
-      "id": 1,
-      "target_checkbox": 42,
-      "courses": [
-        { "id": 1, "code": "CS", "number": "137" },
-        { "id": 2, "code": "CS", "number": "136" }
-      ]
-    }
-  ]
-}
+[
+  {
+    "id": 1,
+    "target_checkbox": 42,
+    "courses": [
+      { "id": 1, "code": "CS", "number": "137" },
+      { "id": 2, "code": "CS", "number": "136" }
+    ]
+  }
+]
 ```
 
 ---
@@ -350,18 +336,15 @@ Get list of courses allowed for a specific additional constraint (read-only).
 
 **Response:** `200 OK`
 ```json
-{
-  "count": 1,
-  "results": [
-    {
-      "id": 1,
-      "target_checkbox": 42,
-      "courses": [
-        { "id": 1, "code": "CS", "number": "137" }
-      ]
-    }
-  ]
-}
+[
+  {
+    "id": 1,
+    "target_checkbox": 42,
+    "courses": [
+      { "id": 1, "code": "CS", "number": "137" }
+    ]
+  }
+]
 ```
 
 ---
@@ -380,32 +363,29 @@ Get all checklists for the authenticated user.
 
 **Response:** `200 OK`
 ```json
-{
-  "count": 2,
-  "results": [
-    {
-      "id": 1,
-      "year": 1,
-      "specialization": 1,
-      "units_required": 36,
-      "taken_course_units": 12,
-      "planned_course_units": 12,
-      "completed": false,
-      "nodes": [
-        {
-          "id": 10,
-          "requirement_type": "head",
-          "title": "First Year Requirements",
-          "units_required": null,
-          "units_gathered": null,
-          "completed": false,
-          "selected_course": null,
-          "children": [...]
-        }
-      ]
-    }
-  ]
-}
+[
+  {
+    "id": 1,
+    "year": 1,
+    "specialization": 1,
+    "units_required": 36,
+    "taken_course_units": 12,
+    "planned_course_units": 12,
+    "completed": false,
+    "nodes": [
+      {
+        "id": 10,
+        "requirement_type": "head",
+        "title": "First Year Requirements",
+        "units_required": null,
+        "units_gathered": null,
+        "completed": false,
+        "selected_course": null,
+        "children": [...]
+      }
+    ]
+  }
+]
 ```
 
 ---
@@ -469,17 +449,14 @@ Get all courses for the authenticated user.
 
 **Response:** `200 OK`
 ```json
-{
-  "count": 10,
-  "results": [
-    {
-      "id": 1,
-      "course": { "id": 5, "code": "CS", "number": "137" },
-      "course_list": "taken",
-      "prereqs_met": null
-    }
-  ]
-}
+[
+  {
+    "id": 1,
+    "course": { "id": 5, "code": "CS", "number": "137" },
+    "course_list": "taken",
+    "prereqs_met": null
+  }
+]
 ```
 
 ---
@@ -527,19 +504,16 @@ Get prerequisite path tree for a specific user course.
 
 **Response:** `200 OK`
 ```json
-{
-  "count": 3,
-  "results": [
-    {
-      "id": 1,
-      "target_course": 5,
-      "prerequisite_node": 10,
-      "branch_completed": true,
-      "parent": null,
-      "children": [...]
-    }
-  ]
-}
+[
+  {
+    "id": 1,
+    "target_course": 5,
+    "prerequisite_node": 10,
+    "branch_completed": true,
+    "parent": null,
+    "children": [...]
+  }
+]
 ```
 
 ---
@@ -593,21 +567,18 @@ Get all additional constraints for a user's checklist.
 
 **Response:** `200 OK`
 ```json
-{
-  "count": 2,
-  "results": [
-    {
-      "id": 1,
-      "requirement_type": "group",
-      "title": "Breadth Requirements",
-      "num_courses_required": 3,
-      "num_courses_gathered": 1,
-      "completed": false,
-      "selected_course": null,
-      "children": [...]
-    }
-  ]
-}
+[
+  {
+    "id": 1,
+    "requirement_type": "group",
+    "title": "Breadth Requirements",
+    "num_courses_required": 3,
+    "num_courses_gathered": 1,
+    "completed": false,
+    "selected_course": null,
+    "children": [...]
+  }
+]
 ```
 
 ---
@@ -643,22 +614,19 @@ Get all depth lists for a user's checklist.
 
 **Response:** `200 OK`
 ```json
-{
-  "count": 1,
-  "results": [
-    {
-      "id": 1,
-      "target_checklist": 1,
-      "is_chain": true,
-      "total_units": 12,
-      "num_courses": 4,
-      "courses": [
-        { "id": 5, "course": "CS137" },
-        { "id": 6, "course": "CS136" }
-      ]
-    }
-  ]
-}
+[
+  {
+    "id": 1,
+    "target_checklist": 1,
+    "is_chain": true,
+    "total_units": 12,
+    "num_courses": 4,
+    "courses": [
+      { "id": 5, "course": "CS137" },
+      { "id": 6, "course": "CS136" }
+    ]
+  }
+]
 ```
 
 ---
