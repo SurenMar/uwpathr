@@ -1,5 +1,15 @@
 # Database Schema
 
+## Table of Contents
+- [Entity Relationship Diagram](#entity-relationship-diagram)
+- [Tables and Columns](#tables-and-columns)
+    - [Users & Authentication](#users--authentication)
+    - [Specializations & Checklists](#specializations--checklists)
+    - [User Checklists](#user-checklists)
+    - [Courses](#courses)
+    - [Additional Constraints](#additional-constraints)
+    - [Depth Lists & Other](#depth-lists--other)
+
 ## Entity Relationship Diagram
 
 ```mermaid
@@ -94,6 +104,8 @@ erDiagram
 | target_checkbox_id | FK → ChecklistNode | Which checkbox |
 | courses | M2M → Course | Allowed courses |
 
+---
+
 ### User Checklists
 
 | **UserChecklist** | Type | Notes |
@@ -126,6 +138,8 @@ erDiagram
 | selected_course_id | FK → UserCourse | Selected course |
 | parent_id | FK → UserChecklistNode (self) | MPPT tree node |
 
+---
+
 ### Courses
 
 | **Course** | Type | Notes |
@@ -157,6 +171,8 @@ erDiagram
 | leaf_course_id | FK → Course | Prerequisite course (if leaf) |
 | num_children_required | SmallInt | Children required (if group) |
 
+---
+
 ### User Courses
 
 | **UserCourse** | Type | Notes |
@@ -179,6 +195,8 @@ erDiagram
 | prerequisite_node_id | FK → CoursePrerequisiteNode | Prereq node in tree |
 | parent_id | FK → UserCoursePathNode (self) | Tree structure |
 | branch_completed | Boolean | Path branch complete |
+
+---
 
 ### Additional Constraints
 
@@ -217,6 +235,8 @@ erDiagram
 | selected_course_id | O2O → Course | Selected course (unique per constraint) |
 | parent_id | FK → UserAdditionalConstraint (self) | MPPT tree node |
 
+---
+
 ### Depth Lists & Other
 
 | **UserDepthList** | Type | Notes |
@@ -240,58 +260,3 @@ erDiagram
 | description | Text | Requirement description |
 | checklist_id | FK → Checklist | Parent checklist |
 ```
-
-## Key Relationships
-
-### Foreign Keys (FK)
-- **UserChecklist** → UserAccount (user_id)
-- **UserChecklist** → Specialization (specialization_id)
-- **UserChecklist** → Checklist (original_checklist_id)
-- **UserChecklistNode** → UserAccount (user_id)
-- **UserChecklistNode** → UserChecklist (target_checklist_id)
-- **UserChecklistNode** → ChecklistNode (original_checkbox_id)
-- **UserChecklistNode** → UserCourse (selected_course_id)
-- **UserChecklistNode** → UserChecklistNode (parent_id, self-referential)
-- **ChecklistNode** → Checklist (target_checklist_id)
-- **ChecklistNode** → ChecklistNode (parent_id, self-referential)
-- **Checklist** → Specialization (specialization_id)
-- **UserCourse** → UserAccount (user_id)
-- **UserCourse** → Course (course_id)
-- **UserCoursePathNode** → UserAccount (user_id)
-- **UserCoursePathNode** → UserCourse (target_course_id)
-- **UserCoursePathNode** → CoursePrerequisiteNode (prerequisite_node_id)
-- **UserCoursePathNode** → UserCoursePathNode (parent_id, self-referential)
-- **CoursePrerequisiteNode** → Course (target_course_id)
-- **CoursePrerequisiteNode** → Course (leaf_course_id, nullable)
-- **CoursePrerequisiteNode** → CoursePrerequisiteNode (parent_id, self-referential)
-- **UserAdditionalConstraint** → UserAccount (user_id)
-- **UserAdditionalConstraint** → UserChecklist (target_checklist_id)
-- **UserAdditionalConstraint** → AdditionalConstraint (original_checkbox_id)
-- **UserAdditionalConstraint** → Course (selected_course_id, OneToOne, nullable)
-- **UserAdditionalConstraint** → UserAdditionalConstraint (parent_id, self-referential)
-- **AdditionalConstraint** → Checklist (target_checklist_id)
-- **AdditionalConstraint** → AdditionalConstraint (parent_id, self-referential)
-- **UserDepthList** → UserAccount (user_id)
-- **UserDepthList** → UserChecklist (target_checklist_id)
-- **NonCourseRequirement** → Checklist (checklist_id)
-
-### Many-to-Many (M2M)
-- **CheckboxAllowedCourses.courses** ↔ Course
-- **AdditionalConstraintAllowedCourses.courses** ↔ Course
-- **UserDepthList.courses** ↔ UserCourse
-
-### One-to-One (O2O)
-- **UserAdditionalConstraint.selected_course** → Course (nullable)
-
-## Tree Structures (MPTT)
-- **ChecklistNode** - Hierarchical requirement structure (head → group → checkbox)
-- **UserChecklistNode** - User's personalized checklist tree
-- **CoursePrerequisiteNode** - Course prerequisite tree (course or group nodes)
-- **AdditionalConstraint** - Specialization constraint tree
-- **UserAdditionalConstraint** - User's additional constraint tree
-
-## Unique Constraints
-- **Course** - (code, number) unique together
-- **UserChecklist** - (user, specialization) unique together
-- **UserCourse** - (user, course) unique together
-- **UserCoursePathNode** - (user, target_course) unique for root nodes (parent IS NULL)
