@@ -153,8 +153,6 @@ For more detailed instructions about the backend and frontend implementation, pl
    `make superuser`
    then login to [http://localhost:8000/admin](http://localhost:8000/admin)
 
-If help is needed, contact suren.v.mar@gmail.com.
-
 ### Commands
 
 This project is managed using a `Makefile`. Use the commands below to build and run the project locally.
