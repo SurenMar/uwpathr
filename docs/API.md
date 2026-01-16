@@ -2,6 +2,60 @@
 
 Base URL: `/api/`
 
+## Table of Contents
+
+### Core
+- [Authentication](#authentication)
+  - [User Registration](#user-registration)
+  - [Login](#login)
+  - [Refresh Token](#refresh-token)
+  - [Verify Token](#verify-token)
+  - [OAuth Social Login](#oauth-social-login)
+  - [Logout](#logout)
+  - [Delete Account](#delete-account)
+
+### Course Management
+- [Courses](#courses)
+  - [List Courses (Public)](#list-courses-public)
+  - [Get Course Details (Public)](#get-course-details-public)
+  - [Get Course Prerequisites (Public)](#get-course-prerequisites-public)
+- [Specializations](#specializations)
+  - [List Specializations (Public)](#list-specializations-public)
+
+### Templates & References
+- [Checklist Templates](#checklist-templates)
+  - [List Checkbox Allowed Courses](#list-checkbox-allowed-courses)
+  - [List Additional Constraint Allowed Courses](#list-additional-constraint-allowed-courses)
+
+### User Data Management
+- [User Checklists](#user-checklists)
+  - [List User Checklists](#list-user-checklists)
+  - [Create User Checklist](#create-user-checklist)
+  - [Update Checklist Node](#update-checklist-node)
+- [User Courses](#user-courses)
+  - [List User Courses](#list-user-courses)
+  - [Add Course to List](#add-course-to-list)
+  - [Remove Course from List](#remove-course-from-list)
+- [Course Prerequisite Paths](#course-prerequisite-paths)
+  - [List Prerequisite Paths](#list-prerequisite-paths)
+  - [Create Prerequisite Path](#create-prerequisite-path)
+  - [Delete Prerequisite Path](#delete-prerequisite-path)
+- [Additional Constraints](#additional-constraints)
+  - [List Additional Constraints](#list-additional-constraints)
+  - [Update Additional Constraint](#update-additional-constraint)
+- [Depth Lists](#depth-lists)
+  - [List Depth Lists](#list-depth-lists)
+  - [Create Depth List](#create-depth-list)
+  - [Update Depth List](#update-depth-list)
+
+### Reference
+- [Error Handling](#error-handling)
+- [Rate Limiting](#rate-limiting)
+- [Pagination](#pagination)
+- [Filtering, Searching & Ordering](#filtering-searching--ordering)
+
+---
+
 ## Authentication
 
 All endpoints require authentication unless explicitly marked as public. Authentication uses JWT tokens stored in `httponly` cookies.
