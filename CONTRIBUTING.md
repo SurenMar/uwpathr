@@ -25,6 +25,7 @@ You can contribute by:
 - Reporting/Fixing bugs
 - Improving the UI / UX
 - Adding new features
+- Adding new backend api endpoints or serializers
 - Displaying new content
 - Improving performance or accessibility
 - Improving documentation
@@ -69,6 +70,10 @@ Please explain:
 - Why it’s useful
 - Any UI ideas or references (screenshots, mockups, etc.)
 
+### Incorrect Prerequisites
+If you find a course has incorrect prerequisites, just include the course code in the issue.
+The correct prerequisites will be added to the database, meaning developers may need to re-run initialize_db.sh if the needed.
+
 ---
 
 ## Pull Requests
@@ -103,15 +108,15 @@ Guidelines:
 
 ## Backend Contributions
 
-Backend changes should be discussed before starting work.
+Backend changes should be discussed before starting work unless it's simply adding a new API endpoint or serializer.
 
 Please open an issue first if you want to:
-- Modify or add to API behavior
+- Modify existing API endpoint behavior
 - Change authentication or permissions
 - Change database models
 - Refactor backend architecture
 
-Small backend fixes may be accepted, but large changes require discussion.
+Otherwise, if you need to add a new API endpoint or serializer while working on a frontend feature, posting an issue is not required.
 
 ---
 
