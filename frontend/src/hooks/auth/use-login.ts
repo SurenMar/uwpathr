@@ -34,7 +34,7 @@ export default function useLogin() {
 				router.push('/dashboard');
 			})
 			.catch(() => {
-				toast.error('Failed to log in');
+				toast.error('Email or password is incorrect.');
 			});
 	};
 
