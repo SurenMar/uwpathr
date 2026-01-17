@@ -32,6 +32,20 @@ export default function useRegister() {
 			const errData = (error as { data?: unknown }).data;
 			if (errData && typeof errData === 'object') {
 				const data = errData as Record<string, unknown>;
+
+
+				if (Array.isArray(data.password) && typeof data.password[0] === 'string') {
+					return data.password[0];
+				}
+
+				if (Array.isArray(data.email) && typeof data.email[0] === 'string') {
+					return data.email[0];
+				}
+
+				if (Array.isArray(data.non_field_errors) && typeof data.non_field_errors[0] === 'string') {
+					return data.non_field_errors[0];
+				}
+
 				if (typeof data.captcha === 'string') return data.captcha;
 				if (Array.isArray(data.captcha) && typeof data.captcha[0] === 'string') return data.captcha[0];
 				if (typeof data.detail === 'string') return data.detail;
