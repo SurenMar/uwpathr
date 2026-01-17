@@ -149,6 +149,7 @@ If you identify a course with incorrect prerequisites, please submit an **“Inc
 - Python 3.11+
 - Node.js 18+
 - Docker
+- Postman (Optional but highly recommended)
 
 ### Installation
 
