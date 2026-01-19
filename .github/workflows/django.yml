@@ -17,7 +17,7 @@ jobs:
       
     env:
       GITHUB_ACTIONS: "True"
-      DATABASE_URL: sqlite:///db.sqlite3
+      DEVELOPMENT_MODE: "True"
 
     steps:
     - uses: actions/checkout@v4
