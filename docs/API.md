@@ -107,7 +107,7 @@ Obtain access and refresh tokens.
 ```
 
 **Response:** `200 OK` (Tokens set in httponly cookies)
-```json
+```json 
 {}
 ```
 
