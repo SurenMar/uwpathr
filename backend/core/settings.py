@@ -8,7 +8,7 @@ import dj_database_url
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 GITHUB_ACTIONS = getenv('GITHUB_ACTIONS', 'False').upper() == 'TRUE'
-DEVELOPMENT_MODE = getenv('DEVELOPMENT_MODE', 'False') == 'True'
+DEVELOPMENT_MODE = getenv('DEVELOPMENT_MODE', 'False').upper() == 'TRUE'
 OAUTH2_ENABLED = getenv('OAUTH2_ENABLED', 'False') == 'True'
 
 SECRET_KEY = getenv('DJANGO_SECRET_KEY', get_random_secret_key())
@@ -84,21 +84,13 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database
 
-if GITHUB_ACTIONS:
-  DATABASES = {
-    "default": {
-      "ENGINE": "django.db.backends.sqlite3",
-      "NAME": ":memory:",
-    }
-  }
-else:
-  DATABASES = {
-    'default': dj_database_url.config(
-      default=getenv('DATABASE_URL'),
-      conn_max_age=600,
-      ssl_require=not DEVELOPMENT_MODE,
-    )
-  }
+DATABASES = {
+  'default': dj_database_url.config(
+    default=getenv('DATABASE_URL'),
+    conn_max_age=600,
+    ssl_require=not DEVELOPMENT_MODE,
+  )
+}
 
 
 # Email settings
