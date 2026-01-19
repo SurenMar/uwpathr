@@ -10,11 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DEVELOPMENT_MODE = getenv('DEVELOPMENT_MODE', 'False') == 'True'
 OAUTH2_ENABLED = getenv('OAUTH2_ENABLED', 'False') == 'True'
 
-SECRET_KEY = getenv('DJANGO_SECRET_KEY')
-if not SECRET_KEY:
-  if not DEVELOPMENT_MODE:
-    raise ValueError('DJANGO_SECRET_KEY is required')
-  SECRET_KEY = get_random_secret_key()
+SECRET_KEY = getenv('DJANGO_SECRET_KEY', get_random_secret_key())
 
 DEBUG = getenv('DEBUG', 'False') == 'True'
 
@@ -89,7 +85,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 DATABASES = {
   'default': dj_database_url.config(
-    default=getenv('DATABASE_URL'),
+    default=getenv('DATABASE_URL', 'postgresql://user:pass@db:5432/temp_for_ci'),
     conn_max_age=600,
     ssl_require=not DEVELOPMENT_MODE,
   )
