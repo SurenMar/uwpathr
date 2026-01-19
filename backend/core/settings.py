@@ -7,7 +7,7 @@ import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-GITHUB_ACTIONS = getenv('GITHUB_ACTIONS', 'False') == 'True'
+GITHUB_ACTIONS = getenv('GITHUB_ACTIONS', 'False').upper() == 'TRUE'
 DEVELOPMENT_MODE = getenv('DEVELOPMENT_MODE', 'False') == 'True'
 OAUTH2_ENABLED = getenv('OAUTH2_ENABLED', 'False') == 'True'
 
