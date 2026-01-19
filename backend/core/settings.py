@@ -7,6 +7,7 @@ import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+GITHUB_ACTIONS = getenv('GITHUB_ACTIONS', 'False') == 'True'
 DEVELOPMENT_MODE = getenv('DEVELOPMENT_MODE', 'False') == 'True'
 OAUTH2_ENABLED = getenv('OAUTH2_ENABLED', 'False') == 'True'
 
@@ -83,7 +84,7 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database
 
-if getenv("GITHUB_ACTIONS") == "True":
+if GITHUB_ACTIONS:
   DATABASES = {
     "default": {
       "ENGINE": "django.db.backends.sqlite3",
@@ -254,9 +255,12 @@ if not DEVELOPMENT_MODE:
   SECURE_BROWSER_XSS_FILTER = True            # Enable browser XSS protection filter
   X_FRAME_OPTIONS = 'DENY'                    # Prevent clickjacking by denying embedding in frames
 
-CSRF_TRUSTED_ORIGINS = getenv(                # List of allowed origins for CSRF-protected requests
-  'CSRF_TRUSTED_ORIGINS', ''
-).split(',')
+if not GITHUB_ACTIONS: 
+  CSRF_TRUSTED_ORIGINS = getenv(                # List of allowed origins for CSRF-protected requests
+    'CSRF_TRUSTED_ORIGINS', ''
+  ).split(',')
+else:
+  CSRF_TRUSTED_ORIGINS = []
 
 
 CORS_ALLOWED_ORIGINS = getenv(
