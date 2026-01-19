@@ -83,13 +83,21 @@ WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database
 
-DATABASES = {
-  'default': dj_database_url.config(
-    default=getenv('DATABASE_URL', 'postgresql://user:pass@db:5432/temp_for_ci'),
-    conn_max_age=600,
-    ssl_require=not DEVELOPMENT_MODE,
-  )
-}
+if getenv("GITHUB_ACTIONS") == "True":
+  DATABASES = {
+    "default": {
+      "ENGINE": "django.db.backends.sqlite3",
+      "NAME": ":memory:",
+    }
+  }
+else:
+  DATABASES = {
+    'default': dj_database_url.config(
+      default=getenv('DATABASE_URL'),
+      conn_max_age=600,
+      ssl_require=not DEVELOPMENT_MODE,
+    )
+  }
 
 
 # Email settings
