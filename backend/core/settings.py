@@ -255,12 +255,9 @@ if not DEVELOPMENT_MODE:
   SECURE_BROWSER_XSS_FILTER = True            # Enable browser XSS protection filter
   X_FRAME_OPTIONS = 'DENY'                    # Prevent clickjacking by denying embedding in frames
 
-if not GITHUB_ACTIONS: 
-  CSRF_TRUSTED_ORIGINS = getenv(                # List of allowed origins for CSRF-protected requests
-    'CSRF_TRUSTED_ORIGINS', ''
-  ).split(',')
-else:
-  CSRF_TRUSTED_ORIGINS = []
+CSRF_TRUSTED_ORIGINS = getenv(                # List of allowed origins for CSRF-protected requests
+  'CSRF_TRUSTED_ORIGINS', 'http://localhost:3000'
+).split(',')
 
 
 CORS_ALLOWED_ORIGINS = getenv(
